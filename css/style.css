@@ -4,6 +4,7 @@
    ========================================================================== */
 
 :root {
+  color-scheme: dark;
   --bg-app: #000000;
   --bg-frame: #0b0b0e;
   --bg-card: rgba(26, 26, 32, 0.65);
@@ -159,7 +160,9 @@ body::before {
 
 .lang-select {
   appearance: none;
-  background: rgba(255, 255, 255, 0.06);
+  -webkit-appearance: none;
+  color-scheme: dark;
+  background: rgba(255, 255, 255, 0.08);
   border: 1px solid var(--border-light);
   color: var(--text-primary);
   font-size: 0.8rem;
@@ -173,8 +176,14 @@ body::before {
 }
 
 .lang-select:hover, .lang-select:focus {
-  background: rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.14);
   border-color: var(--accent-orange);
+}
+
+.lang-select option {
+  background-color: #1a1a22;
+  color: #ffffff;
+  padding: 8px 12px;
 }
 
 .lang-select-wrapper::after {
