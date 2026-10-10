@@ -1,0 +1,629 @@
+/**
+ * Český slovník příbuzenských vztahů
+ * Zdroje: Česká Wikipedie (Seznam členů rodiny), genealogické a historické prameny.
+ */
+
+export const cs = {
+  code: 'cs',
+  name: 'Čeština',
+  labels: {
+    appTitle: 'Rodinná kalkulačka',
+    subtitle: 'Kalkulačka příbuzenských vztahů',
+    egoGender: 'Moje pohlaví',
+    male: 'Muž ♂',
+    female: 'Žena ♀',
+    self: 'JÁ (proband)',
+    selfArchaic: 'EGO / střen',
+    selfDesc: 'Výchozí osoba, od níž se odvíjí genealogický vztah',
+    chainPrefix: 'Můj',
+    chainPrefixFemale: 'Moje',
+    unknownRelation: 'Vzdálený příbuzný',
+    unknownDesc: 'Vztah je příliš složený nebo v češtině nemá specifické jednoslovné pojmenování',
+    mutualTitle: 'Jak říká on mě?',
+    reciprocal: 'Vzájemné oslovení',
+    generationLabel: 'Generace',
+    lineTypeLabel: 'Linie',
+    archaicLabel: 'Historické / staročeské pojmenování',
+    explanationLabel: 'Vysvětlení cesty',
+    clear: 'Smazat',
+    backspace: 'Zpět',
+    calculate: 'Spočítat',
+    mutual: 'Vzájemný vztah (互查)',
+    tokens: {
+      f: 'otec',
+      m: 'matka',
+      s: 'syn',
+      d: 'dcera',
+      b: 'bratr',
+      ob: 'starší bratr',
+      lb: 'mladší bratr',
+      z: 'sestra',
+      oz: 'starší sestra',
+      lz: 'mladší sestra',
+      h: 'manžel',
+      w: 'manželka'
+    },
+    lineTypes: {
+      direct_ascendant: 'Přímá vzestupná linie (předkové)',
+      direct_descendant: 'Přímá sestupná linie (potomci)',
+      sibling: 'Sourozenecká linie',
+      collateral: 'Pobočná linie (strýcové, bratranci, synovci)',
+      affinity: 'Sešvagření (příbuzenství sňatkem)'
+    }
+  },
+  relations: {
+    // === 1. generace předků (Rodiče) ===
+    'f': {
+      name: 'Otec',
+      archaic: 'Táta, knižně děd/ot',
+      description: 'Tvůj mužský rodič',
+      lineType: 'direct_ascendant'
+    },
+    'm': {
+      name: 'Matka',
+      archaic: 'Máma, zastarale máti, máť',
+      description: 'Tvůj ženský rodič',
+      lineType: 'direct_ascendant'
+    },
+
+    // === 2. generace předků (Prarodiče) ===
+    'f,f': {
+      name: 'Dědeček (otcův otec)',
+      archaic: 'Děda, děd, expresivně dědek',
+      description: 'Otec tvého otce (prarodič z otcovy strany)',
+      lineType: 'direct_ascendant'
+    },
+    'f,m': {
+      name: 'Babička (otcova matka)',
+      archaic: 'Bába, babka',
+      description: 'Matka tvého otce (prarodič z otcovy strany)',
+      lineType: 'direct_ascendant'
+    },
+    'm,f': {
+      name: 'Dědeček (matčin otec)',
+      archaic: 'Lidově/nářečně stařeček',
+      description: 'Otec tvé matky (prarodič z matčiny strany)',
+      lineType: 'direct_ascendant'
+    },
+    'm,m': {
+      name: 'Babička (matčina matka)',
+      archaic: 'Lidově/nářečně stařenka, starucha',
+      description: 'Matka tvé matky (prarodič z matčiny strany)',
+      lineType: 'direct_ascendant'
+    },
+
+    // === 3. generace předků (Praprarodiče) ===
+    'f,f,f': {
+      name: 'Pradědeček',
+      archaic: 'Praděd, staročesky též předděd, nadděd',
+      description: 'Otec tvého dědečka',
+      lineType: 'direct_ascendant'
+    },
+    'f,f,m': {
+      name: 'Prababička',
+      archaic: 'Prabába',
+      description: 'Matka tvého dědečka',
+      lineType: 'direct_ascendant'
+    },
+    'f,m,f': {
+      name: 'Pradědeček',
+      archaic: 'Praděd, předděd',
+      description: 'Otec tvé babičky z otcovy strany',
+      lineType: 'direct_ascendant'
+    },
+    'f,m,m': {
+      name: 'Prababička',
+      archaic: 'Prabába',
+      description: 'Matka tvé babičky z otcovy strany',
+      lineType: 'direct_ascendant'
+    },
+    'm,f,f': {
+      name: 'Pradědeček',
+      archaic: 'Praděd, předděd',
+      description: 'Otec tvého dědečka z matčiny strany',
+      lineType: 'direct_ascendant'
+    },
+    'm,f,m': {
+      name: 'Prababička',
+      archaic: 'Prabába',
+      description: 'Matka tvého dědečka z matčiny strany',
+      lineType: 'direct_ascendant'
+    },
+    'm,m,f': {
+      name: 'Pradědeček',
+      archaic: 'Praděd, předděd',
+      description: 'Otec tvé babičky z matčiny strany',
+      lineType: 'direct_ascendant'
+    },
+    'm,m,m': {
+      name: 'Prababička',
+      archaic: 'Prabába',
+      description: 'Matka tvé babičky z matčiny strany',
+      lineType: 'direct_ascendant'
+    },
+
+    // === Sourozenci ===
+    'b': {
+      name: 'Bratr',
+      archaic: 'Brácha, staročesky brat',
+      description: 'Tvůj mužský sourozenec',
+      lineType: 'sibling'
+    },
+    'z': {
+      name: 'Sestra',
+      archaic: 'Ségra, zastarale sstřice',
+      description: 'Tvůj ženský sourozenec',
+      lineType: 'sibling'
+    },
+
+    // === Potomci (1. generace) ===
+    's': {
+      name: 'Syn',
+      archaic: 'První syn: prvenec; synek',
+      description: 'Tvůj mužský potomek v první generaci',
+      lineType: 'direct_descendant'
+    },
+    'd': {
+      name: 'Dcera',
+      archaic: 'Dcerka, cérka',
+      description: 'Tvůj ženský potomek v první generaci',
+      lineType: 'direct_descendant'
+    },
+
+    // === Vnoučata (2. generace potomků) ===
+    's,s': {
+      name: 'Vnuk (syn syna)',
+      archaic: 'Vnouček',
+      description: 'Syn tvého syna',
+      lineType: 'direct_descendant'
+    },
+    's,d': {
+      name: 'Vnučka (dcera syna)',
+      archaic: 'Vnučka',
+      description: 'Dcera tvého syna',
+      lineType: 'direct_descendant'
+    },
+    'd,s': {
+      name: 'Vnuk (syn dcery)',
+      archaic: 'Vnouček',
+      description: 'Syn tvé dcery',
+      lineType: 'direct_descendant'
+    },
+    'd,d': {
+      name: 'Vnučka (dcera dcery)',
+      archaic: 'Vnučka',
+      description: 'Dcera tvé dcery',
+      lineType: 'direct_descendant'
+    },
+
+    // === Pravnoučata (3. generace potomků) ===
+    's,s,s': {
+      name: 'Pravnuk',
+      archaic: 'Staročesky též podvnuk, zavnuk',
+      description: 'Syn tvého vnuka',
+      lineType: 'direct_descendant'
+    },
+    's,s,d': {
+      name: 'Pravnučka',
+      archaic: 'Pravnučka',
+      description: 'Dcera tvého vnuka',
+      lineType: 'direct_descendant'
+    },
+    'd,d,s': {
+      name: 'Pravnuk',
+      archaic: 'Podvnuk, zavnuk',
+      description: 'Syn tvé vnučky',
+      lineType: 'direct_descendant'
+    },
+    'd,d,d': {
+      name: 'Pravnučka',
+      archaic: 'Pravnučka',
+      description: 'Dcera tvé vnučky',
+      lineType: 'direct_descendant'
+    },
+
+    // === Strýcové a tety (Pobočná linie +1) ===
+    'f,b': {
+      name: 'Strýc (otcův bratr)',
+      archaic: 'Strýček, strejda',
+      description: 'Bratr tvého otce',
+      lineType: 'collateral'
+    },
+    'f,z': {
+      name: 'Teta (otcova sestra)',
+      archaic: 'Tetička, staročesky stryna (otcova sestra)',
+      description: 'Sestra tvého otce',
+      lineType: 'collateral'
+    },
+    'm,b': {
+      name: 'Strýc (matčin bratr)',
+      archaic: 'Staročesky ujec',
+      description: 'Bratr tvé matky (v historické češtině striktně rozlišován jako ujec)',
+      lineType: 'collateral'
+    },
+    'm,z': {
+      name: 'Teta (matčina sestra)',
+      archaic: 'Tetička',
+      description: 'Sestra tvé matky',
+      lineType: 'collateral'
+    },
+    'f,b,w': {
+      name: 'Teta (manželka otcova bratra)',
+      archaic: 'Staročesky stryna (žena otcova bratra)',
+      description: 'Manželka bratra tvého otce',
+      lineType: 'affinity'
+    },
+    'm,b,w': {
+      name: 'Teta (manželka matčina bratra)',
+      archaic: 'Staročesky ujčina (žena matčina bratra)',
+      description: 'Manželka bratra tvé matky (ujce)',
+      lineType: 'affinity'
+    },
+    'f,z,h': {
+      name: 'Strýc (manžel otcovy sestry)',
+      archaic: 'Staročesky tetec (muž otcovy sestry)',
+      description: 'Manžel sestry tvého otce',
+      lineType: 'affinity'
+    },
+    'm,z,h': {
+      name: 'Strýc (manžel matčiny sestry)',
+      archaic: 'Staročesky posel (muž matčiny sestry)',
+      description: 'Manžel sestry tvé matky',
+      lineType: 'affinity'
+    },
+
+    // === Prastrýcové a pratety (+2 generace) ===
+    'f,f,b': {
+      name: 'Prastrýc (dědečkův bratr)',
+      archaic: 'Prastrýc',
+      description: 'Bratr tvého dědečka',
+      lineType: 'collateral'
+    },
+    'f,f,z': {
+      name: 'Prateta (dědečkova sestra)',
+      archaic: 'Prateta',
+      description: 'Sestra tvého dědečka',
+      lineType: 'collateral'
+    },
+    'f,m,b': {
+      name: 'Prastrýc (babiččin bratr)',
+      archaic: 'Prastrýc',
+      description: 'Bratr tvé babičky',
+      lineType: 'collateral'
+    },
+    'f,m,z': {
+      name: 'Prateta (babiččina sestra)',
+      archaic: 'Prateta',
+      description: 'Sestra tvé babičky',
+      lineType: 'collateral'
+    },
+    'm,f,b': {
+      name: 'Prastrýc (dědečkův bratr z matčiny strany)',
+      archaic: 'Prastrýc / praujec',
+      description: 'Bratr matčina otce',
+      lineType: 'collateral'
+    },
+    'm,f,z': {
+      name: 'Prateta (dědečkova sestra z matčiny strany)',
+      archaic: 'Prateta',
+      description: 'Sestra matčina otce',
+      lineType: 'collateral'
+    },
+    'm,m,b': {
+      name: 'Prastrýc (babiččin bratr z matčiny strany)',
+      archaic: 'Prastrýc / praujec',
+      description: 'Bratr matčiny matky',
+      lineType: 'collateral'
+    },
+    'm,m,z': {
+      name: 'Prateta (babiččina sestra z matčiny strany)',
+      archaic: 'Prateta',
+      description: 'Sestra matčiny matky',
+      lineType: 'collateral'
+    },
+
+    // === Bratranci a sestřenice (Stejná generace) ===
+    'f,b,s': {
+      name: 'Bratranec (otcova bratra syn)',
+      archaic: 'Staročesky strýčenec, bratran, bratřec, bratřenec',
+      description: 'Syn otcova bratra (strýce)',
+      lineType: 'collateral'
+    },
+    'f,b,d': {
+      name: 'Sestřenice (otcova bratra dcera)',
+      archaic: 'Staročesky strýčena, strýčenice, bratrana',
+      description: 'Dcera otcova bratra (strýce)',
+      lineType: 'collateral'
+    },
+    'm,b,s': {
+      name: 'Bratranec (matčina bratra syn)',
+      archaic: 'Staročesky ujčen, ujčenec',
+      description: 'Syn matčina bratra (ujce)',
+      lineType: 'collateral'
+    },
+    'm,b,d': {
+      name: 'Sestřenice (matčina bratra dcera)',
+      archaic: 'Staročesky ujčena, ujčenice',
+      description: 'Dcera matčina bratra (ujce)',
+      lineType: 'collateral'
+    },
+    'f,z,s': {
+      name: 'Bratranec (otcovy sestry syn)',
+      archaic: 'Staročesky tetěnec, tetčic, sestrovec',
+      description: 'Syn otcovy sestry (tety)',
+      lineType: 'collateral'
+    },
+    'f,z,d': {
+      name: 'Sestřenice (otcovy sestry dcera)',
+      archaic: 'Staročesky tetěnice, tetěna',
+      description: 'Dcera otcovy sestry (tety)',
+      lineType: 'collateral'
+    },
+    'm,z,s': {
+      name: 'Bratranec (matčiny sestry syn)',
+      archaic: 'Staročesky tetěnec, tetčic, sestrovec',
+      description: 'Syn matčiny sestry (tety)',
+      lineType: 'collateral'
+    },
+    'm,z,d': {
+      name: 'Sestřenice (matčiny sestry dcera)',
+      archaic: 'Staročesky tetěnice, tetěna',
+      description: 'Dcera matčiny sestry (tety)',
+      lineType: 'collateral'
+    },
+
+    // Bratranci z druhého kolene
+    'f,f,b,s,s': {
+      name: 'Bratranec z 2. kolene (druhý bratranec)',
+      archaic: 'Staročesky vlastník, vlastně, stříník',
+      description: 'Vnuk prastrýce, mají společné prarodiče',
+      lineType: 'collateral'
+    },
+    'f,f,b,s,d': {
+      name: 'Sestřenice z 2. kolene (druhá sestřenice)',
+      archaic: 'Staročesky vlastnice, vlastně, střínice',
+      description: 'Vnučka prastrýce, mají společné prarodiče',
+      lineType: 'collateral'
+    },
+    'f,b,s,s': {
+      name: 'Syn bratrance (bratranec z 2. kolene mladší gen.)',
+      archaic: 'Druhý bratranec sestupně',
+      description: 'Syn tvého bratrance',
+      lineType: 'collateral'
+    },
+    'f,b,s,d': {
+      name: 'Dcera bratrance (sestřenice z 2. kolene mladší gen.)',
+      archaic: 'Druhá sestřenice sestupně',
+      description: 'Dcera tvého bratrance',
+      lineType: 'collateral'
+    },
+
+    // === Synovci a neteře (Potomci sourozenců) ===
+    'b,s': {
+      name: 'Synovec (bratrův syn)',
+      archaic: 'Staročesky bratrovec',
+      description: 'Syn tvého bratra',
+      lineType: 'collateral'
+    },
+    'b,d': {
+      name: 'Neteř (bratrova dcera)',
+      archaic: 'Staročesky synovkyně',
+      description: 'Dcera tvého bratra',
+      lineType: 'collateral'
+    },
+    'z,s': {
+      name: 'Synovec (sestřin syn)',
+      archaic: 'Staročesky sestřenec, potet',
+      description: 'Syn tvé sestry',
+      lineType: 'collateral'
+    },
+    'z,d': {
+      name: 'Neteř (sestřina dcera)',
+      archaic: 'Staročesky neť',
+      description: 'Dcera tvé sestry',
+      lineType: 'collateral'
+    },
+    'b,s,s': {
+      name: 'Prasynovec',
+      archaic: 'Vnuk bratra',
+      description: 'Syn tvého synovce',
+      lineType: 'collateral'
+    },
+    'b,s,d': {
+      name: 'Praneteř',
+      archaic: 'Vnučka bratra',
+      description: 'Dcera tvého synovce',
+      lineType: 'collateral'
+    },
+    'z,s,s': {
+      name: 'Prasynovec',
+      archaic: 'Vnuk sestry',
+      description: 'Syn tvého synovce od sestry',
+      lineType: 'collateral'
+    },
+    'z,s,d': {
+      name: 'Praneteř',
+      archaic: 'Vnučka sestry',
+      description: 'Dcera tvého synovce od sestry',
+      lineType: 'collateral'
+    },
+
+    // === Sňatek a sešvagření (Affinity) ===
+    'h': {
+      name: 'Manžel',
+      archaic: 'Muž, choť',
+      description: 'Tvůj mužský manželský partner',
+      lineType: 'affinity'
+    },
+    'w': {
+      name: 'Manželka',
+      archaic: 'Žena, choť',
+      description: 'Tvůj ženský manželský partner',
+      lineType: 'affinity'
+    },
+
+    // Rodiče partnera (Tchán a tchyně)
+    'w,f': {
+      name: 'Tchán (manželčin otec)',
+      archaic: 'Staročesky test, švekr',
+      description: 'Otec tvé manželky',
+      lineType: 'affinity'
+    },
+    'w,m': {
+      name: 'Tchyně (manželčina matka)',
+      archaic: 'Staročesky testa, švekruše',
+      description: 'Matka tvé manželky',
+      lineType: 'affinity'
+    },
+    'h,f': {
+      name: 'Tchán (manželův otec)',
+      archaic: 'Staročesky test, švekr',
+      description: 'Otec tvého manžela',
+      lineType: 'affinity'
+    },
+    'h,m': {
+      name: 'Tchyně (manželova matka)',
+      archaic: 'Staročesky testa, švekruše',
+      description: 'Matka tvého manžela',
+      lineType: 'affinity'
+    },
+    'w,f,f': {
+      name: 'Pratchán',
+      archaic: 'Dědeček tvé manželky',
+      description: 'Otec tvého tchána',
+      lineType: 'affinity'
+    },
+    'w,f,m': {
+      name: 'Pratchyně',
+      archaic: 'Babička tvé manželky',
+      description: 'Matka tvého tchána',
+      lineType: 'affinity'
+    },
+    'h,f,f': {
+      name: 'Pratchán',
+      archaic: 'Dědeček tvého manžela',
+      description: 'Otec tvého tchána',
+      lineType: 'affinity'
+    },
+    'h,f,m': {
+      name: 'Pratchyně',
+      archaic: 'Babička tvého manžela',
+      description: 'Matka tvého tchána',
+      lineType: 'affinity'
+    },
+
+    // Švagři a švagrové
+    'b,w': {
+      name: 'Švagrová (bratrova žena)',
+      archaic: 'Staročesky bratřina',
+      description: 'Manželka tvého bratra',
+      lineType: 'affinity'
+    },
+    'z,h': {
+      name: 'Švagr (sestřin muž)',
+      archaic: 'Staročesky svokr, švakr, domácky švára',
+      description: 'Manžel tvé sestry',
+      lineType: 'affinity'
+    },
+    'w,b': {
+      name: 'Švagr (manželčin bratr)',
+      archaic: 'Staročesky šurin, stč. šir/sír',
+      description: 'Bratr tvé manželky (v historické češtině specificky zván šurin)',
+      lineType: 'affinity'
+    },
+    'w,z': {
+      name: 'Švagrová (manželčina sestra)',
+      archaic: 'Staročesky zelva, zelvice',
+      description: 'Sestra tvé manželky (v historické češtině specificky zvána zelva)',
+      lineType: 'affinity'
+    },
+    'h,b': {
+      name: 'Švagr (manželův bratr)',
+      archaic: 'Staročesky deveř',
+      description: 'Bratr tvého manžela (v historické češtině specificky zván deveř)',
+      lineType: 'affinity'
+    },
+    'h,z': {
+      name: 'Švagrová (manželova sestra)',
+      archaic: 'Švagrová',
+      description: 'Sestra tvého manžela',
+      lineType: 'affinity'
+    },
+    'w,b,w': {
+      name: 'Švagrová (manželka švagra)',
+      archaic: 'Švagrová',
+      description: 'Manželka bratra tvé manželky',
+      lineType: 'affinity'
+    },
+    'w,z,h': {
+      name: 'Švagr (manžel švagrové)',
+      archaic: 'Švagr',
+      description: 'Manžel sestry tvé manželky',
+      lineType: 'affinity'
+    },
+    'h,b,w': {
+      name: 'Švagrová',
+      archaic: 'Švagrová',
+      description: 'Manželka bratra tvého manžela',
+      lineType: 'affinity'
+    },
+    'h,z,h': {
+      name: 'Švagr',
+      archaic: 'Švagr',
+      description: 'Manžel sestry tvého manžela',
+      lineType: 'affinity'
+    },
+
+    // Partneři dětí (Snacha a zeť)
+    's,w': {
+      name: 'Snacha',
+      archaic: 'Nevěsta (obecně přivdaná žena)',
+      description: 'Manželka tvého syna',
+      lineType: 'affinity'
+    },
+    'd,h': {
+      name: 'Zeť',
+      archaic: 'Svak (obecně přiženěný muž)',
+      description: 'Manžel tvé dcery',
+      lineType: 'affinity'
+    },
+    's,s,w': {
+      name: 'Prasnacha',
+      archaic: 'Manželka vnuka',
+      description: 'Manželka tvého vnuka',
+      lineType: 'affinity'
+    },
+    'd,d,h': {
+      name: 'Prazeť',
+      archaic: 'Manžel vnučky',
+      description: 'Manžel tvé vnučky',
+      lineType: 'affinity'
+    },
+
+    // Rodiče partnerů dětí (Svat a svatka)
+    's,w,f': {
+      name: 'Svat (otec snachy)',
+      archaic: 'Starosvat',
+      description: 'Otec manželky tvého syna',
+      lineType: 'affinity'
+    },
+    's,w,m': {
+      name: 'Svatka (matka snachy)',
+      archaic: 'Starosvatka',
+      description: 'Matka manželky tvého syna',
+      lineType: 'affinity'
+    },
+    'd,h,f': {
+      name: 'Svat (otec zetě)',
+      archaic: 'Starosvat',
+      description: 'Otec manžela tvé dcery',
+      lineType: 'affinity'
+    },
+    'd,h,m': {
+      name: 'Svatka (matka zetě)',
+      archaic: 'Starosvatka',
+      description: 'Matka manžela tvé dcery',
+      lineType: 'affinity'
+    }
+  }
+};

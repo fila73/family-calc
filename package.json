@@ -1,0 +1,22 @@
+{
+  "name": "family-calc",
+  "version": "1.0.0",
+  "description": "Interaktivní kalkulačka rodinných vztahů inspirovaná čínskou kalkulačkou příbuzenství",
+  "type": "module",
+  "scripts": {
+    "test": "node tests/kinship.test.js",
+    "dev": "node server.js",
+    "start": "node server.js"
+  },
+  "keywords": [
+    "kinship",
+    "family",
+    "calculator",
+    "genealogy",
+    "rodina",
+    "pribuzenstvo",
+    "czech"
+  ],
+  "author": "",
+  "license": "MIT"
+}
