@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>Rodinná kalkulačka (Terms of Kinship) - Výpočet rodinných vztahů</title>
+  <meta name="description" content="Interaktivní kalkulačka příbuzenských vztahů v češtině, angličtině, čínštině a slovenštině s podporou historických a staročeských termínů podle české Wikipedie.">
+  <meta name="theme-color" content="#000000">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  
+  <!-- Web App Manifest -->
+  <link rel="manifest" href="manifest.json">
+  
+  <!-- Modern Typography from Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Main Mobile App Wrapper -->
+  <main class="app-wrapper" id="appMain">
+    
+    <!-- Header -->
+    <header class="app-header" id="appHeader">
+      <div class="header-left">
+        <button class="back-btn" id="resetBtn" title="Vyčistit výpočet" aria-label="Resetovat kalkulačku">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="19" y1="12" x2="5" y2="12"></line>
+            <polyline points="12 19 5 12 12 5"></polyline>
+          </svg>
+        </button>
+        <div class="app-title-group">
+          <h1 id="appTitle">Rodinná kalkulačka</h1>
+          <p id="appSubtitle">Terms of kinship</p>
+        </div>
+      </div>
+
+      <div class="header-controls">
+        <!-- Language Selector -->
+        <div class="lang-select-wrapper">
+          <select id="langSelect" class="lang-select" aria-label="Výběr jazyka"></select>
+        </div>
+
+        <!-- Dictionary Explorer Button -->
+        <button class="icon-action-btn" id="openDictBtn" title="Otevřít slovník pojmů" aria-label="Slovník příbuzenských vztahů">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Proband (Ego) Gender Selector Bar -->
+    <div class="proband-bar" id="probandBar">
+      <span class="proband-label" id="probandLabel">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+          <circle cx="12" cy="7" r="4"></circle>
+        </svg>
+        <span id="probandLabelText">Moje pohlaví</span>
+      </span>
+      <div class="gender-toggle" role="group" aria-label="Výběr pohlaví výchozí osoby">
+        <button class="gender-btn active" id="genderBtnMale" type="button">Muž ♂</button>
+        <button class="gender-btn" id="genderBtnFemale" type="button">Žena ♀</button>
+      </div>
+    </div>
+
+    <!-- Display Area -->
+    <section class="calculator-display" id="calcDisplay">
+      <!-- Breadcrumb Chain -->
+      <div class="chain-container" id="chainContainer" aria-live="polite"></div>
+
+      <!-- Main Result -->
+      <div class="result-container" id="resultContainer">
+        <div class="result-main" id="resultMain">Já (proband)</div>
+        <div class="result-meta-badges" id="metaBadges"></div>
+      </div>
+
+      <!-- Result Details Box -->
+      <div class="result-details-box" id="resultDetailsBox">
+        <div class="detail-row">
+          <span class="detail-label" id="explanationLabel">Vysvětlení cesty:</span>
+          <span class="detail-value" id="detailExplanation">Výchozí osoba, od níž se odvíjí genealogický vztah</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label" id="reciprocalLabel">Vzájemné oslovení:</span>
+          <span class="detail-value" id="detailReciprocal">—</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Keypad Grid (Ergonomic 4x4 Mobile Calculator Layout) -->
+    <section class="keypad" id="keypad" aria-label="Klávesnice rodinných vztahů">
+      <!-- Row 1: Manžel | Manželka | Clear (C) | Backspace -->
+      <button class="key" id="keyHusband" type="button" aria-label="Manžel">
+        Manžel
+      </button>
+      <button class="key" id="keyWife" type="button" aria-label="Manželka">
+        Manželka
+      </button>
+      <button class="key key-clear" id="keyClear" type="button" aria-label="Vymazat vše">
+        C
+      </button>
+      <button class="key key-backspace" id="keyBackspace" type="button" aria-label="Smazat poslední krok">
+        <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 4H8l-7 8 7 8h13a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2z"></path>
+          <line x1="18" y1="9" x2="12" y2="15"></line>
+          <line x1="12" y1="9" x2="18" y2="15"></line>
+        </svg>
+      </button>
+
+      <!-- Row 2: Otec | Matka | Syn | Dcera -->
+      <button class="key" id="keyFather" type="button" aria-label="Otec">
+        Otec
+      </button>
+      <button class="key" id="keyMother" type="button" aria-label="Matka">
+        Matka
+      </button>
+      <button class="key" id="keySon" type="button" aria-label="Syn">
+        Syn
+      </button>
+      <button class="key" id="keyDaughter" type="button" aria-label="Dcera">
+        Dcera
+      </button>
+
+      <!-- Row 3: Bratr (st.) | Bratr (ml.) | Sestra (st.) | Sestra (ml.) -->
+      <button class="key" id="keyBrotherOld" type="button" aria-label="Bratr starší">
+        Bratr<span class="key-subtext">starší</span>
+      </button>
+      <button class="key" id="keyBrotherYoung" type="button" aria-label="Bratr mladší">
+        Bratr<span class="key-subtext">mladší</span>
+      </button>
+      <button class="key" id="keySisterOld" type="button" aria-label="Sestra starší">
+        Sestra<span class="key-subtext">starší</span>
+      </button>
+      <button class="key" id="keySisterYoung" type="button" aria-label="Sestra mladší">
+        Sestra<span class="key-subtext">mladší</span>
+      </button>
+
+      <!-- Row 4: Vzájemný vztah (互查) [span 2] | = Spočítat [span 2] -->
+      <button class="key key-mutual" id="keyMutual" type="button" aria-label="Vzájemný vztah - jak mi říká on?">
+        Vzájemný vztah (互查)
+      </button>
+      <button class="key key-equals" id="keyEquals" type="button" aria-label="Spočítat výsledek">
+        =
+      </button>
+    </section>
+
+    <!-- Dictionary Drawer Modal -->
+    <div class="modal-overlay" id="dictModal" role="dialog" aria-modal="true" aria-labelledby="dictModalTitle">
+      <div class="modal-header">
+        <h2 id="dictModalTitle">Slovník rodinných vztahů</h2>
+        <button class="modal-close-btn" id="closeDictBtn" aria-label="Zavřít slovník">&times;</button>
+      </div>
+      <div class="modal-search-box">
+        <input type="search" class="modal-search-input" id="dictSearchInput" placeholder="Hledat výraz (např. ujec, deveř, tchán, švagr...)" autocomplete="off">
+      </div>
+      <div class="modal-list" id="dictList"></div>
+    </div>
+
+    <!-- Feedback Toast -->
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  </main>
+
+  <!-- ES6 Module Script -->
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
