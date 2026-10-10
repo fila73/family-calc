@@ -27,7 +27,7 @@ export const sk = {
     clear: 'Zmazať',
     backspace: 'Späť',
     calculate: 'Vypočítať',
-    mutual: 'Vzájomný vzťah (互查)',
+    mutual: 'Vzájomný vzťah',
     tokens: {
       f: 'otec',
       m: 'matka',

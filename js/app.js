@@ -249,7 +249,15 @@ class FamilyCalcApp {
     if (this.chain.length === 0) return;
     this.isMutualView = !this.isMutualView;
     this.render();
-    this.showToast(this.isMutualView ? 'Přepnuto na: Kdo jsem já pro něj (互查)' : 'Základní pohled kalkulačky');
+    const mutualMsg = this.currentLang === 'zh' ? '已切换至互查模式' :
+                      this.currentLang === 'sk' ? 'Prepnuté na: Kto som ja pre neho' :
+                      this.currentLang === 'en' ? 'Switched to reciprocal view' :
+                      'Přepnuto na: Kdo jsem já pro něj';
+    const baseMsg = this.currentLang === 'zh' ? '基础模式' :
+                    this.currentLang === 'sk' ? 'Základný pohľad' :
+                    this.currentLang === 'en' ? 'Standard view' :
+                    'Základní pohled';
+    this.showToast(this.isMutualView ? mutualMsg : baseMsg);
   }
 
   onEquals() {

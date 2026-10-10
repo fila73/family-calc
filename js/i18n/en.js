@@ -27,7 +27,7 @@ export const en = {
     clear: 'Clear',
     backspace: 'Back',
     calculate: 'Equals',
-    mutual: 'Mutual Query (互查)',
+    mutual: 'Reciprocal',
     tokens: {
       f: 'father',
       m: 'mother',
