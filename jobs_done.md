@@ -28,3 +28,9 @@
 - [x] Lokální testovací server (`server.js`) a ověření funkčnosti v reálném prohlížeči pomocí `browser_subagent`.
 - [x] Oprava kontrastu rozbalovacího menu jazyků (`#langSelect`): doplnění `color-scheme: dark;` a explicitního tmavého pozadí s bílým písmem pro `option` prvky.
 - [x] Vyčištění popisku tlačítka "Vzájemný vztah": odstraněny pozůstatky čínských znaků `(互查)` z češtiny, angličtiny a slovenštiny (čínský znak `互查` se nyní zobrazuje výhradně při volbě čínštiny).
+- [x] Přidání 4 nových jazyků:
+  - **한국어 (Korean 🇰🇷)**: kompletní slovník 친족 관계 (할아버지, 큰아버지, 고모, 외삼촌, 이모, 사촌, 며느리, 사위...).
+  - **Русский (Russian 🇷🇺)**: kompletní slovník (дядя, тётя, двоюродный брат, шурин, деверь, невестка, золовка...).
+  - **Polski (Polish 🇵🇱)**: kompletní slovník (stryj, wuj, ciotka, bratanek, siostrzeniec, szwagier, bratowa...).
+  - **Deutsch (German 🇩🇪)**: kompletní slovník (Großvater, Onkel, Tante, Cousin, Neffe, Schwager, Schwägerin...).
+- [x] Rozšíření testovací sady v `tests/kinship.test.js` (20 / 20 testů úspěšně prošlo) a ověření všech nových jazyků v reálném prohlížeči.
