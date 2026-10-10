@@ -27,3 +27,4 @@
   - `capacitor.config.json` a návod v `PLUGIN_DEV.md` pro build do Android a iOS.
 - [x] Lokální testovací server (`server.js`) a ověření funkčnosti v reálném prohlížeči pomocí `browser_subagent`.
 - [x] Oprava kontrastu rozbalovacího menu jazyků (`#langSelect`): doplnění `color-scheme: dark;` a explicitního tmavého pozadí s bílým písmem pro `option` prvky.
+- [x] Vyčištění popisku tlačítka "Vzájemný vztah": odstraněny pozůstatky čínských znaků `(互查)` z češtiny, angličtiny a slovenštiny (čínský znak `互查` se nyní zobrazuje výhradně při volbě čínštiny).
