@@ -192,6 +192,26 @@ class FamilyCalcApp {
       this.setKeyContent(this.keyBrotherYoung, '弟', '幼');
       this.setKeyContent(this.keySisterOld, '姐', '长');
       this.setKeyContent(this.keySisterYoung, '妹', '幼');
+    } else if (this.currentLang === 'ko') {
+      this.setKeyContent(this.keyBrotherOld, '형/오빠', '연상');
+      this.setKeyContent(this.keyBrotherYoung, '남동생', '연하');
+      this.setKeyContent(this.keySisterOld, '누나/언니', '연상');
+      this.setKeyContent(this.keySisterYoung, '여동생', '연하');
+    } else if (this.currentLang === 'ru') {
+      this.setKeyContent(this.keyBrotherOld, 'Брат', 'старший');
+      this.setKeyContent(this.keyBrotherYoung, 'Брат', 'младший');
+      this.setKeyContent(this.keySisterOld, 'Сестра', 'старшая');
+      this.setKeyContent(this.keySisterYoung, 'Сестра', 'младшая');
+    } else if (this.currentLang === 'pl') {
+      this.setKeyContent(this.keyBrotherOld, 'Brat', 'starszy');
+      this.setKeyContent(this.keyBrotherYoung, 'Brat', 'młodszy');
+      this.setKeyContent(this.keySisterOld, 'Siostra', 'starsza');
+      this.setKeyContent(this.keySisterYoung, 'Siostra', 'młodsza');
+    } else if (this.currentLang === 'de') {
+      this.setKeyContent(this.keyBrotherOld, 'Bruder', 'älterer');
+      this.setKeyContent(this.keyBrotherYoung, 'Bruder', 'jüngerer');
+      this.setKeyContent(this.keySisterOld, 'Schwester', 'ältere');
+      this.setKeyContent(this.keySisterYoung, 'Schwester', 'jüngere');
     } else if (this.currentLang === 'cs') {
       this.setKeyContent(this.keyBrotherOld, 'Bratr', 'starší');
       this.setKeyContent(this.keyBrotherYoung, 'Bratr', 'mladší');
@@ -250,10 +270,18 @@ class FamilyCalcApp {
     this.isMutualView = !this.isMutualView;
     this.render();
     const mutualMsg = this.currentLang === 'zh' ? '已切换至互查模式' :
+                      this.currentLang === 'ko' ? '상호 호칭 모드로 전환됨' :
+                      this.currentLang === 'ru' ? 'Переключено на взаимное обращение' :
+                      this.currentLang === 'pl' ? 'Przełączono na relację wzajemną' :
+                      this.currentLang === 'de' ? 'Auf gegenseitige Anrede umgeschaltet' :
                       this.currentLang === 'sk' ? 'Prepnuté na: Kto som ja pre neho' :
                       this.currentLang === 'en' ? 'Switched to reciprocal view' :
                       'Přepnuto na: Kdo jsem já pro něj';
     const baseMsg = this.currentLang === 'zh' ? '基础模式' :
+                    this.currentLang === 'ko' ? '기본 모드' :
+                    this.currentLang === 'ru' ? 'Основной режим' :
+                    this.currentLang === 'pl' ? 'Tryb podstawowy' :
+                    this.currentLang === 'de' ? 'Standardansicht' :
                     this.currentLang === 'sk' ? 'Základný pohľad' :
                     this.currentLang === 'en' ? 'Standard view' :
                     'Základní pohled';

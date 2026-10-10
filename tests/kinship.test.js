@@ -7,6 +7,10 @@ import { resolveKinship, invertChain, simplifyChain } from '../js/engine/kinship
 import { cs } from '../js/i18n/cs.js';
 import { en } from '../js/i18n/en.js';
 import { zh } from '../js/i18n/zh.js';
+import { ko } from '../js/i18n/ko.js';
+import { ru } from '../js/i18n/ru.js';
+import { pl } from '../js/i18n/pl.js';
+import { de } from '../js/i18n/de.js';
 
 let passed = 0;
 let total = 0;
@@ -137,6 +141,35 @@ it('Anglický překlad pro strýce a synovce', () => {
 it('Čínský překlad (podle předlohy)', () => {
   const rZH = resolveKinship(['f', 'f'], 'm', zh);
   assert.strictEqual(rZH.name, '爷爷');
+});
+
+console.log('\n7. Nové jazyky (Korejština, Ruština, Polština, Němčina):');
+it('Korejský překlad (할아버지, 큰아버지, 며느리)', () => {
+  const rKO1 = resolveKinship(['f', 'f'], 'm', ko);
+  assert.ok(rKO1.name.includes('할아버지'));
+  const rKO2 = resolveKinship(['s', 'w'], 'm', ko);
+  assert.strictEqual(rKO2.name, '며느리');
+});
+
+it('Ruský překlad (Дядя, Шурин, Невестка)', () => {
+  const rRU1 = resolveKinship(['f', 'b'], 'm', ru);
+  assert.strictEqual(rRU1.name, 'Дядя (брат отца)');
+  const rRU2 = resolveKinship(['w', 'b'], 'm', ru);
+  assert.strictEqual(rRU2.name, 'Шурин');
+});
+
+it('Polský překlad (Stryj, Szwagier, Bratanek)', () => {
+  const rPL1 = resolveKinship(['f', 'b'], 'm', pl);
+  assert.strictEqual(rPL1.name, 'Stryj (brat ojca)');
+  const rPL2 = resolveKinship(['b', 's'], 'm', pl);
+  assert.strictEqual(rPL2.name, 'Bratanek (syn brata)');
+});
+
+it('Německý překlad (Großvater, Onkel, Schwiegervater)', () => {
+  const rDE1 = resolveKinship(['f', 'f'], 'm', de);
+  assert.strictEqual(rDE1.name, 'Großvater (väterlicherseits)');
+  const rDE2 = resolveKinship(['w', 'f'], 'm', de);
+  assert.strictEqual(rDE2.name, 'Schwiegervater');
 });
 
 console.log(`\n========================================`);
