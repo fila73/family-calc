@@ -12,5 +12,5 @@ Interaktivní webová aplikace inspirovaná čínskou kalkulačkou příbuzenstv
   - **`✝ Křestní`**: duchovní příbuzenství (*Kmotr*, *Kmotra*, *Kmotřenec*, *Kmotřenka*).
 - **Oboustranný výpočet (互查)**: přepnutí perspektivy – okamžité zjištění, jak daný příbuzný oslovuje vás ("Kdo jsem já pro něj?").
 - **Volba pohlaví EGO / probanda**: muž / žena (výrazně ovlivňuje partnerské a vzájemné vztahy).
-- **Připraveno pro vícejazyčnost**: architektura s oddělenými lokalizacemi (Čeština 🇨🇿, Slovenčina 🇸🇰, Polski 🇵🇱, Deutsch 🇩🇪, English 🇬🇧, Русский 🇷🇺, 中文 🇨🇳, 한국어 🇰🇷).
+- **Připraveno pro vícejazyčnost**: architektura s oddělenými lokalizacemi (Čeština 🇨🇿, Slovenčina 🇸🇰, Polski 🇵🇱, Deutsch 🇩🇪, English 🇬🇧, Français 🇫🇷, Italiano 🇮🇹, Español 🇪🇸, Русский 🇷🇺, 中文 🇨🇳, 한국어 🇰🇷).
 - **Připraveno pro mobilní aplikace**: čistý kód bez zbytečných závislostí, podpora PWA a připravenost pro zabalení do Android (APK/AAB) a iOS pomocí Capacitoru.

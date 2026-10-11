@@ -3,6 +3,9 @@ import { sk } from './sk.js';
 import { pl } from './pl.js';
 import { de } from './de.js';
 import { en } from './en.js';
+import { fr } from './fr.js';
+import { it } from './it.js';
+import { es } from './es.js';
 import { ru } from './ru.js';
 import { zh } from './zh.js';
 import { ko } from './ko.js';
@@ -13,6 +16,9 @@ export const dictionaries = {
   pl,
   de,
   en,
+  fr,
+  it,
+  es,
   ru,
   zh,
   ko
@@ -24,6 +30,9 @@ export const availableLanguages = [
   { code: 'pl', label: 'Polski 🇵🇱' },
   { code: 'de', label: 'Deutsch 🇩🇪' },
   { code: 'en', label: 'English 🇬🇧' },
+  { code: 'fr', label: 'Français 🇫🇷' },
+  { code: 'it', label: 'Italiano 🇮🇹' },
+  { code: 'es', label: 'Español 🇪🇸' },
   { code: 'ru', label: 'Русский 🇷🇺' },
   { code: 'zh', label: '中文 🇨🇳' },
   { code: 'ko', label: '한국어 🇰🇷' }

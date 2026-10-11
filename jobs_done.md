@@ -52,3 +52,10 @@
   - Spodní label (`key-subtext`) nyní zobrazuje **původní název tlačítka** (např. na tlačítku **Macecha** je spodní label **matka**, na **Otčím** je **otec**, na **Pastorek** je **syn** atd.).
   - U irelevantních vazeb v křestním režimu (✝ Křestní) jsou tlačítka (*Manžel*, *Manželka*, *Bratr*, *Sestra*) automaticky **deaktivována (disabled)**, zešedlá a neklikací.
 - [x] Ověřeno v reálném prohlížeči pomocí `browser_subagent` s pořízením screenshotů.
+- [x] Přidání 3 nových románských jazyků (celkem 11 podporovaných jazyků):
+  - **Français (French 🇫🇷)**: kompletní slovník `fr.js` (*Père, Mère, Grand-père paternel, Oncle, Tante, Cousin germain, Neveu, Nièce, Belle-sœur, Beau-frère, Bru, Gendre, Parrain, Marraine, Filleul, Belle-mère...*).
+  - **Italiano (Italian 🇮🇹)**: kompletní slovník `it.js` (*Padre, Madre, Nonno paterno, Zio, Zia, Cugino, Nipote, Cognato, Cognata, Nuora, Genero, Padrino, Madrina, Figlioccio, Matrigna, Patrigno...*).
+  - **Español (Spanish 🇪🇸)**: kompletní slovník `es.js` (*Padre, Madre, Abuelo paterno, Tío, Tía, Primo hermano, Sobrino, Sobrina, Cuñado, Cuñada, Nuera, Yerno, Padrino, Madrina, Ahijado, Madrastra, Padrastro...*).
+- [x] Rozšíření testovací sady v `tests/kinship.test.js` na **29 / 29 úspěšně procházejících testů**.
+- [x] Aktualizace Service Workeru (`sw.js`) na verzi `family-calc-v4`.
+- [x] Úspěšné ověření v reálném prohlížeči pomocí `browser_subagent`.

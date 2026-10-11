@@ -241,6 +241,21 @@ class FamilyCalcApp {
       broYoungMain = 'Bruder'; broYoungSub = 'jüngerer';
       sisOldMain = 'Schwester'; sisOldSub = 'ältere';
       sisYoungMain = 'Schwester'; sisYoungSub = 'jüngere';
+    } else if (this.currentLang === 'fr') {
+      broOldMain = 'Frère'; broOldSub = 'aîné';
+      broYoungMain = 'Frère'; broYoungSub = 'cadet';
+      sisOldMain = 'Sœur'; sisOldSub = 'aînée';
+      sisYoungMain = 'Sœur'; sisYoungSub = 'cadette';
+    } else if (this.currentLang === 'it') {
+      broOldMain = 'Fratello'; broOldSub = 'maggiore';
+      broYoungMain = 'Fratello'; broYoungSub = 'minore';
+      sisOldMain = 'Sorella'; sisOldSub = 'maggiore';
+      sisYoungMain = 'Sorella'; sisYoungSub = 'minore';
+    } else if (this.currentLang === 'es') {
+      broOldMain = 'Hermano'; broOldSub = 'mayor';
+      broYoungMain = 'Hermano'; broYoungSub = 'menor';
+      sisOldMain = 'Hermana'; sisOldSub = 'mayor';
+      sisYoungMain = 'Hermana'; sisYoungSub = 'menor';
     } else if (this.currentLang === 'sk') {
       broOldMain = 'Brat'; broOldSub = 'starší';
       broYoungMain = 'Brat'; broYoungSub = 'mladší';
@@ -381,6 +396,9 @@ class FamilyCalcApp {
                       this.currentLang === 'ru' ? 'Переключено на взаимное обращение' :
                       this.currentLang === 'pl' ? 'Przełączono na relację wzajemną' :
                       this.currentLang === 'de' ? 'Auf gegenseitige Anrede umgeschaltet' :
+                      this.currentLang === 'fr' ? 'Passé en mode réciproque' :
+                      this.currentLang === 'it' ? 'Passato alla modalità reciproca' :
+                      this.currentLang === 'es' ? 'Cambiado a modo recíproco' :
                       this.currentLang === 'sk' ? 'Prepnuté na: Kto som ja pre neho' :
                       this.currentLang === 'en' ? 'Switched to reciprocal view' :
                       'Přepnuto na: Kdo jsem já pro něj';
@@ -389,6 +407,9 @@ class FamilyCalcApp {
                     this.currentLang === 'ru' ? 'Основной режим' :
                     this.currentLang === 'pl' ? 'Tryb podstawowy' :
                     this.currentLang === 'de' ? 'Standardansicht' :
+                    this.currentLang === 'fr' ? 'Mode standard' :
+                    this.currentLang === 'it' ? 'Modalità standard' :
+                    this.currentLang === 'es' ? 'Modo estándar' :
                     this.currentLang === 'sk' ? 'Základný pohľad' :
                     this.currentLang === 'en' ? 'Standard view' :
                     'Základní pohled';

@@ -11,6 +11,9 @@ import { ko } from '../js/i18n/ko.js';
 import { ru } from '../js/i18n/ru.js';
 import { pl } from '../js/i18n/pl.js';
 import { de } from '../js/i18n/de.js';
+import { fr } from '../js/i18n/fr.js';
+import { it as itLang } from '../js/i18n/it.js';
+import { es } from '../js/i18n/es.js';
 
 let passed = 0;
 let total = 0;
@@ -231,9 +234,50 @@ it('Křestní modifikátor a vzájemný vztah (kmotr / kmotřenec)', () => {
   assert.strictEqual(rInvF.name, 'Kmotřenka');
 });
 
+console.log('\n9. Románské jazyky (Francouzština, Italština, Španělština):');
+it('Francouzský překlad (Grand-père, Oncle, Belle-fille, Belle-mère, Parrain)', () => {
+  const rFR1 = resolveKinship(['f', 'f'], 'm', fr);
+  assert.strictEqual(rFR1.name, 'Grand-père (paternel)');
+  const rFR2 = resolveKinship(['f', 'b'], 'm', fr);
+  assert.strictEqual(rFR2.name, 'Oncle (paternel)');
+  const rFR3 = resolveKinship(['s', 'w'], 'm', fr);
+  assert.strictEqual(rFR3.name, 'Belle-fille (bru)');
+  const rFR4 = resolveKinship(['step_m'], 'm', fr);
+  assert.strictEqual(rFR4.name, 'Belle-mère');
+  const rFR5 = resolveKinship(['god_f'], 'm', fr);
+  assert.strictEqual(rFR5.name, 'Parrain');
+});
+
+it('Italský překlad (Nonno, Zio, Nuora, Matrigna, Padrino)', () => {
+  const rIT1 = resolveKinship(['f', 'f'], 'm', itLang);
+  assert.strictEqual(rIT1.name, 'Nonno paterno');
+  const rIT2 = resolveKinship(['f', 'b'], 'm', itLang);
+  assert.strictEqual(rIT2.name, 'Zio (paterno)');
+  const rIT3 = resolveKinship(['s', 'w'], 'm', itLang);
+  assert.strictEqual(rIT3.name, 'Nuora');
+  const rIT4 = resolveKinship(['step_m'], 'm', itLang);
+  assert.strictEqual(rIT4.name, 'Matrigna');
+  const rIT5 = resolveKinship(['god_f'], 'm', itLang);
+  assert.strictEqual(rIT5.name, 'Padrino');
+});
+
+it('Španělský překlad (Abuelo, Tío, Nuera, Madrastra, Padrino)', () => {
+  const rES1 = resolveKinship(['f', 'f'], 'm', es);
+  assert.strictEqual(rES1.name, 'Abuelo paterno');
+  const rES2 = resolveKinship(['f', 'b'], 'm', es);
+  assert.strictEqual(rES2.name, 'Tío (paterno)');
+  const rES3 = resolveKinship(['s', 'w'], 'm', es);
+  assert.strictEqual(rES3.name, 'Nuera');
+  const rES4 = resolveKinship(['step_m'], 'm', es);
+  assert.strictEqual(rES4.name, 'Madrastra');
+  const rES5 = resolveKinship(['god_f'], 'm', es);
+  assert.strictEqual(rES5.name, 'Padrino');
+});
+
 console.log(`\n========================================`);
 console.log(`Výsledky testů: ${passed} / ${total} prošlo.`);
 if (passed !== total) {
   process.exit(1);
 }
+
 
