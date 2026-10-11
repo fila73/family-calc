@@ -143,4 +143,9 @@
   - `tests/reductions_mutual.test.js`: 26 nových jednotkových testů pokrývajících macechu, otčíma, jiného manžela, sešvagřené synovce, cizojazyčné ekvivalenty a úplný audit všech vztahů.
   - `tests/audit_all.js`: vyčerpávající audit všech 132 vztahů z `cs.js` v obou pohlavích (264 běhů), s výsledkem **0 neznámých vztahů** (100% úspěšnost).
   - Aktualizace `npm test` v `package.json` na spuštění obou sad: celkem **75 / 75 úspěšně procházejících testů**.
+- [x] Oprava chybějícího importu `getTokenGender` v `js/app.js`:
+  - Doplněn import `getTokenGender` z `./engine/kinship-engine.js` do hlavičky `js/app.js`.
+  - Odstraněna `ReferenceError: getTokenGender is not defined`, která blokovala volání metody `render()` a způsobovala nefunkčnost tlačítek na displeji.
+  - Zvýšena verze Service Workeru (`sw.js`) na `family-calc-v10` pro okamžitou aktualizaci v prohlížeči.
+  - Ověřeno živým proklikáním v prohlížeči (`Otec ➔ Otec = Dědeček`, otevření rodokmenu, modifikátory, Clear, Backspace).
 

@@ -2,7 +2,7 @@
  * Rodinná kalkulačka - Hlavní aplikační kontrolér
  */
 
-import { resolveKinship, invertChain, TOKENS } from './engine/kinship-engine.js';
+import { resolveKinship, invertChain, TOKENS, getTokenGender } from './engine/kinship-engine.js';
 import { parseGedcom } from './engine/gedcom-parser.js';
 import { getDictionary, languagesRegistry, languageCategories, getLanguageMeta } from './i18n/index.js';
 
