@@ -399,23 +399,23 @@ body::before {
 /* Display Section (Expression & Result) */
 .calculator-display {
   flex: 1;
-  padding: 20px 22px 14px;
+  padding: 12px 20px 10px;
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
   position: relative;
   overflow-y: auto;
-  min-height: 180px;
+  min-height: 160px;
 }
 
 /* Chain Breadcrumb Scroll */
 .chain-container {
+  margin-top: auto;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: 6px;
-  margin-bottom: 14px;
-  max-height: 90px;
+  margin-bottom: 10px;
+  max-height: 80px;
   overflow-y: auto;
   padding-right: 4px;
 }
@@ -454,7 +454,7 @@ body::before {
 
 /* Result Title (Prominent, like in photo) */
 .result-container {
-  margin-bottom: 8px;
+  margin-bottom: 6px;
   animation: fadeInResult 0.25s ease-out;
 }
 
@@ -464,7 +464,7 @@ body::before {
 }
 
 .result-main {
-  font-size: 2.15rem;
+  font-size: 1.85rem;
   font-weight: 700;
   color: var(--text-primary);
   letter-spacing: -0.5px;
@@ -662,7 +662,9 @@ body::before {
   border-radius: var(--radius-lg);
   color: var(--text-primary);
   font-family: inherit;
-  font-size: 1.15rem;
+  font-size: 1.02rem;
+  letter-spacing: -0.015em;
+  padding: 0 2px;
   font-weight: 500;
   display: flex;
   flex-direction: column;

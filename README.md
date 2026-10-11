@@ -33,5 +33,13 @@ An interactive web application inspired by the Chinese kinship calculator (亲�
 - **Mobile Native Ready**: PWA compliant with Network-First Service Worker, full Capacitor native Android project (`cz.fila73.familycalc`).
 - **Pre-Built Android Packages**: Ready-to-use binaries in `build-android/` — `Rodinna-Kalkulacka-debug.apk` (4.25 MB) for instant phone sideloading and `Rodinna-Kalkulacka-release.aab` (3.11 MB) for Google Play Console.
 - **Google Play Store Assets & Guide**: Complete store registration package in `google-play/` (Privacy Policy `privacy.html`, Store listing texts `STORE_LISTING.md`, Keystore and release instructions `RELEASE_GUIDE.md`).
+- **Store Graphics & Screenshots in `google-play/assets/`**:
+  - High-res App Icon 512 × 512 px PNG (`icon-512.png`).
+  - Feature Graphic 1024 × 500 px PNG (`feature-graphic-1024x500.png`).
+  - 5 Full HD Phone Screenshots 1080 × 2400 px captured directly on real Xiaomi Redmi Note 11 Pro 5G via ADB (`screenshot_1_calculator.png` to `screenshot_5_quiz.png`).
+- **GitHub Pages Web Presentation & Privacy Policy**:
+  - `https://fila73.github.io/family-calc/`
+  - `https://fila73.github.io/family-calc/privacy.html`
 - **Ethical Zero-Ad & Zero-Tracking Monetization**: Strictly no ads, no trackers, and no third-party telemetry. 100% offline functionality. Voluntary donation tip jar modal (`#donateModal`) supporting Czech QR SPAYD payments, Ko-fi, Buy Me a Coffee, and Google Play ratings.
+
 

@@ -188,3 +188,21 @@
   - Nastavení Java 17 kompatibility v `android/build.gradle`, `variables.gradle` a Capacitor knihovně.
   - **Úspěšné sestavení testovacího APK**: `build-android/Rodinna-Kalkulacka-debug.apk` (4,25 MB) připraveno pro okamžitou instalaci na libovolný Android telefon (přes `adb install` nebo stažením do mobilu).
   - **Úspěšné sestavení produkčního AAB**: `build-android/Rodinna-Kalkulacka-release.aab` (3,11 MB) připraveno pro nahrání do Google Play Console.
+- [x] Generování a příprava grafických podkladů pro Google Play Store v adresáři `google-play/assets/`:
+  - **Ikona aplikace**: `icon-512.png` (512 × 512 px, 32-bit PNG bez průhlednosti na tmavém pozadí `#09090b`).
+  - **Hlavní grafika (Feature Graphic)**: `feature-graphic-1024x500.png` (1024 × 500 px, PNG do 15 MB) s AMOLED vizuálem a nápisem Rodinná kalkulačka.
+- [x] Reálné testování a snímání screenshotů na připojeném telefonu přes ADB:
+  - Telefon Xiaomi Redmi Note 11 Pro 5G (rozlišení 1080 × 2400 px) připojen a ověřen přes ADB.
+  - Aplikace `cz.fila73.familycalc` nainstalována přímo na telefon a spuštěna.
+  - Vyladěna typografie a layout: opraven ořez textu "manželka" na klávesnici a vyřešen flex overflow na displeji.
+  - Nasnímáno 5 oficiálních screenshotů v nativním rozlišení 1080 × 2400 px:
+    1. `screenshot_1_calculator.png` — Hlavní displej kalkulačky s výpočtem Strýc (otcův bratr), odznaky DNA a dědických tříd.
+    2. `screenshot_2_tree.png` — Vizuální minirodokmen (JÁ ➔ otec ➔ starší bratr ➔ cíl výpočtu).
+    3. `screenshot_3_languages.png` — Výběr z 25 lokalizovaných jazyků s vyhledáváním a rychlými čipy.
+    4. `screenshot_4_gedcom.png` — GEDCOM analyzátor rodokmenů s načteným stromem a porovnáním osob.
+    5. `screenshot_5_quiz.png` — Výukový kvíz rodinných vztahů s vyhodnocenou správnou odpovědí a počítadlem sérií.
+- [x] Příprava publikace GitHub Pages (`https://fila73.github.io/family-calc/privacy.html`):
+  - Vytvořen soubor `.nojekyll` zabraňující ignorování systémových souborů Jekyllem.
+  - Zásady ochrany osobních údajů v `privacy.html` v kořenu repozitáře připraveny k okamžitému servírování.
+  - Nastaven lokální Git remote `origin` na `https://github.com/fila73/family-calc.git`.
+

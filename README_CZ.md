@@ -36,5 +36,13 @@ Interaktivní webová aplikace inspirovaná čínskou kalkulačkou příbuzenstv
 - **Připraveno pro mobilní aplikace**: čistý kód bez zbytečných závislostí, podpora PWA a plná integrace s nativním Android projektem přes Capacitor (`cz.fila73.familycalc`).
 - **Sestavené Android balíčky**: v adresáři `build-android/` jsou k dispozici sestavené balíčky `Rodinna-Kalkulacka-debug.apk` (4,25 MB pro přímou instalaci do mobilu) a `Rodinna-Kalkulacka-release.aab` (3,11 MB pro Google Play Console).
 - **Registrace do Google Play Store**: kompletní podklady v adresáři `google-play/` (Zásady ochrany soukromí `privacy.html`, texty zápisu `STORE_LISTING.md`, příručka pro podpis a vydání `RELEASE_GUIDE.md`).
+- **Grafické podklady pro Google Play v `google-play/assets/`**:
+  - Ikona aplikace 512 × 512 px PNG (`icon-512.png`).
+  - Hlavní banner 1024 × 500 px PNG (`feature-graphic-1024x500.png`).
+  - 5 oficiálních screenshotů 1080 × 2400 px nasnímaných přímo na reálném telefonu Xiaomi Redmi Note 11 Pro 5G přes ADB (`screenshot_1_calculator.png` až `screenshot_5_quiz.png`).
+- **Webová prezentace a zásady soukromí na GitHub Pages**:
+  - `https://fila73.github.io/family-calc/`
+  - `https://fila73.github.io/family-calc/privacy.html`
 - **Čistá etická monetizace (Zero-ads & Zero-tracking)**: žádné reklamy, žádné analytické ani sledovací skripty. Aplikace funguje 100% offline. Možnost dobrovolného příspěvku v menu (dialog `#donateModal`) přes českou QR platbu SPAYD (0 % poplatků), Ko-fi / Buy Me a Coffee nebo 5hvězdičkové hodnocení na Google Play.
+
 

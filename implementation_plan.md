@@ -71,4 +71,7 @@ Vytvoření webové kalkulačky rodinných vztahů inspirované čínskou kalkul
 18. Inicializace a plná konfigurace nativního Android projektu přes Capacitor (`cz.fila73.familycalc`).
 19. Úspěšné sestavení testovacího instalačního balíčku `Rodinna-Kalkulacka-debug.apk` (4,25 MB) a produkčního `Rodinna-Kalkulacka-release.aab` (3,11 MB) v Gradle s Java 17 a Android SDK 36.
 20. Průběžné commitování do lokálního gitu a aktualizace stavu.
+21. Příprava grafických podkladů Google Play v `google-play/assets/` (ikona 512×512 px PNG, feature graphic 1024×500 px PNG).
+22. Testování a optimalizace na reálném zařízení Xiaomi Redmi Note 11 Pro 5G přes ADB, nasnímání 5 oficiálních screenshotů (1080×2400 px) pro obchod Google Play.
+23. Příprava GitHub Pages pro servírování `privacy.html` (`https://fila73.github.io/family-calc/privacy.html`) se souborem `.nojekyll` a konfigurací vzdáleného repozitáře.
 

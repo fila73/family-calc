@@ -49,6 +49,14 @@
 - [x] 21. **Sestavení nativní Android aplikace (APK a AAB)**:
   - Úspěšné sestavení instalačního debug APK balíčku `Rodinna-Kalkulacka-debug.apk` (4,25 MB) pro okamžité otestování v mobilu.
   - Úspěšné sestavení produkčního bundle balíčku `Rodinna-Kalkulacka-release.aab` (3,11 MB) připraveného pro nahrání do Google Play Console.
+- [x] 22. **Grafické podklady pro Google Play (Store Assets v `google-play/assets/`)**:
+  - Ikona aplikace 512 × 512 px PNG (32-bit RGB bez průhlednosti, tmavé pozadí `#09090b`).
+  - Feature Graphic 1024 × 500 px PNG s AMOLED vizuálem a nápisem Rodinná kalkulačka.
+- [x] 23. **Reálné screenshoty pro Google Play (1080 × 2400 px přes ADB)**:
+  - 5 oficiálních snímků obrazovky nasnímaných přímo na připojeném telefonu Xiaomi Redmi Note 11 Pro 5G: kalkulačka, minirodokmen, 25 jazyků, GEDCOM analyzátor a kvíz.
+- [x] 24. **GitHub Pages nasazení a Privacy Policy URL**:
+  - Soubor `.nojekyll`, stránka `privacy.html` a nastavený remote pro `https://fila73.github.io/family-calc/privacy.html`.
+
 
 ## Nové nápady a budoucí rozšíření
 1. **Export rodokmenu do vektorového SVG / PDF**:
