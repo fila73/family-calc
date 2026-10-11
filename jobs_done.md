@@ -120,7 +120,27 @@
   - Algoritmus BFS pro nalezení nejkratší genealogické cesty v grafu rodiny.
   - Zobrazení detailní výsledkové karty: název vztahu v aktivním jazyce, celá genealogická cesta, DNA %, dědická třída a překážka sňatku dle NOZ.
   - Tlačítko "Přenést vztah do kalkulačky ➔", které načte zjištěný řetězec přímo do displeje kalkulačky.
-- [x] Rozšíření testovací sady v `tests/kinship.test.js` na **49 / 49 úspěšně procházejících testů**.
-- [x] Aktualizace Service Workeru (`sw.js`) na verzi `family-calc-v9` s cacheováním nového modulu `gedcom-parser.js`.
-- [x] Kompletní ověření všech nových modulů v reálném prohlížeči pomocí `browser_subagent`.
+- [x] Oprava a zpřesnění redukčních pravidel v `js/engine/kinship-engine.js`:
+  - **Uživatelský případ Já ➔ Macecha ➔ jiný manžel ➔ syn**: `step_m ➔ (h | step_h) ➔ (s | step_s)` se nyní správně a spolehlivě redukuje na `step_b` (**Nevlastní bratr**).
+  - Obdobně pro dcery: `step_m ➔ (h | step_h) ➔ (d | step_d)` se redukuje na `step_z` (**Nevlastní sestra**).
+  - Symmetricky pro otčíma: `step_f ➔ (w | step_w) ➔ (s | step_s)` = `step_b` (**Nevlastní bratr**), a pro dceru `step_z` (**Nevlastní sestra**).
+  - Podpora složených řetězců: `f ➔ step_w ➔ h ➔ s` i `m ➔ step_h ➔ w ➔ s` se správně redukuje na **Nevlastní bratr**.
+  - Redukce pro sešvagřené synovce a neteře: `(h | w) ➔ (b | z) ➔ (s | d)` se redukuje na **Synovec** / **Neteř**.
+  - Dvouprvkové redukce pro nevlastní děti rodičů: `(m | f) ➔ step_s` = `step_b`, `(m | f) ➔ step_d` = `step_z`.
+- [x] Kompletní oprava a vylepšení funkce "Vzájemný vztah" (互查 / Mutual query):
+  - Oprava inverze v `invertChain`: tokeny `step_h` a `step_w` se nyní správně invertují na partnera (`h` / `w`) předchozí osoby namísto zachování původního tokenu.
+  - Správné určení mluvčího v `js/app.js`: při recipročním pohledu se mluvčí přebírá podle pohlaví cílové osoby (`targetGender`), nikoliv podle pohlaví původního Ega.
+  - Vizuální indikátor aktivního režimu: tlačítko `#keyMutual` získalo aktivní třídu `.key-mutual.active-mutual` s modrým neonovým podsvícením.
+  - Indikátor vzájemného vztahu v breadcrumbs: při aktivním vzájemném režimu je v řetězci zobrazen štítek `⇄ Vzájemný vztah k [Jméno cíle]:`.
+  - Odznak v metadatech: zobrazení animovaného štítku `⇄ Vzájemný vztah: [Cíl] ➔ říká mně`.
+  - Přepracovaný box detailů: jasné rozlišení základního vztahu a vzájemného oslovení s možností kdykoliv kliknutím přepnout zpět.
+- [x] Rozšíření slovníku `cs.js` o chybějící vztahy a inverze:
+  - Doplněny vztahy pro prazeť (`s,d,h`, `s,s,h`), prasnacha (`s,d,w`, `d,d,w`), pratchán/pratchyně (`w,m,f`, `w,m,m`).
+  - Doplněni strýcové a tety z 2. kolena (`f,f,b,s`, `f,f,b,d`, `m,m,b,s`, `m,m,b,d`) a synovci/neteře z 2. kolena (`f,z,d,s`, `f,z,d,d`).
+  - Doplněni partneři macechy a otčíma (`step_m,h`, `step_m,step_h`, `step_f,w`, `step_f,step_w`).
+  - Doplněno stejnopohlavní a doplňkové sešvagření (`d,w`, `s,h`, `z,w`, `b,h`, `h,z,w`, `w,z,w`, `h,b,h`, `w,b,h`).
+- [x] Vytvoření dedikované sady headless testů pro redukce a vzájemné vztahy:
+  - `tests/reductions_mutual.test.js`: 26 nových jednotkových testů pokrývajících macechu, otčíma, jiného manžela, sešvagřené synovce, cizojazyčné ekvivalenty a úplný audit všech vztahů.
+  - `tests/audit_all.js`: vyčerpávající audit všech 132 vztahů z `cs.js` v obou pohlavích (264 běhů), s výsledkem **0 neznámých vztahů** (100% úspěšnost).
+  - Aktualizace `npm test` v `package.json` na spuštění obou sad: celkem **75 / 75 úspěšně procházejících testů**.
 

@@ -1,0 +1,171 @@
+import { resolveKinship, simplifyChain, invertChain, getTokenGender } from '../js/engine/kinship-engine.js';
+import { cs } from '../js/i18n/cs.js';
+import { en } from '../js/i18n/en.js';
+import { sk } from '../js/i18n/sk.js';
+import { de } from '../js/i18n/de.js';
+
+let passed = 0;
+let failed = 0;
+
+function assert(condition, message) {
+  if (condition) {
+    passed++;
+    console.log(`  ✓ ${message}`);
+  } else {
+    failed++;
+    console.error(`  ✗ FAIL: ${message}`);
+  }
+}
+
+function assertEquals(actual, expected, message) {
+  if (actual === expected) {
+    passed++;
+    console.log(`  ✓ ${message}`);
+  } else {
+    failed++;
+    console.error(`  ✗ FAIL: ${message} (Očekáváno: "${expected}", Obdrženo: "${actual}")`);
+  }
+}
+
+console.log('=== TEST SUITE: REDUKČNÍ PRAVIDLA A VZÁJEMNÉ VZTAHY (HEADLESS) ===\n');
+
+// 1. Uživatelský scénář: Já - Macecha - jiný manžel - syn / dcera
+console.log('1. Stepparent other marriage children (Macecha -> jiný manžel -> syn):');
+{
+  // step_m, h, s -> Nevlastní bratr
+  const res1 = resolveKinship(['step_m', 'h', 's'], 'm', cs);
+  assertEquals(res1.name, 'Nevlastní bratr', 'step_m, h, s = Nevlastní bratr');
+  assertEquals(res1.key, 'step_b', 'Klíč je step_b');
+
+  // step_m, step_h, s -> Nevlastní bratr
+  const res2 = resolveKinship(['step_m', 'step_h', 's'], 'm', cs);
+  assertEquals(res2.name, 'Nevlastní bratr', 'step_m, step_h, s = Nevlastní bratr');
+
+  // step_m, step_h, step_s -> Nevlastní bratr
+  const res3 = resolveKinship(['step_m', 'step_h', 'step_s'], 'm', cs);
+  assertEquals(res3.name, 'Nevlastní bratr', 'step_m, step_h, step_s = Nevlastní bratr');
+
+  // step_m, h, step_s -> Nevlastní bratr
+  const res4 = resolveKinship(['step_m', 'h', 'step_s'], 'm', cs);
+  assertEquals(res4.name, 'Nevlastní bratr', 'step_m, h, step_s = Nevlastní bratr');
+
+  // Dcery: step_m, h, d -> Nevlastní sestra
+  const res5 = resolveKinship(['step_m', 'h', 'd'], 'm', cs);
+  assertEquals(res5.name, 'Nevlastní sestra', 'step_m, h, d = Nevlastní sestra');
+
+  const res6 = resolveKinship(['step_m', 'step_h', 'step_d'], 'm', cs);
+  assertEquals(res6.name, 'Nevlastní sestra', 'step_m, step_h, step_d = Nevlastní sestra');
+}
+
+// 2. Otčím -> jiná manželka -> syn / dcera
+console.log('\n2. Stepfather other marriage children (Otčím -> jiná manželka -> syn/dcera):');
+{
+  const res1 = resolveKinship(['step_f', 'w', 's'], 'm', cs);
+  assertEquals(res1.name, 'Nevlastní bratr', 'step_f, w, s = Nevlastní bratr');
+
+  const res2 = resolveKinship(['step_f', 'step_w', 's'], 'm', cs);
+  assertEquals(res2.name, 'Nevlastní bratr', 'step_f, step_w, s = Nevlastní bratr');
+
+  const res3 = resolveKinship(['step_f', 'step_w', 'step_s'], 'm', cs);
+  assertEquals(res3.name, 'Nevlastní bratr', 'step_f, step_w, step_s = Nevlastní bratr');
+
+  const res4 = resolveKinship(['step_f', 'w', 'd'], 'm', cs);
+  assertEquals(res4.name, 'Nevlastní sestra', 'step_f, w, d = Nevlastní sestra');
+
+  const res5 = resolveKinship(['step_f', 'step_w', 'step_d'], 'm', cs);
+  assertEquals(res5.name, 'Nevlastní sestra', 'step_f, step_w, step_d = Nevlastní sestra');
+}
+
+// 3. Delší řetězce: Otec -> macecha -> jiný manžel -> syn
+console.log('\n3. Compound step chains (f, step_w, h, s):');
+{
+  const res1 = resolveKinship(['f', 'step_w', 'h', 's'], 'm', cs);
+  assertEquals(res1.name, 'Nevlastní bratr', 'f, step_w, h, s = Nevlastní bratr');
+
+  const res2 = resolveKinship(['f', 'step_w', 'step_h', 's'], 'm', cs);
+  assertEquals(res2.name, 'Nevlastní bratr', 'f, step_w, step_h, s = Nevlastní bratr');
+
+  const res3 = resolveKinship(['m', 'step_h', 'w', 's'], 'm', cs);
+  assertEquals(res3.name, 'Nevlastní bratr', 'm, step_h, w, s = Nevlastní bratr');
+}
+
+// 4. In-law synovci a neteře (Spouse brother/sister son/daughter)
+console.log('\n4. In-law nephews/nieces reduction:');
+{
+  // w, b, s = Synovec
+  const res1 = resolveKinship(['w', 'b', 's'], 'm', cs);
+  assert(res1.name.includes('Synovec'), 'w, b, s = Synovec');
+
+  // h, b, s = Synovec
+  const res2 = resolveKinship(['h', 'b', 's'], 'f', cs);
+  assert(res2.name.includes('Synovec'), 'h, b, s = Synovec');
+
+  // w, z, d = Neteř
+  const res3 = resolveKinship(['w', 'z', 'd'], 'm', cs);
+  assert(res3.name.includes('Neteř'), 'w, z, d = Neteř');
+}
+
+// 5. InvertChain tests for step relations
+console.log('\n5. InvertChain correctness for step relations:');
+{
+  // step_m, h, s inverts back to step_b
+  const inv1 = invertChain(['step_m', 'h', 's'], 'm');
+  const resInv1 = resolveKinship(inv1, 'm', cs);
+  assertEquals(resInv1.name, 'Nevlastní bratr', 'Invert(step_m, h, s) = Nevlastní bratr');
+
+  // step_f, w, s inverts back to step_b
+  const inv2 = invertChain(['step_f', 'w', 's'], 'm');
+  const resInv2 = resolveKinship(inv2, 'm', cs);
+  assertEquals(resInv2.name, 'Nevlastní bratr', 'Invert(step_f, w, s) = Nevlastní bratr');
+
+  // Teta (f, b, w) inverts to Synovec
+  const inv3 = invertChain(['f', 'b', 'w'], 'm');
+  const resInv3 = resolveKinship(inv3, 'f', cs);
+  assert(resInv3.name.includes('Synovec'), 'Invert(f, b, w) s mluvčím ženou = Synovec');
+
+  // Strýc (f, z, h) inverts to Synovec
+  const inv4 = invertChain(['f', 'z', 'h'], 'm');
+  const resInv4 = resolveKinship(inv4, 'm', cs);
+  assert(resInv4.name.includes('Synovec'), 'Invert(f, z, h) s mluvčím mužem = Synovec');
+}
+
+// 6. Multilingual stepbrother resolution
+console.log('\n6. Multilingual stepbrother resolution:');
+{
+  const resEn = resolveKinship(['step_m', 'h', 's'], 'm', en);
+  assertEquals(resEn.name, 'Stepbrother', 'English: Stepbrother');
+
+  const resSk = resolveKinship(['step_m', 'h', 's'], 'm', sk);
+  assertEquals(resSk.name, 'Nevlastný brat', 'Slovak: Nevlastný brat');
+
+  const resDe = resolveKinship(['step_m', 'h', 's'], 'm', de);
+  assertEquals(resDe.name, 'Stiefbruder', 'German: Stiefbruder');
+}
+
+// 7. Full inventory audit: every relation in cs.js must invert to a known relation
+console.log('\n7. Exhaustive audit of cs.js (all relations x 2 genders):');
+{
+  let unhandled = 0;
+  for (const [key, val] of Object.entries(cs.relations)) {
+    const chain = key.split(',');
+    for (const ego of ['m', 'f']) {
+      const targetGender = getTokenGender(chain[chain.length - 1]) || 'm';
+      const inv = invertChain(chain, ego);
+      const resInv = resolveKinship(inv, targetGender, cs);
+      if (resInv.name === 'Vzdálený příbuzný') {
+        unhandled++;
+        console.error(`  FAIL INVERSION: [${key}] "${val.name}" (ego: ${ego}) -> inv: [${inv.join(',')}] -> Vzdálený příbuzný`);
+      }
+    }
+  }
+  assertEquals(unhandled, 0, '100 % všech vztahů se invertuje na platný rodinný termín bez selhání');
+}
+
+console.log('\n========================================');
+console.log(`Výsledky testů: ${passed} / ${passed + failed} prošlo.`);
+if (failed > 0) {
+  console.error(`SELHALO ${failed} testů!`);
+  process.exit(1);
+} else {
+  console.log('VŠECHNY TESTY PROŠLY NA VÝBORNOU!');
+}

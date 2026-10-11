@@ -61,5 +61,9 @@ Vytvoření webové kalkulačky rodinných vztahů inspirované čínskou kalkul
 8. Hamburger drawer menu s 8 nástroji (dědictví, sňatky, PNG export, hlas, porovnání...).
 9. Konfigurace pro Android/iOS (PWA manifest, ikony, viewport meta tagy, Capacitor konfigurace).
 10. Otestování v prohlížeči a Node testech (47 / 47 testů).
-11. Průběžné commitování do lokálního gitu a aktualizace stavu.
+11. Oprava a zpřesnění redukčních pravidel (Macecha/Otčím ➔ jiný manžel/manželka ➔ syn/dcera = Nevlastní bratr/sestra).
+12. Oprava inverze `step_h` a `step_w` v `invertChain` a korekce mluvčího z pohledu cílové osoby při vzájemném vztahu.
+13. Zdokonalení UI vzájemného vztahu (aktivní stav tlačítka `#keyMutual`, indikátor v breadcrumbs a odznak).
+14. Vytvoření headless testovací sady (`tests/reductions_mutual.test.js`) s rychlým ověřením bez nutnosti browseru (celkem 75 testů).
+15. Průběžné commitování do lokálního gitu a aktualizace stavu.
 

@@ -34,7 +34,7 @@ Pro zařazení jazyka do vyhledávače a dialogu:
 3. V případě nové rodiny jazyků doplňte novou kategorii do `languageCategories`.
 4. Exportujte slovník v `js/i18n/index.js` v objektu `dictionaries`.
 5. Přidejte soubor do `ASSETS_TO_CACHE` v `sw.js`.
-6. Přidejte ověřovací testy do `tests/kinship.test.js`.
+6. Přidejte ověřovací testy do `tests/kinship.test.js` nebo `tests/reductions_mutual.test.js`.
 
 ## 4. Přidání nového nástroje do Hamburger Drawer Menu
 Postup pro integraci nového nástroje (např. GEDCOM import, audio efekty apod.):
@@ -42,4 +42,10 @@ Postup pro integraci nového nástroje (např. GEDCOM import, audio efekty apod.
 2. Přidejte modalové okno pro zobrazení výstupu/dialogu s třídou `modal-overlay`.
 3. V `js/app.js` namapujte obslužnou funkci otevření modalu a jeho logiku.
 4. Přidejte styl v `css/style.css` v souladu s AMOLED motivem a designovým systémem.
+
+## 5. Headless testování bez nutnosti prohlížeče
+Pro rychlé a úsporné ověření správnosti všech vztahů a redukčních pravidel:
+- Spusťte `npm test`, který sekvenčně spustí `tests/kinship.test.js` i `tests/reductions_mutual.test.js`.
+- Pro audit inverze všech vztahů spusťte `node tests/audit_all.js`.
+- Tyto testy zaručují, že žádný vztah nekončí jako "Vzdálený příbuzný".
 

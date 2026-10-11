@@ -6,11 +6,12 @@ Interaktivní webová aplikace inspirovaná čínskou kalkulačkou příbuzenstv
 - **Kalkulačkové rozhraní**: ergonomické mobilní rozložení klávesnice s AMOLED tmavým motivem.
 - **Kompletní české názvosloví**: podpora vztahů podle české Wikipedie, včetně přímých předků/potomků, pobočných linií (strýcové, tety, bratranci a sestřenice z více kolen, synovci a neteře) i sešvagření (tchán, tchyně, švagr, švagrová, zeť, snacha, svat, svatka).
 - **Historické & archaické názvy**: *ujec*, *stryna*, *tetec*, *posel*, *deveř*, *šurin*, *zelva*, *svak*, *starosvat* a další.
-- **Inteligentní redukční pravidla**: automatické zjednodušování složených řetězců (např. *Bratr ➔ Syn ➔ Matka* = **Švagrová** / *bratřina*, *Sestra ➔ Syn ➔ Otec* = **Švagr**).
+- **Inteligentní redukční pravidla**: automatické zjednodušování složených řetězců (např. *Bratr ➔ Syn ➔ Matka* = **Švagrová** / *bratřina*, *Sestra ➔ Syn ➔ Otec* = **Švagr**, *Macecha ➔ jiný manžel ➔ syn* = **Nevlastní bratr**, *Otčím ➔ jiná manželka ➔ syn* = **Nevlastní bratr**, *Manželka ➔ Bratr ➔ Syn* = **Synovec**).
 - **Modifikátory klávesnice**:
-  - **`⇧ Nevlastní`**: zadávání nevlastních rodičů (*Otčím*, *Macecha*), pastorků i polorodých a nevlastních sourozenců (*jednobřišní* i *jednokrevní* bratr/sestra).
+  - **`⇧ Nevlastní`**: zadávání nevlastních rodičů (*Otčím*, *Macecha*), pastorků i polorodých a nevlastních sourozenců (*jednobřišní* i *jednokrevní* bratr/sestra, nepokrevní nevlastní bratr ze svazku rodičů).
   - **`✝ Křestní`**: duchovní příbuzenství (*Kmotr*, *Kmotra*, *Kmotřenec*, *Kmotřenka*).
-- **Oboustranný výpočet (互查)**: přepnutí perspektivy – okamžité zjištění, jak daný příbuzný oslovuje vás ("Kdo jsem já pro něj?").
+- **Oboustranný výpočet (互查 / Vzájemný vztah)**: přepnutí perspektivy s vizuálním neonovým zvýrazněním tlačítka a breadcrumbs – okamžité zjištění, jak daný příbuzný oslovuje vás ("Kdo jsem já pro něj?"), s automatickým určením mluvčího dle cílové osoby.
+- **Rychlé headless testování**: sada unit testů pokrývající 75 scénářů (`npm test`) bez nutnosti spouštět prohlížeč.
 - **Volba pohlaví EGO / probanda**: muž / žena (výrazně ovlivňuje partnerské a vzájemné vztahy).
 - **Vizuální minirodokmen (`#treeModal`)**: grafické schéma genealogické cesty s avatary, vztahovými štítky a zvýrazněním cíle.
 - **Kvíz rodinných vztahů (`#quizModal`)**: interaktivní procvičování a trénink genealogických i archaických pojmů se skóre a sériemi.

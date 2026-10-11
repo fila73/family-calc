@@ -1045,83 +1045,132 @@ class FamilyCalcApp {
 
   render() {
     const dict = getDictionary(this.currentLang);
-    const effectiveChain = this.isMutualView ? invertChain(this.chain, this.egoGender) : this.chain;
-    const resolved = resolveKinship(effectiveChain, this.egoGender, dict);
+
+    // Update active class on mutual key
+    if (this.keyMutual) {
+      this.keyMutual.classList.toggle('active-mutual', this.isMutualView && this.chain.length > 0);
+      this.keyMutual.setAttribute('aria-pressed', (this.isMutualView && this.chain.length > 0) ? 'true' : 'false');
+    }
+
+    if (this.chain.length === 0) {
+      this.isMutualView = false;
+      if (this.keyMutual) {
+        this.keyMutual.classList.remove('active-mutual');
+        this.keyMutual.setAttribute('aria-pressed', 'false');
+      }
+      const selfResolved = resolveKinship([], this.egoGender, dict);
+      this.renderChainBreadcrumbs(dict);
+      this.resultMain.textContent = selfResolved.name;
+      this.metaBadges.innerHTML = '';
+      if (this.explanationLabel) this.explanationLabel.textContent = dict.labels.explanationLabel || 'Vysvětlení cesty:';
+      this.detailExplanation.textContent = selfResolved.description;
+      if (this.reciprocalLabel) this.reciprocalLabel.textContent = dict.labels.reciprocal || 'Vzájemné oslovení:';
+      this.detailReciprocal.textContent = '—';
+      this.detailReciprocal.classList.remove('reciprocal-clickable');
+      return;
+    }
+
+    const lastToken = this.chain[this.chain.length - 1];
+    const targetGender = getTokenGender(lastToken) || 'm';
+
+    // 1. Direct relationship from Ego -> Target
+    const directResolved = resolveKinship(this.chain, this.egoGender, dict);
+
+    // 2. Mutual / Reciprocal relationship from Target -> Ego
+    const invertedChain = invertChain(this.chain, this.egoGender);
+    const mutualResolved = resolveKinship(invertedChain, targetGender, dict);
+
+    // Active displayed item based on mutual mode
+    const displayedResolved = this.isMutualView ? mutualResolved : directResolved;
 
     // 1. Render Chain Breadcrumbs
-    this.renderChainBreadcrumbs(dict);
+    this.renderChainBreadcrumbs(dict, directResolved.name);
 
     // 2. Render Main Result
-    this.resultMain.textContent = resolved.name;
+    this.resultMain.textContent = displayedResolved.name;
 
     // 3. Render Badges
     this.metaBadges.innerHTML = '';
 
-    if (resolved.archaic) {
+    if (this.isMutualView) {
+      const bMutual = document.createElement('span');
+      bMutual.className = 'meta-badge badge-mutual-mode';
+      bMutual.innerHTML = `⇄ Vzájemný vztah: <strong>${directResolved.name}</strong> ➔ říká mně`;
+      this.metaBadges.appendChild(bMutual);
+    }
+
+    if (displayedResolved.archaic) {
       const bArch = document.createElement('span');
       bArch.className = 'meta-badge badge-archaic';
-      bArch.innerHTML = `📜 ${resolved.archaic}`;
+      bArch.innerHTML = `📜 ${displayedResolved.archaic}`;
       this.metaBadges.appendChild(bArch);
     }
 
-    if (resolved.generation !== undefined && resolved.generation !== 0) {
+    if (displayedResolved.generation !== undefined && displayedResolved.generation !== 0) {
       const bGen = document.createElement('span');
       bGen.className = 'meta-badge badge-generation';
-      const sign = resolved.generation > 0 ? '+' : '';
-      bGen.textContent = `${dict.labels.generationLabel}: ${sign}${resolved.generation}`;
+      const sign = displayedResolved.generation > 0 ? '+' : '';
+      bGen.textContent = `${dict.labels.generationLabel}: ${sign}${displayedResolved.generation}`;
       this.metaBadges.appendChild(bGen);
     }
 
-    if (resolved.lineType && dict.labels.lineTypes[resolved.lineType]) {
+    if (displayedResolved.lineType && dict.labels.lineTypes[displayedResolved.lineType]) {
       const bLine = document.createElement('span');
       bLine.className = 'meta-badge badge-line';
-      bLine.textContent = dict.labels.lineTypes[resolved.lineType];
+      bLine.textContent = dict.labels.lineTypes[displayedResolved.lineType];
       this.metaBadges.appendChild(bLine);
     }
 
-    if (resolved.consanguinity && resolved.consanguinity.badge) {
+    if (displayedResolved.consanguinity && displayedResolved.consanguinity.badge) {
       const bDna = document.createElement('span');
       bDna.className = 'meta-badge badge-consanguinity';
-      bDna.textContent = resolved.consanguinity.badge;
+      bDna.textContent = displayedResolved.consanguinity.badge;
       this.metaBadges.appendChild(bDna);
     }
 
-    if (resolved.inheritance && resolved.inheritance.badge) {
+    if (displayedResolved.inheritance && displayedResolved.inheritance.badge) {
       const bInh = document.createElement('span');
       bInh.className = 'meta-badge badge-inheritance';
-      bInh.textContent = resolved.inheritance.badge;
+      bInh.textContent = displayedResolved.inheritance.badge;
       this.metaBadges.appendChild(bInh);
     }
 
-    if (resolved.marriageImpediment && resolved.marriageImpediment.badge) {
+    if (displayedResolved.marriageImpediment && displayedResolved.marriageImpediment.badge) {
       const bImp = document.createElement('span');
-      bImp.className = `meta-badge ${resolved.marriageImpediment.allowed ? 'badge-impediment-allowed' : 'badge-impediment-blocked'}`;
-      bImp.textContent = resolved.marriageImpediment.badge;
+      bImp.className = `meta-badge ${displayedResolved.marriageImpediment.allowed ? 'badge-impediment-allowed' : 'badge-impediment-blocked'}`;
+      bImp.textContent = displayedResolved.marriageImpediment.badge;
       this.metaBadges.appendChild(bImp);
     }
 
     // 4. Render Details Box
-    if (this.chain.length === 0) {
-      this.detailExplanation.textContent = resolved.description;
-      this.detailReciprocal.textContent = '—';
-      this.detailReciprocal.classList.remove('reciprocal-clickable');
+    if (this.isMutualView) {
+      if (this.explanationLabel) this.explanationLabel.textContent = 'Vysvětlení vzájemného vztahu:';
+      this.detailExplanation.textContent = `Z pohledu ${directResolved.name}: Jste pro něj „${mutualResolved.name}“. ${mutualResolved.description || ''}`;
+      if (this.reciprocalLabel) this.reciprocalLabel.textContent = 'Základní vztah:';
+      this.detailReciprocal.textContent = `${directResolved.name} (kliknutím zpět)`;
+      this.detailReciprocal.title = 'Kliknutím přepneš zpět na základní pohled';
     } else {
-      this.detailExplanation.textContent = resolved.description;
-
-      // Calculate reciprocal perspective
-      const invertedChain = invertChain(effectiveChain, this.egoGender);
-      const reciprocalResolved = resolveKinship(invertedChain, this.egoGender, dict);
-      this.detailReciprocal.textContent = reciprocalResolved.name;
-      this.detailReciprocal.title = 'Kliknutím přepneš perspektivu výpočtu';
-      this.detailReciprocal.classList.add('reciprocal-clickable');
-
-      // Auto-save to calculation history
-      this.saveHistoryItem(this.chain, resolved.name);
+      if (this.explanationLabel) this.explanationLabel.textContent = dict.labels.explanationLabel || 'Vysvětlení cesty:';
+      this.detailExplanation.textContent = displayedResolved.description;
+      if (this.reciprocalLabel) this.reciprocalLabel.textContent = dict.labels.reciprocal || 'Vzájemné oslovení:';
+      this.detailReciprocal.textContent = mutualResolved.name;
+      this.detailReciprocal.title = 'Kliknutím přepneš na vzájemný vztah (jak mi říká on)';
     }
+    this.detailReciprocal.classList.add('reciprocal-clickable');
+
+    // Auto-save to calculation history
+    this.saveHistoryItem(this.chain, displayedResolved.name);
   }
 
-  renderChainBreadcrumbs(dict) {
+  renderChainBreadcrumbs(dict, directName = '') {
     this.chainContainer.innerHTML = '';
+
+    if (this.isMutualView) {
+      const mutualInd = document.createElement('span');
+      mutualInd.className = 'chain-mutual-indicator';
+      mutualInd.textContent = `⇄ Vzájemný vztah k [${directName || 'cíl'}]:`;
+      this.chainContainer.appendChild(mutualInd);
+    }
 
     // "Self" starting node
     const selfItem = document.createElement('span');

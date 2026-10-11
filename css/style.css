@@ -721,11 +721,51 @@ body::before {
   color: #ffffff;
   background: #1c1c24;
   border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.2s ease;
 }
 
 .key-mutual:hover {
   background: #252530;
   border-color: var(--accent-orange);
+}
+
+.key-mutual.active-mutual {
+  background: rgba(59, 130, 246, 0.25);
+  border-color: #3b82f6;
+  color: #60a5fa;
+  box-shadow: 0 0 16px rgba(59, 130, 246, 0.4);
+}
+
+.key-mutual.active-mutual:hover {
+  background: rgba(59, 130, 246, 0.35);
+  border-color: #93c5fd;
+}
+
+.badge-mutual-mode {
+  background: rgba(59, 130, 246, 0.18);
+  border: 1px solid rgba(59, 130, 246, 0.5);
+  color: #93c5fd;
+  font-weight: 600;
+  animation: pulseMutual 2s infinite ease-in-out;
+}
+
+@keyframes pulseMutual {
+  0%, 100% { box-shadow: 0 0 0 rgba(59, 130, 246, 0); }
+  50% { box-shadow: 0 0 10px rgba(59, 130, 246, 0.4); }
+}
+
+.chain-mutual-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(59, 130, 246, 0.16);
+  border: 1px solid rgba(59, 130, 246, 0.4);
+  color: #93c5fd;
+  padding: 2px 8px;
+  border-radius: var(--radius-sm);
+  font-size: 0.76rem;
+  font-weight: 600;
+  margin-right: 4px;
 }
 
 /* Equals Key (= - Spans 2 columns, Signature Orange) */

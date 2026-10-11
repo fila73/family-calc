@@ -4,7 +4,7 @@
   "description": "Interaktivní kalkulačka rodinných vztahů inspirovaná čínskou kalkulačkou příbuzenství",
   "type": "module",
   "scripts": {
-    "test": "node tests/kinship.test.js",
+    "test": "node tests/kinship.test.js && node tests/reductions_mutual.test.js",
     "dev": "node server.js",
     "start": "node server.js"
   },

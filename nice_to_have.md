@@ -35,6 +35,11 @@
   - Syntetizovaný zvuk kliku klávesy s nulovou latencí a přepínačem v záhlaví (`🔊` / `🔇`) s perzistencí v `localStorage`.
 - [x] 16. **Import & analýza GEDCOM souborů (`.ged`)**:
   - Parsování standardních genealogických exportů z MyHeritage, Gramps, Ancestry, vestavěný ukázkový 4-generační rodokmen, grafové hledání nejkratší příbuzenské cesty a přenos zjištěného vztahu do kalkulačky.
+- [x] 17. **Kompletní audit a oprava redukčních pravidel a vzájemného vztahu**:
+  - Vyřešen případ Macecha ➔ jiný manžel ➔ syn/dcera = Nevlastní bratr/sestra (`step_b` / `step_z`).
+  - Zpřesněna redukce sešvagřených synovců a neteří (`w/h ➔ b/z ➔ s/d = b ➔ s/d`).
+  - Opravena reciproční perspektiva ve vzájemném vztahu, přidán vizuální neonový indikátor aktivního tlačítka, odznak a breadcrumbs.
+  - Headless testovací suite (`npm test`) s nulovým dopadem na browser kredity a 100% úspěšností (75 testů).
 
 ## Nové nápady a budoucí rozšíření
 1. **Export rodokmenu do vektorového SVG / PDF**:

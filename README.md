@@ -4,11 +4,12 @@ An interactive web application inspired by the Chinese kinship calculator (亲�
 
 ## Features
 - **Calculator Keypad**: Mobile-optimized layout with dark mode ergonomics.
-- **Reduction Rules Engine**: Automatic simplification of compound relationships (e.g. *Brother ➔ Son ➔ Mother* reduces to *Sister-in-law*).
+- **Reduction Rules Engine**: Automatic simplification of compound relationships (e.g. *Brother ➔ Son ➔ Mother* reduces to *Sister-in-law*, *Stepmother ➔ other husband ➔ son* reduces to *Stepbrother*, *Wife ➔ Brother ➔ Son* reduces to *Nephew*).
 - **Modifier Keys**:
   - **`⇧ Step` (Nevlastní)**: Step-parents (*Otčím*, *Macecha*), step-children (*Pastorek*), half-siblings (*jednobřišní* / *jednokrevní*), and step-siblings.
   - **`✝ Godparent` (Křestní)**: Spiritual kinship (*Kmotr*, *Kmotra*, *Kmotřenec*, *Kmotřenka*).
-- **Mutual Relationship Mode (互查)**: Determine reciprocal terms ("What does this relative call me?").
+- **Mutual Relationship Mode (互查)**: Determine reciprocal terms ("What does this relative call me?") with active neon button highlighting, breadcrumb reciprocal indicators, and target-speaker perspective.
+- **Fast Headless Test Suite**: Full suite of 75 unit tests (`npm test`) validating 100% of relationships and mutual query inversions without browser overhead.
 - **Visual Family Tree Modal (`#treeModal`)**: Interactive graphical chain with avatars, step connectors, and target node highlighting.
 - **Kinship Quiz Mode (`#quizModal`)**: Educational game mode with dynamic question generation, instant feedback, streaks, and score tracking.
 - **Voice Text-to-Speech (🔊 TTS)**: Natural speech synthesis in all 25 languages with animated sound waves.
