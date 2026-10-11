@@ -2,13 +2,14 @@
  * Service Worker pro offline běh rodinné kalkulačky
  */
 
-const CACHE_NAME = 'family-calc-v8';
+const CACHE_NAME = 'family-calc-v9';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
   './css/style.css',
   './js/app.js',
   './js/engine/kinship-engine.js',
+  './js/engine/gedcom-parser.js',
   './js/i18n/index.js',
   './js/i18n/languages.js',
   './js/i18n/cs.js',

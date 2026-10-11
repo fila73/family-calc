@@ -4,6 +4,7 @@
 
 import assert from 'node:assert';
 import { resolveKinship, invertChain, simplifyChain } from '../js/engine/kinship-engine.js';
+import { parseGedcom } from '../js/engine/gedcom-parser.js';
 import { cs } from '../js/i18n/cs.js';
 import { en } from '../js/i18n/en.js';
 import { zh } from '../js/i18n/zh.js';
@@ -456,6 +457,96 @@ it('Rumunský překlad (Bunic, Unchi, Noră, Tată vitreg)', () => {
   assert.strictEqual(resolveKinship(['f', 'b'], 'm', ro).name, 'Unchi (fratele tatălui)');
   assert.strictEqual(resolveKinship(['s', 'w'], 'm', ro).name, 'Noră');
   assert.strictEqual(resolveKinship(['step_f'], 'm', ro).name, 'Tată vitreg');
+});
+
+console.log('\n14. Genealogický import a analýza GEDCOM souborů (.ged):');
+it('Parsování GEDCOM struktury a extrakce osob a rodin', () => {
+  const sampleGed = `
+0 HEAD
+1 SOUR TestTree
+0 @I1@ INDI
+1 NAME Jan /Novák/
+1 SEX M
+1 BIRT
+2 DATE 1920
+1 FAMS @F1@
+0 @I2@ INDI
+1 NAME Marie /Svobodová/
+1 SEX F
+1 BIRT
+2 DATE 1925
+1 FAMS @F1@
+0 @I3@ INDI
+1 NAME Josef /Novák/
+1 SEX M
+1 BIRT
+2 DATE 1950
+1 FAMC @F1@
+1 FAMS @F2@
+0 @I4@ INDI
+1 NAME Anna /Nováková/
+1 SEX F
+1 BIRT
+2 DATE 1953
+1 FAMC @F1@
+0 @I5@ INDI
+1 NAME Tomáš /Novák/
+1 SEX M
+1 BIRT
+2 DATE 1980
+1 FAMC @F2@
+0 @F1@ FAM
+1 HUSB @I1@
+1 WIFE @I2@
+1 CHIL @I3@
+1 CHIL @I4@
+0 @F2@ FAM
+1 HUSB @I3@
+1 CHIL @I5@
+0 TRLR
+  `;
+
+  const parsed = parseGedcom(sampleGed);
+  assert.strictEqual(parsed.individuals.size, 5);
+  assert.strictEqual(parsed.families.size, 2);
+
+  const list = parsed.getIndividualList();
+  assert.strictEqual(list.length, 5);
+  assert.strictEqual(list.find(p => p.id === '@I1@').name, 'Jan Novák');
+
+  // Test 1: Tomáš (@I5@) -> Jan (@I1@) = Dědeček (f -> f)
+  const pathGrandfather = parsed.findKinshipChain('@I5@', '@I1@');
+  assert.deepStrictEqual(pathGrandfather.chain, ['f', 'f']);
+  const resGF = resolveKinship(pathGrandfather.chain, 'm', cs);
+  assert.strictEqual(resGF.name, 'Dědeček (otcův otec)');
+
+  // Test 2: Josef (@I3@) -> Anna (@I4@) = Sestra (f -> d)
+  const pathSister = parsed.findKinshipChain('@I3@', '@I4@');
+  assert.deepStrictEqual(pathSister.chain, ['f', 'd']);
+  const resSister = resolveKinship(pathSister.chain, 'm', cs);
+  assert.strictEqual(resSister.name, 'Sestra');
+
+  // Test 3: Tomáš (@I5@) -> Anna (@I4@) = Teta (f -> f -> d)
+  const pathAunt = parsed.findKinshipChain('@I5@', '@I4@');
+  assert.deepStrictEqual(pathAunt.chain, ['f', 'f', 'd']);
+  const resAunt = resolveKinship(pathAunt.chain, 'm', cs);
+  assert.strictEqual(resAunt.name, 'Teta (otcova sestra)');
+});
+
+it('Detekce nepropojených větví rodokmenu', () => {
+  const disconnectedGed = `
+0 @I1@ INDI
+1 NAME Karel /Dvořák/
+1 SEX M
+0 @I2@ INDI
+1 NAME Eva /Černá/
+1 SEX F
+0 TRLR
+  `;
+  const parsed = parseGedcom(disconnectedGed);
+  const result = parsed.findKinshipChain('@I1@', '@I2@');
+  assert.strictEqual(result.chain, null);
+  assert.ok(result.error);
 });
 
 console.log(`\n========================================`);

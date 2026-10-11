@@ -16,16 +16,31 @@
 - [x] 7. **Historie výpočtů (`#historyModal`)**:
   - Automatické ukládání posledních výpočtů do `localStorage` s možností obnovení libovolného dřívějšího vztahu zpět na klávesnici.
 
+- [x] 8. **Export vizuální kartičky do PNG obrázku (Social Card Generator)**:
+  - Generování grafické kartičky pro sociální sítě na HTML5 Canvas s tmavým AMOLED motivem, avatarem, názvem vztahu, popisem a DNA shodou s možností stažení přímo do souboru PNG.
+- [x] 9. **Kalkulačka dědických tříd (Zákonná dědická posloupnost ČR dle NOZ)**:
+  - Právní zařazení do 1. až 6. dědické třídy podle nového občanského zákoníku s detailním komentářem dědických podílů.
+- [x] 10. **Detektor překážek manželství (Právní přípustnost sňatku dle § 675 NOZ)**:
+  - Automatické právní posouzení možnosti uzavření manželství (přísný zákaz v přímé linii a mezi sourozenci, přípustnost u bratranců a afinit).
+- [x] 11. **Hlasové zadávání (Speech Recognition / Web Speech API)**:
+  - Možnost nadiktovat rodinný řetězec hlasem (česky i anglicky) a nechat kalkulačku automaticky rozpoznat klíčová slova a vyťukat vztah.
+- [x] 12. **Režim porovnání dvou osob v rodokmenu ("Jak jsou tito dva příbuzní?")**:
+  - Zadání dvou různých větví z jednoho výchozího probanda a okamžité určení jejich vzájemného vztahu.
+- [x] 13. **Hamburger vysouvací menu (`#menuModal`)**:
+  - Přehledná postranní nabídka seskupující všech 8 pokročilých nástrojů pro čisté mobilní rozhraní.
+
+- [x] 14. **Klávesové zkratky pro desktop (Keyboard Hotkeys & Modal)**:
+  - Kompletní podpora ovládání z fyzické klávesnice (`F`, `M`, `S`, `D`, `B`, `Shift+B`, `X`, `Shift+X`, `H`, `W`, `C`, `⌫`, `Enter`, `R`, `Tab`, `G`, `Space`, `?`) a přehledný modální dialog nápovědy.
+- [x] 15. **Zvuková odezva klávesnice (Web Audio Click Feedback)**:
+  - Syntetizovaný zvuk kliku klávesy s nulovou latencí a přepínačem v záhlaví (`🔊` / `🔇`) s perzistencí v `localStorage`.
+- [x] 16. **Import & analýza GEDCOM souborů (`.ged`)**:
+  - Parsování standardních genealogických exportů z MyHeritage, Gramps, Ancestry, vestavěný ukázkový 4-generační rodokmen, grafové hledání nejkratší příbuzenské cesty a přenos zjištěného vztahu do kalkulačky.
+
 ## Nové nápady a budoucí rozšíření
-1. **Export vizuální kartičky do PNG obrázku (Social Card Generator)**:
-   - Možnost vygenerovat líbivý obrázek (např. pro Instagram Stories, WhatsApp nebo rodinnou skupinu) s grafickým minirodokmenem, jménem vztahu a DNA shodou přímo přes HTML5 Canvas.
-2. **Kalkulačka dědických tříd (Zákonná dědická posloupnost ČR dle NOZ)**:
-   - Zobrazení, do které dědické třídy (1. až 6. třída podle nového občanského zákoníku) daný příbuzný spadá, a jaká by byla jeho pozice při dědění ze zákona.
-3. **Detektor překážek manželství (Právní přípustnost sňatku)**:
-   - Právní indikátor, zda mezi EGO a vybraným příbuzným existuje zákonná překážka pro uzavření manželství (v ČR zákaz sňatku mezi předky a potomky a mezi sourozenci).
-4. **Hlasové zadávání (Speech Recognition / Web Speech API)**:
-   - Možnost nadiktovat rodinný řetězec hlasem (např. „otec matka bratr syn“) a nechat kalkulačku automaticky vyťukat klávesy.
-5. **Import & Export GEDCOM souborů**:
-   - Možnost nahrát genealogický soubor `.ged` ze softwaru MyHeritage, Gramps nebo Ancestry a vyhledat přesná pojmenování reálných předků v rodokmenu.
-6. **Režim porovnání dvou osob v rodokmenu ("Jak jsou tito dva příbuzní?")**:
-   - Zadání dvou různých větví z jednoho společného předka a určení jejich vzájemného vztahu.
+1. **Export rodokmenu do vektorového SVG / PDF**:
+   - Stažení minirodokmenu jako škálovatelné vektorové grafiky nebo tiskového PDF dokumentu.
+2. **Výběr grafických motivů (AMOLED Dark, Light Parchment, Cyberpunk)**:
+   - Volba mezi současným AMOLED motivem, historickým papírovým stylem (pergamen) a světlým režimem.
+3. **Generování rodinných certifikátů a diplomů**:
+   - Tiskový formát formálního rodinného diplomu s ozdobným rámečkem osvědčujícím přesný genealogický vztah.
+

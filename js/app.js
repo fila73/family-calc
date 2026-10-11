@@ -3,6 +3,7 @@
  */
 
 import { resolveKinship, invertChain, TOKENS } from './engine/kinship-engine.js';
+import { parseGedcom } from './engine/gedcom-parser.js';
 import { getDictionary, languagesRegistry, languageCategories, getLanguageMeta } from './i18n/index.js';
 
 class FamilyCalcApp {
@@ -16,11 +17,16 @@ class FamilyCalcApp {
     this.recentLangs = this.loadRecentLangs();
     this.quizState = { score: 0, total: 0, streak: 0, currentQuestion: null };
     this.synth = typeof window !== 'undefined' && 'speechSynthesis' in window ? window.speechSynthesis : null;
+    this.soundEnabled = localStorage.getItem('family_calc_sound') !== 'false';
+    this.audioCtx = null;
+    this.activeGedcom = null;
+    this.gedcomKinshipResult = null;
 
     this.initElements();
     this.initEventListeners();
     this.updateLanguageTrigger();
     this.updateLanguage();
+    this.updateSoundUI();
     this.render();
   }
 
@@ -30,6 +36,10 @@ class FamilyCalcApp {
     this.genderBtnMale = document.getElementById('genderBtnMale');
     this.genderBtnFemale = document.getElementById('genderBtnFemale');
     this.probandLabelText = document.getElementById('probandLabelText');
+
+    // Sound button in header
+    this.soundToggleBtn = document.getElementById('soundToggleBtn');
+    this.soundIcon = document.getElementById('soundIcon');
 
     // Language modal elements
     this.openLangModalBtn = document.getElementById('openLangModalBtn');
@@ -74,6 +84,8 @@ class FamilyCalcApp {
     this.menuImpedimentBtn = document.getElementById('menuImpedimentBtn');
     this.menuVoiceBtn = document.getElementById('menuVoiceBtn');
     this.menuCompareBtn = document.getElementById('menuCompareBtn');
+    this.menuGedcomBtn = document.getElementById('menuGedcomBtn');
+    this.menuShortcutsBtn = document.getElementById('menuShortcutsBtn');
 
     // Keypad keys
     this.keypad = document.getElementById('keypad');
@@ -151,6 +163,26 @@ class FamilyCalcApp {
     this.compareResultCard = document.getElementById('compareResultCard');
     this.compareResultTitle = document.getElementById('compareResultTitle');
     this.compareResultDesc = document.getElementById('compareResultDesc');
+
+    // GEDCOM Modal elements
+    this.gedcomModal = document.getElementById('gedcomModal');
+    this.closeGedcomModalBtn = document.getElementById('closeGedcomModalBtn');
+    this.gedcomFileInput = document.getElementById('gedcomFileInput');
+    this.uploadGedcomBtn = document.getElementById('uploadGedcomBtn');
+    this.sampleGedcomBtn = document.getElementById('sampleGedcomBtn');
+    this.gedcomStatusBox = document.getElementById('gedcomStatusBox');
+    this.gedcomSelectSection = document.getElementById('gedcomSelectSection');
+    this.gedcomPersonA = document.getElementById('gedcomPersonA');
+    this.gedcomPersonB = document.getElementById('gedcomPersonB');
+    this.executeGedcomBtn = document.getElementById('executeGedcomBtn');
+    this.gedcomResultCard = document.getElementById('gedcomResultCard');
+    this.gedcomResultTitle = document.getElementById('gedcomResultTitle');
+    this.gedcomResultDesc = document.getElementById('gedcomResultDesc');
+    this.transferGedcomBtn = document.getElementById('transferGedcomBtn');
+
+    // Keyboard Shortcuts Modal elements
+    this.shortcutsModal = document.getElementById('shortcutsModal');
+    this.closeShortcutsModalBtn = document.getElementById('closeShortcutsModalBtn');
   }
 
   initEventListeners() {
@@ -233,6 +265,23 @@ class FamilyCalcApp {
         this.closeMenu();
         this.openCompareModal();
       });
+    }
+    if (this.menuGedcomBtn) {
+      this.menuGedcomBtn.addEventListener('click', () => {
+        this.closeMenu();
+        this.openGedcomModal();
+      });
+    }
+    if (this.menuShortcutsBtn) {
+      this.menuShortcutsBtn.addEventListener('click', () => {
+        this.closeMenu();
+        this.openShortcutsModal();
+      });
+    }
+
+    // Sound toggle in header
+    if (this.soundToggleBtn) {
+      this.soundToggleBtn.addEventListener('click', () => this.toggleSound());
     }
 
     // Action buttons (TTS, Share, Tree)
@@ -325,6 +374,43 @@ class FamilyCalcApp {
       this.executeCompareBtn.addEventListener('click', () => this.executeCompare());
     }
 
+    // GEDCOM Modal listeners
+    if (this.closeGedcomModalBtn) {
+      this.closeGedcomModalBtn.addEventListener('click', () => this.closeGedcomModal());
+    }
+    if (this.gedcomModal) {
+      this.gedcomModal.addEventListener('click', (e) => {
+        if (e.target === this.gedcomModal) this.closeGedcomModal();
+      });
+    }
+    if (this.uploadGedcomBtn) {
+      this.uploadGedcomBtn.addEventListener('click', () => {
+        if (this.gedcomFileInput) this.gedcomFileInput.click();
+      });
+    }
+    if (this.gedcomFileInput) {
+      this.gedcomFileInput.addEventListener('change', (e) => this.handleGedcomFileUpload(e));
+    }
+    if (this.sampleGedcomBtn) {
+      this.sampleGedcomBtn.addEventListener('click', () => this.loadSampleGedcom());
+    }
+    if (this.executeGedcomBtn) {
+      this.executeGedcomBtn.addEventListener('click', () => this.executeGedcomKinship());
+    }
+    if (this.transferGedcomBtn) {
+      this.transferGedcomBtn.addEventListener('click', () => this.transferGedcomToCalculator());
+    }
+
+    // Shortcuts Modal listeners
+    if (this.closeShortcutsModalBtn) {
+      this.closeShortcutsModalBtn.addEventListener('click', () => this.closeShortcutsModal());
+    }
+    if (this.shortcutsModal) {
+      this.shortcutsModal.addEventListener('click', (e) => {
+        if (e.target === this.shortcutsModal) this.closeShortcutsModal();
+      });
+    }
+
     // Reset button
     this.resetBtn.addEventListener('click', () => {
       this.triggerHaptic();
@@ -370,8 +456,11 @@ class FamilyCalcApp {
     // Click on reciprocal link in details box to swap perspective
     this.detailReciprocal.addEventListener('click', () => this.toggleMutual());
 
-    // Keyboard shortcuts for convenience
+    // Comprehensive Keyboard Shortcuts for Desktop
     window.addEventListener('keydown', (e) => {
+      const activeEl = document.activeElement;
+      const isInputFocused = activeEl && (activeEl.tagName === 'INPUT' || activeEl.tagName === 'TEXTAREA' || activeEl.tagName === 'SELECT');
+
       const anyModalOpen = [
         this.dictModal,
         this.langModal,
@@ -382,11 +471,16 @@ class FamilyCalcApp {
         this.inheritanceModal,
         this.impedimentModal,
         this.voiceModal,
-        this.compareModal
+        this.compareModal,
+        this.gedcomModal,
+        this.shortcutsModal
       ].some((m) => m && m.classList.contains('open'));
 
-      if (anyModalOpen) {
-        if (e.key === 'Escape') {
+      if (e.key === 'Escape') {
+        if (isInputFocused) {
+          activeEl.blur();
+        }
+        if (anyModalOpen) {
           if (this.dictModal && this.dictModal.classList.contains('open')) this.closeDictionary();
           if (this.langModal && this.langModal.classList.contains('open')) this.closeLanguageModal();
           if (this.treeModal && this.treeModal.classList.contains('open')) this.closeTreeModal();
@@ -397,17 +491,58 @@ class FamilyCalcApp {
           if (this.impedimentModal && this.impedimentModal.classList.contains('open')) this.closeImpedimentModal();
           if (this.voiceModal && this.voiceModal.classList.contains('open')) this.closeVoiceModal();
           if (this.compareModal && this.compareModal.classList.contains('open')) this.closeCompareModal();
+          if (this.gedcomModal && this.gedcomModal.classList.contains('open')) this.closeGedcomModal();
+          if (this.shortcutsModal && this.shortcutsModal.classList.contains('open')) this.closeShortcutsModal();
+        } else {
+          this.clearAll();
         }
         return;
       }
-      if (e.key === 'Shift') {
-        this.toggleModifier('step');
-      } else if (e.key === 'Backspace') {
-        this.popToken();
-      } else if (e.key === 'Escape' || e.key === 'c' || e.key === 'C') {
+
+      // If user is typing in an input field or a modal is open, do not intercept normal typing
+      if (isInputFocused || anyModalOpen) {
+        return;
+      }
+
+      // Hotkeys for kinship calculator
+      const key = e.key;
+      if (key === 'f' || key === 'F') {
+        this.addToken(TOKENS.FATHER);
+      } else if (key === 'm' || key === 'M') {
+        this.addToken(TOKENS.MOTHER);
+      } else if (key === 's' || key === 'S') {
+        this.addToken(TOKENS.SON);
+      } else if (key === 'd' || key === 'D') {
+        this.addToken(TOKENS.DAUGHTER);
+      } else if (key === 'b') {
+        this.addToken(TOKENS.OLDER_BROTHER);
+      } else if (key === 'B') {
+        this.addToken(TOKENS.YOUNGER_BROTHER);
+      } else if (key === 'x') {
+        this.addToken(TOKENS.OLDER_SISTER);
+      } else if (key === 'X') {
+        this.addToken(TOKENS.YOUNGER_SISTER);
+      } else if (key === 'h' || key === 'H') {
+        this.addToken(TOKENS.HUSBAND);
+      } else if (key === 'w' || key === 'W') {
+        this.addToken(TOKENS.WIFE);
+      } else if (key === 'c' || key === 'C') {
         this.clearAll();
-      } else if (e.key === 'Enter' || e.key === '=') {
+      } else if (key === 'Backspace' || key === 'Delete') {
+        this.popToken();
+      } else if (key === 'Enter' || key === '=') {
         this.onEquals();
+      } else if (key === 'r' || key === 'R' || key === 'i' || key === 'I') {
+        this.toggleMutual();
+      } else if (key === 'Tab') {
+        e.preventDefault();
+        this.toggleModifier('step');
+      } else if (key === 'g' || key === 'G' || key === ' ') {
+        if (key === ' ') e.preventDefault();
+        this.toggleModifier('god');
+      } else if (key === '?' || key === 'F1') {
+        e.preventDefault();
+        this.openShortcutsModal();
       }
     });
   }
@@ -427,12 +562,56 @@ class FamilyCalcApp {
   }
 
   triggerHaptic() {
+    this.playClickSound();
     if (typeof navigator !== 'undefined' && navigator.vibrate) {
       try {
         navigator.vibrate(12);
       } catch (e) {
         // Ignored
       }
+    }
+  }
+
+  playClickSound() {
+    if (!this.soundEnabled) return;
+    try {
+      if (!this.audioCtx) {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        if (AudioCtx) this.audioCtx = new AudioCtx();
+      }
+      if (this.audioCtx && this.audioCtx.state === 'suspended') {
+        this.audioCtx.resume();
+      }
+      if (!this.audioCtx) return;
+      const osc = this.audioCtx.createOscillator();
+      const gain = this.audioCtx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(800, this.audioCtx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(140, this.audioCtx.currentTime + 0.025);
+      gain.gain.setValueAtTime(0.12, this.audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, this.audioCtx.currentTime + 0.025);
+      osc.connect(gain);
+      gain.connect(this.audioCtx.destination);
+      osc.start();
+      osc.stop(this.audioCtx.currentTime + 0.025);
+    } catch (e) {}
+  }
+
+  toggleSound() {
+    this.soundEnabled = !this.soundEnabled;
+    localStorage.setItem('family_calc_sound', this.soundEnabled ? 'true' : 'false');
+    this.updateSoundUI();
+    if (this.soundEnabled) {
+      this.playClickSound();
+      this.showToast('Zvukové efekty: Zapnuto 🔊');
+    } else {
+      this.showToast('Zvukové efekty: Vypnuto 🔇');
+    }
+  }
+
+  updateSoundUI() {
+    if (this.soundIcon) {
+      this.soundIcon.textContent = this.soundEnabled ? '🔊' : '🔇';
     }
   }
 
@@ -1884,6 +2063,239 @@ class FamilyCalcApp {
       <div style="margin-top: 8px; font-size: 13px; color: #a78bfa;">🔗 Propojení přes rodokmen: ${invA.map((t) => dict.labels.tokens[t] || t).join(' ➔ ')} ➔ ${chainB.map((t) => dict.labels.tokens[t] || t).join(' ➔ ')}</div>
     `;
     this.compareResultCard.style.display = 'block';
+  }
+
+  // === Shortcuts Modal ===
+  openShortcutsModal() {
+    this.triggerHaptic();
+    if (this.shortcutsModal) this.shortcutsModal.classList.add('open');
+  }
+
+  closeShortcutsModal() {
+    if (this.shortcutsModal) this.shortcutsModal.classList.remove('open');
+  }
+
+  // === GEDCOM Import & Analysis ===
+  openGedcomModal() {
+    this.triggerHaptic();
+    if (this.gedcomModal) this.gedcomModal.classList.add('open');
+  }
+
+  closeGedcomModal() {
+    if (this.gedcomModal) this.gedcomModal.classList.remove('open');
+  }
+
+  handleGedcomFileUpload(event) {
+    const file = event.target.files && event.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const text = e.target.result;
+      this.loadGedcomText(text, file.name);
+    };
+    reader.readAsText(file, 'utf-8');
+  }
+
+  loadSampleGedcom() {
+    this.triggerHaptic();
+    const SAMPLE_GEDCOM = `
+0 HEAD
+1 SOUR FamilyCalc
+0 @I1@ INDI
+1 NAME Jan /Novák/
+1 SEX M
+1 BIRT
+2 DATE 1918
+1 FAMS @F1@
+0 @I2@ INDI
+1 NAME Marie /Nováková/
+1 SEX F
+1 BIRT
+2 DATE 1922
+1 FAMS @F1@
+0 @I3@ INDI
+1 NAME Josef /Novák/
+1 SEX M
+1 BIRT
+2 DATE 1945
+1 FAMC @F1@
+1 FAMS @F2@
+0 @I4@ INDI
+1 NAME Václav /Novák/
+1 SEX M
+1 BIRT
+2 DATE 1948
+1 FAMC @F1@
+1 FAMS @F3@
+0 @I5@ INDI
+1 NAME Eva /Svobodová/
+1 SEX F
+1 BIRT
+2 DATE 1952
+1 FAMC @F1@
+0 @I6@ INDI
+1 NAME Hana /Nováková/
+1 SEX F
+1 BIRT
+2 DATE 1947
+1 FAMS @F2@
+0 @I7@ INDI
+1 NAME Tomáš /Novák/
+1 SEX M
+1 BIRT
+2 DATE 1974
+1 FAMC @F2@
+1 FAMS @F4@
+0 @I8@ INDI
+1 NAME Kateřina /Dvořáková/
+1 SEX F
+1 BIRT
+2 DATE 1978
+1 FAMC @F2@
+0 @I9@ INDI
+1 NAME Martin /Novák/
+1 SEX M
+1 BIRT
+2 DATE 1976
+1 FAMC @F3@
+0 @I10@ INDI
+1 NAME Lenka /Nováková/
+1 SEX F
+1 BIRT
+2 DATE 1977
+1 FAMS @F4@
+0 @I11@ INDI
+1 NAME Jakub /Novák/
+1 SEX M
+1 BIRT
+2 DATE 2004
+1 FAMC @F4@
+0 @I12@ INDI
+1 NAME Tereza /Nováková/
+1 SEX F
+1 BIRT
+2 DATE 2007
+1 FAMC @F4@
+0 @F1@ FAM
+1 HUSB @I1@
+1 WIFE @I2@
+1 CHIL @I3@
+1 CHIL @I4@
+1 CHIL @I5@
+0 @F2@ FAM
+1 HUSB @I3@
+1 WIFE @I6@
+1 CHIL @I7@
+1 CHIL @I8@
+0 @F3@ FAM
+1 HUSB @I4@
+1 CHIL @I9@
+0 @F4@ FAM
+1 HUSB @I7@
+1 WIFE @I10@
+1 CHIL @I11@
+1 CHIL @I12@
+0 TRLR
+`;
+    this.loadGedcomText(SAMPLE_GEDCOM, 'Ukázkový rodokmen Novákovi (4 generace)');
+  }
+
+  loadGedcomText(text, sourceName) {
+    try {
+      const parsed = parseGedcom(text);
+      if (parsed.individuals.size === 0) {
+        this.gedcomStatusBox.textContent = `V souboru ${sourceName} nebyly nalezeny žádné osoby.`;
+        return;
+      }
+      this.activeGedcom = parsed;
+      const list = parsed.getIndividualList();
+
+      this.gedcomStatusBox.innerHTML = `
+        <strong style="color: #10b981;">✓ Úspěšně načteno:</strong> ${sourceName}<br>
+        Celkem <strong>${parsed.individuals.size}</strong> osob v <strong>${parsed.families.size}</strong> rodinách.
+      `;
+
+      const fillSelect = (selectEl, defaultId) => {
+        selectEl.innerHTML = '';
+        list.forEach((item) => {
+          const opt = document.createElement('option');
+          opt.value = item.id;
+          opt.textContent = item.label;
+          if (item.id === defaultId) opt.selected = true;
+          selectEl.appendChild(opt);
+        });
+      };
+
+      const defaultA = list[0] ? list[0].id : '';
+      const defaultB = list[list.length - 1] ? list[list.length - 1].id : defaultA;
+
+      fillSelect(this.gedcomPersonA, defaultA);
+      fillSelect(this.gedcomPersonB, defaultB);
+
+      this.gedcomSelectSection.style.display = 'flex';
+      this.gedcomResultCard.style.display = 'none';
+      this.showToast(`Rodokmen načten: ${parsed.individuals.size} osob`);
+    } catch (err) {
+      this.gedcomStatusBox.textContent = `Chyba při čtení souboru: ${err.message}`;
+    }
+  }
+
+  executeGedcomKinship() {
+    this.triggerHaptic();
+    if (!this.activeGedcom) return;
+
+    const idA = this.gedcomPersonA.value;
+    const idB = this.gedcomPersonB.value;
+    const personA = this.activeGedcom.individuals.get(idA);
+    const personB = this.activeGedcom.individuals.get(idB);
+
+    if (!personA || !personB) return;
+
+    const pathResult = this.activeGedcom.findKinshipChain(idA, idB);
+
+    if (pathResult.error || !pathResult.chain) {
+      this.gedcomResultTitle.textContent = `${personB.name} a ${personA.name}`;
+      this.gedcomResultDesc.innerHTML = `<span style="color: #ef4444;">${pathResult.error || 'Nepropojeno'}</span>`;
+      this.transferGedcomBtn.style.display = 'none';
+      this.gedcomResultCard.style.display = 'block';
+      return;
+    }
+
+    const dict = getDictionary(this.currentLang);
+    const resolved = resolveKinship(pathResult.chain, personA.sex === 'F' ? 'f' : 'm', dict);
+    this.gedcomKinshipResult = { chain: pathResult.chain, resolved, personA, personB };
+
+    const pathNames = pathResult.pathPersons.map((pId) => {
+      const p = this.activeGedcom.individuals.get(pId);
+      return p ? p.name : pId;
+    });
+
+    this.gedcomResultTitle.textContent = `${personB.name} je pro ${personA.name}:`;
+    this.gedcomResultDesc.innerHTML = `
+      <div style="font-size: 24px; font-weight: 700; color: #fff; margin: 8px 0;">${resolved.name}</div>
+      <div style="font-size: 14px; color: var(--text-secondary);">${resolved.description || ''}</div>
+      <div style="margin: 8px 0; font-size: 13px; color: #a78bfa;">🔗 Genealogická cesta: ${pathNames.join(' ➔ ')}</div>
+      <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 6px;">
+        ${resolved.consanguinity && resolved.consanguinity.badge ? `<span class="meta-badge badge-consanguinity">${resolved.consanguinity.badge}</span>` : ''}
+        ${resolved.inheritance && resolved.inheritance.badge ? `<span class="meta-badge badge-inheritance">${resolved.inheritance.badge}</span>` : ''}
+        ${resolved.marriageImpediment && resolved.marriageImpediment.badge ? `<span class="meta-badge ${resolved.marriageImpediment.allowed ? 'badge-impediment-allowed' : 'badge-impediment-blocked'}">${resolved.marriageImpediment.badge}</span>` : ''}
+      </div>
+    `;
+    this.transferGedcomBtn.style.display = 'block';
+    this.gedcomResultCard.style.display = 'block';
+  }
+
+  transferGedcomToCalculator() {
+    this.triggerHaptic();
+    if (!this.gedcomKinshipResult || !this.gedcomKinshipResult.chain) return;
+
+    this.chain = [...this.gedcomKinshipResult.chain];
+    this.isMutualView = false;
+    this.egoGender = this.gedcomKinshipResult.personA.sex === 'F' ? 'f' : 'm';
+    this.updateGenderUI();
+    this.closeGedcomModal();
+    this.render();
+    this.showToast(`Přenoseno do kalkulačky: ${this.gedcomKinshipResult.resolved.name}`);
   }
 }
 

@@ -86,4 +86,41 @@
   - Rozšíření testovací sady v `tests/kinship.test.js` na **33 / 33 úspěšně procházejících testů**.
   - Aktualizace Service Workeru (`sw.js`) na verzi `family-calc-v7`.
   - Kompletní ověření všech funkcí v reálném prohlížeči pomocí `browser_subagent`.
+- [x] Implementace vysouvacího Hamburger menu (`#menuModal`) a 8 specializovaných nástrojů:
+  - **Menu drawer**: Přístup ke všem modulům z kompaktního tlačítka v záhlaví.
+  - **Kalkulačka dědických tříd ČR dle NOZ**: Přesné zařazení do 1.–6. dědické třídy s právním odůvodněním a podíly.
+  - **Detektor překážek manželství dle § 675 NOZ**: Automatické vyhodnocení legality sňatku (přímá linie a sourozenci zakázáni, boční linie povoleny).
+  - **Export grafické kartičky do PNG (Social Card Generator)**: Vykreslení stylové vizitky na HTML5 Canvas s možností okamžitého stažení do souboru.
+  - **Hlasové zadávání (Diktování)**: Integrace Web Speech API s rozpoznáváním klíčových slov (otec, matka, bratr...) v češtině i angličtině.
+  - **Porovnání dvou osob v rodokmenu**: Zjištění vzájemného vztahu dvou libovolných členů rodiny z pohledu společného probanda.
+- [x] Masivní expanze na **25 plně lokalizovaných světových jazyků**:
+  - Doplněno 12 nových jazyků: **Ukrajinština 🇺🇦**, **Portugalština 🇵🇹**, **Nizozemština 🇳🇱**, **Maďarština 🇭🇺**, **Turečtina 🇹🇷**, **Řečtina 🇬🇷**, **Švédština 🇸🇪**, **Hindština 🇮🇳**, **Indonéština 🇮🇩**, **Arabština 🇸🇦**, **Chorvatština 🇭🇷**, **Rumunština 🇷🇴**.
+  - Rozšíření `js/i18n/languages.js` a `js/i18n/index.js` pro všech 25 jazyků včetně vlajek, abeced a jazykových skupin.
+  - Rozšíření testovací sady v `tests/kinship.test.js` na **47 / 47 úspěšně procházejících testů**.
+  - Aktualizace Service Workeru (`sw.js`) pro offline cacheování všech 25 jazykových modulů.
+- [x] Spuštění lokálního HTTP serveru (`server.js`) a ověření reálného chování v prohlížeči:
+  - Spuštěn na `http://localhost:30099/`.
+  - Ověřeno načtení aplikace bez chyb v konzoli.
+  - Ověřeno otevírání a zavírání vysouvacího menu s 8 nástroji.
+  - Ověřen výpočet příbuzenství (Otec + Matka = Babička) se všemi odznaky (DNA, dědická třída, překážka sňatku).
+  - Ověřeno živé vyhledávání v modalu s 25 jazyky.
+  - Ověřeno renderování minirodokmenu na plátně.
+- [x] Web Audio syntetizátor zvukových efektů stisku kláves (Haptic Sound Feedback):
+  - Syntéza jemného kliknutí bez externích audio souborů (nulová latence).
+  - Přepínací tlačítko zvuku v záhlaví aplikace (`🔊` / `🔇`) s perzistencí stavu v `localStorage`.
+- [x] Klávesové zkratky pro fyzickou klávesnici (Desktop Keyboard Hotkeys):
+  - Rychlé zadávání: `F` (Otec), `M` (Matka), `S` (Syn), `D` (Dcera), `B` (Bratr st.), `Shift+B` (Bratr ml.), `X` (Sestra st.), `Shift+X` (Sestra ml.), `H` (Manžel), `W` (Manželka).
+  - Ovládací klávesy: `Enter` / `=` (Spočítat), `C` / `Esc` (Vymazat), `Backspace` / `Del` (Krok zpět), `R` / `I` (Vzájemný vztah), `Tab` (Nevlastní), `G` / `Mezerník` (Křestní), `?` / `F1` (Nápověda zkratek).
+  - Chytré ošetření textových polí (při psaní do vyhledávače se klávesy kalkulačky neaktivují).
+  - Modální dialog s přehlednou tabulkou zkratek (`#shortcutsModal`) přístupný z menu i klávesy `?`.
+- [x] Genealogický GEDCOM parser a analyzátor rodokmenů (`js/engine/gedcom-parser.js` & `#gedcomModal`):
+  - Plnohodnotná podpora standardních souborů `.ged` (GEDCOM 5.5 / 5.5.1) z Ancestry, MyHeritage a Gramps.
+  - Tlačítko pro okamžité načtení ukázkového 4-generačního rodokmenu (rodina Novákových, 12 osob, 4 rodiny).
+  - Výběr výchozí osoby (probanda) a hledaného příbuzného ze seznamu s roky narození/úmrtí.
+  - Algoritmus BFS pro nalezení nejkratší genealogické cesty v grafu rodiny.
+  - Zobrazení detailní výsledkové karty: název vztahu v aktivním jazyce, celá genealogická cesta, DNA %, dědická třída a překážka sňatku dle NOZ.
+  - Tlačítko "Přenést vztah do kalkulačky ➔", které načte zjištěný řetězec přímo do displeje kalkulačky.
+- [x] Rozšíření testovací sady v `tests/kinship.test.js` na **49 / 49 úspěšně procházejících testů**.
+- [x] Aktualizace Service Workeru (`sw.js`) na verzi `family-calc-v9` s cacheováním nového modulu `gedcom-parser.js`.
+- [x] Kompletní ověření všech nových modulů v reálném prohlížeči pomocí `browser_subagent`.
 

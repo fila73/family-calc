@@ -22,7 +22,7 @@ Pro export do mobilních aplikací:
 
 ## 3. Vývoj jazykových pluginů / balíčků
 Každý jazykový balíček implementuje standardní rozhraní v adresáři `js/i18n/`:
-- `code`: ISO kód jazyka (např. `cs`, `en`, `zh`, `sk`, `ja`, `vi`)
+- `code`: ISO kód jazyka (v současnosti 25 jazyků: `cs`, `sk`, `pl`, `de`, `en`, `fr`, `it`, `es`, `ru`, `zh`, `ja`, `ko`, `vi`, `uk`, `pt`, `nl`, `hu`, `tr`, `el`, `sv`, `hi`, `id`, `ar`, `hr`, `ro`)
 - `name`: Nativní název jazyka
 - `labels`: Překlady prvků uživatelského rozhraní
 - `relations`: Mapování normalizovaných relačních kódů na názvy, synonyma a vysvětlení
@@ -34,3 +34,12 @@ Pro zařazení jazyka do vyhledávače a dialogu:
 3. V případě nové rodiny jazyků doplňte novou kategorii do `languageCategories`.
 4. Exportujte slovník v `js/i18n/index.js` v objektu `dictionaries`.
 5. Přidejte soubor do `ASSETS_TO_CACHE` v `sw.js`.
+6. Přidejte ověřovací testy do `tests/kinship.test.js`.
+
+## 4. Přidání nového nástroje do Hamburger Drawer Menu
+Postup pro integraci nového nástroje (např. GEDCOM import, audio efekty apod.):
+1. Přidejte tlačítko do `#menuModal` v `index.html`.
+2. Přidejte modalové okno pro zobrazení výstupu/dialogu s třídou `modal-overlay`.
+3. V `js/app.js` namapujte obslužnou funkci otevření modalu a jeho logiku.
+4. Přidejte styl v `css/style.css` v souladu s AMOLED motivem a designovým systémem.
+

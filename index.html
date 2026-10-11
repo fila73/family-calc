@@ -41,6 +41,11 @@
       </div>
 
       <div class="header-controls">
+        <!-- Sound Effect Toggle Button -->
+        <button class="icon-action-btn sound-btn" id="soundToggleBtn" type="button" title="Zvukové efekty klávesnice (Web Audio)" aria-label="Přepnout zvukové efekty">
+          <span id="soundIcon">🔊</span>
+        </button>
+
         <!-- Language Selector Trigger Button -->
         <button class="lang-trigger-btn" id="openLangModalBtn" type="button" title="Vybrat jazyk" aria-label="Vybrat jazyk">
           <span class="lang-trigger-flag" id="langTriggerFlag">🇨🇿</span>
@@ -342,6 +347,26 @@
           </div>
           <span class="menu-item-arrow">➔</span>
         </button>
+
+        <!-- 9. Import rodokmenu GEDCOM -->
+        <button class="menu-item-btn" id="menuGedcomBtn" type="button">
+          <span class="menu-item-icon">📜</span>
+          <div class="menu-item-content">
+            <div class="menu-item-title">Import rodokmenu GEDCOM (.ged)</div>
+            <div class="menu-item-desc">Analýza příbuzenských vztahů z Ancestry, MyHeritage či Gramps</div>
+          </div>
+          <span class="menu-item-arrow">➔</span>
+        </button>
+
+        <!-- 10. Klávesové zkratky (Desktop) -->
+        <button class="menu-item-btn" id="menuShortcutsBtn" type="button">
+          <span class="menu-item-icon">⌨️</span>
+          <div class="menu-item-content">
+            <div class="menu-item-title">Klávesové zkratky (Desktop)</div>
+            <div class="menu-item-desc">Rychlé ovládání kalkulačky pomocí fyzické klávesnice</div>
+          </div>
+          <span class="menu-item-arrow">➔</span>
+        </button>
       </div>
     </div>
 
@@ -398,6 +423,76 @@
         <div class="compare-result-card" id="compareResultCard" style="display: none;">
           <div class="compare-result-title" id="compareResultTitle"></div>
           <div class="compare-result-desc" id="compareResultDesc"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- GEDCOM Modal -->
+    <div class="modal-overlay" id="gedcomModal" role="dialog" aria-modal="true" aria-labelledby="gedcomModalTitle">
+      <div class="modal-header">
+        <h2 id="gedcomModalTitle">Import rodokmenu GEDCOM (.ged) 📜</h2>
+        <button class="modal-close-btn" id="closeGedcomModalBtn" aria-label="Zavřít import GEDCOM">&times;</button>
+      </div>
+      <div class="compare-modal-body gedcom-modal-body">
+        <input type="file" id="gedcomFileInput" accept=".ged" style="display: none;">
+        <div class="gedcom-actions-row">
+          <button class="compare-btn gedcom-btn-upload" id="uploadGedcomBtn" type="button">📁 Nahrát .ged soubor</button>
+          <button class="compare-btn gedcom-btn-sample" id="sampleGedcomBtn" type="button">🌳 Načíst ukázkový rodokmen</button>
+        </div>
+        <div class="gedcom-status-box" id="gedcomStatusBox">
+          Nahrajte soubor .ged ze softwaru MyHeritage, Gramps, Ancestry, nebo načtěte ukázkový rodokmen.
+        </div>
+        <div class="gedcom-select-section" id="gedcomSelectSection" style="display: none;">
+          <div class="compare-row">
+            <label class="compare-label" for="gedcomPersonA">Výchozí osoba (JÁ / Proband):</label>
+            <select class="compare-select" id="gedcomPersonA"></select>
+          </div>
+          <div class="compare-row">
+            <label class="compare-label" for="gedcomPersonB">Hledaný příbuzný:</label>
+            <select class="compare-select" id="gedcomPersonB"></select>
+          </div>
+          <button class="compare-btn" id="executeGedcomBtn" type="button">Vyhodnotit příbuzenský vztah ➔</button>
+          <div class="compare-result-card" id="gedcomResultCard" style="display: none;">
+            <div class="compare-result-title" id="gedcomResultTitle"></div>
+            <div class="compare-result-desc" id="gedcomResultDesc"></div>
+            <button class="compare-btn gedcom-transfer-btn" id="transferGedcomBtn" type="button" style="margin-top: 12px; background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
+              Přenést vztah do kalkulačky ➔
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Keyboard Shortcuts Modal -->
+    <div class="modal-overlay" id="shortcutsModal" role="dialog" aria-modal="true" aria-labelledby="shortcutsModalTitle">
+      <div class="modal-header">
+        <h2 id="shortcutsModalTitle">Klávesové zkratky (Desktop) ⌨️</h2>
+        <button class="modal-close-btn" id="closeShortcutsModalBtn" aria-label="Zavřít klávesové zkratky">&times;</button>
+      </div>
+      <div class="shortcuts-modal-body">
+        <div class="shortcuts-group-title">Základní vztahy</div>
+        <div class="shortcuts-grid">
+          <div class="shortcut-item"><kbd>F</kbd> <span>Otec (Father)</span></div>
+          <div class="shortcut-item"><kbd>M</kbd> <span>Matka (Mother)</span></div>
+          <div class="shortcut-item"><kbd>S</kbd> <span>Syn (Son)</span></div>
+          <div class="shortcut-item"><kbd>D</kbd> <span>Dcera (Daughter)</span></div>
+          <div class="shortcut-item"><kbd>B</kbd> <span>Bratr starší</span></div>
+          <div class="shortcut-item"><kbd>Shift</kbd> + <kbd>B</kbd> <span>Bratr mladší</span></div>
+          <div class="shortcut-item"><kbd>X</kbd> <span>Sestra starší</span></div>
+          <div class="shortcut-item"><kbd>Shift</kbd> + <kbd>X</kbd> <span>Sestra mladší</span></div>
+          <div class="shortcut-item"><kbd>H</kbd> <span>Manžel (Husband)</span></div>
+          <div class="shortcut-item"><kbd>W</kbd> <span>Manželka (Wife)</span></div>
+        </div>
+
+        <div class="shortcuts-group-title" style="margin-top: 14px;">Ovládání kalkulačky</div>
+        <div class="shortcuts-grid">
+          <div class="shortcut-item"><kbd>Enter</kbd> / <kbd>=</kbd> <span>Spočítat výsledek</span></div>
+          <div class="shortcut-item"><kbd>C</kbd> / <kbd>Esc</kbd> <span>Vymazat vše (Clear)</span></div>
+          <div class="shortcut-item"><kbd>⌫</kbd> / <kbd>Del</kbd> <span>Smazat poslední krok</span></div>
+          <div class="shortcut-item"><kbd>R</kbd> / <kbd>I</kbd> <span>Vzájemný vztah (互查)</span></div>
+          <div class="shortcut-item"><kbd>Tab</kbd> <span>Modifikátor Nevlastní (⇧)</span></div>
+          <div class="shortcut-item"><kbd>G</kbd> / <kbd>Space</kbd> <span>Modifikátor Křestní (✝)</span></div>
+          <div class="shortcut-item"><kbd>?</kbd> <span>Tato nápověda zkratek</span></div>
         </div>
       </div>
     </div>
