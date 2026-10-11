@@ -41,10 +41,12 @@
       </div>
 
       <div class="header-controls">
-        <!-- Language Selector -->
-        <div class="lang-select-wrapper">
-          <select id="langSelect" class="lang-select" aria-label="Výběr jazyka"></select>
-        </div>
+        <!-- Language Selector Trigger Button -->
+        <button class="lang-trigger-btn" id="openLangModalBtn" type="button" title="Vybrat jazyk" aria-label="Vybrat jazyk">
+          <span class="lang-trigger-flag" id="langTriggerFlag">🇨🇿</span>
+          <span class="lang-trigger-code" id="langTriggerCode">CS</span>
+          <span class="lang-trigger-arrow">▾</span>
+        </button>
 
         <!-- Dictionary Explorer Button -->
         <button class="icon-action-btn" id="openDictBtn" title="Otevřít slovník pojmů" aria-label="Slovník příbuzenských vztahů">
@@ -161,6 +163,24 @@
         =
       </button>
     </section>
+
+    <!-- Language Selection Drawer Modal -->
+    <div class="modal-overlay" id="langModal" role="dialog" aria-modal="true" aria-labelledby="langModalTitle">
+      <div class="modal-header">
+        <h2 id="langModalTitle">Zvolit jazyk / Language</h2>
+        <button class="modal-close-btn" id="closeLangModalBtn" aria-label="Zavřít výběr jazyka">&times;</button>
+      </div>
+      <div class="modal-search-box">
+        <input type="search" class="modal-search-input" id="langSearchInput" placeholder="Hledat jazyk (např. pol, jap, deutsch, viet...)" autocomplete="off">
+      </div>
+      <!-- Recent Languages Row -->
+      <div class="recent-langs-section" id="recentLangsSection">
+        <div class="recent-langs-title" id="recentLangsTitle">Nedávno použité</div>
+        <div class="recent-langs-row" id="recentLangsRow"></div>
+      </div>
+      <!-- Categorized Language Groups List -->
+      <div class="modal-list lang-modal-list" id="langGroupsList"></div>
+    </div>
 
     <!-- Dictionary Drawer Modal -->
     <div class="modal-overlay" id="dictModal" role="dialog" aria-modal="true" aria-labelledby="dictModalTitle">

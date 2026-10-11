@@ -44,6 +44,8 @@ export const availableLanguages = [
   { code: 'vi', label: 'Tiếng Việt 🇻🇳' }
 ];
 
+export { languagesRegistry, languageCategories, getLanguageMeta } from './languages.js';
+
 export function getDictionary(langCode = 'cs') {
   return dictionaries[langCode] || dictionaries.cs;
 }

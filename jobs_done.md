@@ -69,3 +69,13 @@
 - [x] Rozšíření testovací sady v `tests/kinship.test.js` na **31 / 31 úspěšně procházejících testů**.
 - [x] Aktualizace Service Workeru (`sw.js`) na verzi `family-calc-v5`.
 - [x] Kompletní ověření v reálném prohlížeči pomocí `browser_subagent`.
+- [x] Moderní škálovatelný dialog pro výběr jazyků (`#langModal`):
+  - Nahrazení statického `<select>` rozbalovacího menu kompaktním header tlačítkem s vlajkou, ISO kódem a šipkou (`🇨🇿 CS ▾`).
+  - Tmavé modal dialogové okno v AMOLED stylu se skleněným pozadím (glassmorphism) a animací otevření.
+  - Okamžité vyhledávání (live search) filtrující jazyky v reálném čase podle nativního názvu, českého i anglického pojmenování i kódu (např. *pol*, *jap*, *viet*, *deutsch*).
+  - Rychlé přepínání pomocí čipů "Nedávno použité" (Recent languages) s automatickou perzistencí v `localStorage`.
+  - Přehledná kategorizace jazyků do skupin (Slovanské, Germánské, Románské, Východoasijské, Jihovýchodní Asie) s ikonami kontinentů.
+  - Vytvoření registru jazyků `js/i18n/languages.js` pro snadné a škálovatelné přidávání desítek dalších jazyků.
+  - Aktualizace Service Workeru (`sw.js`) na verzi `family-calc-v6` s offline cachováním nového modulu.
+  - 100% průchod všech 31 jednotkových testů v `tests/kinship.test.js`.
+  - Kompletní ověření v reálném prohlížeči pomocí `browser_subagent` (vyhledávání, volba japonštiny, ověření recent čipu, návrat k češtině).

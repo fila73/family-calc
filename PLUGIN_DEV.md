@@ -22,7 +22,15 @@ Pro export do mobilních aplikací:
 
 ## 3. Vývoj jazykových pluginů / balíčků
 Každý jazykový balíček implementuje standardní rozhraní v adresáři `js/i18n/`:
-- `code`: ISO kód jazyka (např. `cs`, `en`, `zh`, `sk`)
+- `code`: ISO kód jazyka (např. `cs`, `en`, `zh`, `sk`, `ja`, `vi`)
 - `name`: Nativní název jazyka
 - `labels`: Překlady prvků uživatelského rozhraní
 - `relations`: Mapování normalizovaných relačních kódů na názvy, synonyma a vysvětlení
+
+### Přidání nového jazyka do škálovatelného výběru
+Pro zařazení jazyka do vyhledávače a dialogu:
+1. Vytvořte modul `js/i18n/<kod>.js`.
+2. Zaregistrujte jej v `js/i18n/languages.js` v poli `languagesRegistry` (specifikujte `code`, `czechName`, `englishName`, `localName`, `flag` a `group`).
+3. V případě nové rodiny jazyků doplňte novou kategorii do `languageCategories`.
+4. Exportujte slovník v `js/i18n/index.js` v objektu `dictionaries`.
+5. Přidejte soubor do `ASSETS_TO_CACHE` v `sw.js`.

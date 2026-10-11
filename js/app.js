@@ -3,7 +3,7 @@
  */
 
 import { resolveKinship, invertChain, TOKENS } from './engine/kinship-engine.js';
-import { getDictionary, availableLanguages } from './i18n/index.js';
+import { getDictionary, languagesRegistry, languageCategories, getLanguageMeta } from './i18n/index.js';
 
 class FamilyCalcApp {
   constructor() {
@@ -13,10 +13,11 @@ class FamilyCalcApp {
     this.isMutualView = false;
     this.modifier = null; // null | 'step' | 'god'
     this.history = [];
+    this.recentLangs = this.loadRecentLangs();
 
     this.initElements();
     this.initEventListeners();
-    this.populateLanguageSelector();
+    this.updateLanguageTrigger();
     this.updateLanguage();
     this.render();
   }
@@ -24,10 +25,20 @@ class FamilyCalcApp {
   initElements() {
     this.appTitle = document.getElementById('appTitle');
     this.appSubtitle = document.getElementById('appSubtitle');
-    this.langSelect = document.getElementById('langSelect');
     this.genderBtnMale = document.getElementById('genderBtnMale');
     this.genderBtnFemale = document.getElementById('genderBtnFemale');
     this.probandLabelText = document.getElementById('probandLabelText');
+
+    // Language modal elements
+    this.openLangModalBtn = document.getElementById('openLangModalBtn');
+    this.closeLangModalBtn = document.getElementById('closeLangModalBtn');
+    this.langModal = document.getElementById('langModal');
+    this.langSearchInput = document.getElementById('langSearchInput');
+    this.recentLangsSection = document.getElementById('recentLangsSection');
+    this.recentLangsRow = document.getElementById('recentLangsRow');
+    this.langGroupsList = document.getElementById('langGroupsList');
+    this.langTriggerFlag = document.getElementById('langTriggerFlag');
+    this.langTriggerCode = document.getElementById('langTriggerCode');
 
     // Modifiers
     this.btnModStep = document.getElementById('btnModStep');
@@ -77,13 +88,21 @@ class FamilyCalcApp {
     this.genderBtnMale.addEventListener('click', () => this.setGender('m'));
     this.genderBtnFemale.addEventListener('click', () => this.setGender('f'));
 
-    // Language selector
-    this.langSelect.addEventListener('change', (e) => {
-      this.currentLang = e.target.value;
-      localStorage.setItem('lang_code', this.currentLang);
-      this.updateLanguage();
-      this.render();
-    });
+    // Language modal open/close & search
+    if (this.openLangModalBtn) {
+      this.openLangModalBtn.addEventListener('click', () => this.openLanguageModal());
+    }
+    if (this.closeLangModalBtn) {
+      this.closeLangModalBtn.addEventListener('click', () => this.closeLanguageModal());
+    }
+    if (this.langModal) {
+      this.langModal.addEventListener('click', (e) => {
+        if (e.target === this.langModal) this.closeLanguageModal();
+      });
+    }
+    if (this.langSearchInput) {
+      this.langSearchInput.addEventListener('input', () => this.filterLanguages());
+    }
 
     // Reset button
     this.resetBtn.addEventListener('click', () => {
@@ -127,7 +146,13 @@ class FamilyCalcApp {
 
     // Keyboard shortcuts for convenience
     window.addEventListener('keydown', (e) => {
-      if (this.dictModal.classList.contains('open')) return;
+      if (this.dictModal.classList.contains('open') || (this.langModal && this.langModal.classList.contains('open'))) {
+        if (e.key === 'Escape') {
+          if (this.dictModal.classList.contains('open')) this.closeDictionary();
+          if (this.langModal && this.langModal.classList.contains('open')) this.closeLanguageModal();
+        }
+        return;
+      }
       if (e.key === 'Shift') {
         this.toggleModifier('step');
       } else if (e.key === 'Backspace') {
@@ -182,15 +207,164 @@ class FamilyCalcApp {
     }
   }
 
-  populateLanguageSelector() {
-    this.langSelect.innerHTML = '';
-    availableLanguages.forEach((lang) => {
-      const opt = document.createElement('option');
-      opt.value = lang.code;
-      opt.textContent = lang.label;
-      if (lang.code === this.currentLang) opt.selected = true;
-      this.langSelect.appendChild(opt);
+  loadRecentLangs() {
+    try {
+      const saved = JSON.parse(localStorage.getItem('family_calc_recent_langs'));
+      if (Array.isArray(saved) && saved.length > 0) {
+        return saved;
+      }
+    } catch (e) {
+      // ignore
+    }
+    return ['cs', 'sk', 'en', 'de'];
+  }
+
+  saveRecentLang(code) {
+    let recents = this.recentLangs.filter((c) => c !== code);
+    recents.unshift(code);
+    if (recents.length > 5) recents = recents.slice(0, 5);
+    this.recentLangs = recents;
+    try {
+      localStorage.setItem('family_calc_recent_langs', JSON.stringify(recents));
+    } catch (e) {}
+  }
+
+  updateLanguageTrigger() {
+    const meta = getLanguageMeta(this.currentLang);
+    if (this.langTriggerFlag) this.langTriggerFlag.textContent = meta.flag;
+    if (this.langTriggerCode) this.langTriggerCode.textContent = meta.code.toUpperCase();
+  }
+
+  openLanguageModal() {
+    this.triggerHaptic();
+    if (this.langSearchInput) this.langSearchInput.value = '';
+    this.renderRecentLangs();
+    this.filterLanguages();
+    if (this.langModal) this.langModal.classList.add('open');
+    setTimeout(() => {
+      if (this.langSearchInput) this.langSearchInput.focus();
+    }, 120);
+  }
+
+  closeLanguageModal() {
+    if (this.langModal) this.langModal.classList.remove('open');
+  }
+
+  renderRecentLangs() {
+    if (!this.recentLangsRow) return;
+    this.recentLangsRow.innerHTML = '';
+
+    const codes = [...new Set([this.currentLang, ...this.recentLangs])].slice(0, 5);
+
+    codes.forEach((code) => {
+      const meta = getLanguageMeta(code);
+      if (!meta) return;
+      const chip = document.createElement('button');
+      chip.type = 'button';
+      chip.className = `recent-chip ${code === this.currentLang ? 'active' : ''}`;
+      chip.innerHTML = `<span class="chip-flag">${meta.flag}</span><span class="chip-label">${meta.localName}</span>`;
+      chip.addEventListener('click', () => {
+        this.selectLanguage(code);
+      });
+      this.recentLangsRow.appendChild(chip);
     });
+  }
+
+  filterLanguages() {
+    if (!this.langGroupsList) return;
+    const query = this.langSearchInput ? this.langSearchInput.value.toLowerCase().trim() : '';
+    this.langGroupsList.innerHTML = '';
+
+    if (this.recentLangsSection) {
+      this.recentLangsSection.style.display = query ? 'none' : 'block';
+    }
+
+    const groupMap = {};
+    Object.keys(languageCategories).forEach((catKey) => {
+      groupMap[catKey] = [];
+    });
+
+    let totalMatches = 0;
+
+    languagesRegistry.forEach((lang) => {
+      const matchCode = lang.code.toLowerCase().includes(query);
+      const matchCzech = lang.czechName && lang.czechName.toLowerCase().includes(query);
+      const matchEnglish = lang.englishName && lang.englishName.toLowerCase().includes(query);
+      const matchLocal = lang.localName && lang.localName.toLowerCase().includes(query);
+      const matchLabel = lang.label && lang.label.toLowerCase().includes(query);
+
+      if (!query || matchCode || matchCzech || matchEnglish || matchLocal || matchLabel) {
+        if (!groupMap[lang.group]) groupMap[lang.group] = [];
+        groupMap[lang.group].push(lang);
+        totalMatches++;
+      }
+    });
+
+    if (totalMatches === 0) {
+      const empty = document.createElement('div');
+      empty.className = 'lang-empty-msg';
+      empty.style.padding = '24px';
+      empty.style.textAlign = 'center';
+      empty.style.color = '#71717a';
+      empty.textContent = 'Nenalezen žádný odpovídající jazyk / No matching language found.';
+      this.langGroupsList.appendChild(empty);
+      return;
+    }
+
+    Object.entries(groupMap).forEach(([groupId, langs]) => {
+      if (langs.length === 0) return;
+      const cat = languageCategories[groupId] || { label: groupId, icon: '🌐' };
+
+      const groupDiv = document.createElement('div');
+      groupDiv.className = 'lang-group';
+
+      const headerDiv = document.createElement('div');
+      headerDiv.className = 'lang-group-header';
+      headerDiv.textContent = `${cat.icon} ${cat.label}`;
+      groupDiv.appendChild(headerDiv);
+
+      langs.forEach((lang) => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = `lang-item-btn ${lang.code === this.currentLang ? 'active' : ''}`;
+
+        btn.innerHTML = `
+          <span class="lang-flag">${lang.flag}</span>
+          <div class="lang-info">
+            <span class="lang-local">${lang.localName}</span>
+            <span class="lang-sub">${lang.czechName} · ${lang.englishName} (${lang.code.toUpperCase()})</span>
+          </div>
+          ${lang.code === this.currentLang ? `
+            <span class="lang-check">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+            </span>
+          ` : ''}
+        `;
+
+        btn.addEventListener('click', () => {
+          this.selectLanguage(lang.code);
+        });
+
+        groupDiv.appendChild(btn);
+      });
+
+      this.langGroupsList.appendChild(groupDiv);
+    });
+  }
+
+  selectLanguage(code) {
+    this.triggerHaptic();
+    this.currentLang = code;
+    localStorage.setItem('lang_code', code);
+    this.saveRecentLang(code);
+    this.updateLanguageTrigger();
+    this.updateLanguage();
+    this.render();
+    this.closeLanguageModal();
+    const meta = getLanguageMeta(code);
+    this.showToast(`${meta.flag} ${meta.localName}`);
   }
 
   updateLanguage() {
