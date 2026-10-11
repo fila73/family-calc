@@ -41,7 +41,7 @@ Aplikace si váží vašeho soukromí. Neobsahuje žádné otravné bannery, ž�
 • Modifikátory vztahů:
   - ⇧ Nevlastní: Macecha, otčím, pastorek, polorodí sourozenci (jednobřišní i jednokrevní) i nepokrevní nevlastní sourozenci.
   - ✝ Křestní: Kmotr, kmotra, kmotřenec a kmotřenka.
-• Vzájemný vztah (互查): Jedním tlačítkem zjistíte reciproční pohled – jak tento příbuzný oslovuje vás („Kdo jsem já pro něj?“).
+• Vzájemný vztah: Jedním tlačítkem zjistíte reciproční pohled – jak tento příbuzný oslovuje vás („Kdo jsem já pro něj?“).
 • Vizuální minirodokmen: Grafické schéma genealogického řetězce s avatary a zvýrazněním cíle.
 • Import rodokmenů GEDCOM (.ged): Načtěte rodokmen z MyHeritage, Gramps nebo Ancestry, najděte nejkratší příbuzenskou cestu mezi dvěma osobami a přeneste ji do kalkulačky.
 • Genetická shoda & Consanguinity: Výpočet kanonického stupně příbuzenství a odhad procenta sdílené DNA (např. 12.5% DNA pro bratrance).
@@ -98,17 +98,21 @@ Explore your family ties with precision and ease!
 
 ---
 
-## 4. Požadavky na grafické podklady (Store Assets)
+## 4. Požadavky na grafické podklady (Store Assets) — PŘIPRAVENO V `google-play/assets/`
 
-| Podklad | Rozměry | Formát | Poznámka |
-| :--- | :--- | :--- | :--- |
-| **Ikona aplikace** | 512 × 512 px | PNG (32-bit, bez průhlednosti) | Čisté logo rodinného stromu s kalkulačkovým motivem na tmavém pozadí `#09090b`. |
-| **Hlavní grafika (Feature Graphic)** | 1024 × 500 px | PNG / JPEG (max 15 MB) | Reklamní banner v záhlaví Google Play profilu s nápisem a ukázkou AMOLED rozhraní. |
-| **Screenshoty pro telefony** | Min. 1080 × 1920 px (nebo 1080 × 2400) | PNG / JPEG | Minimálně 2 snímky, doporučeno 4–6 snímků: <br>1. Hlavní displej kalkulačky<br>2. Vizuální minirodokmen<br>3. Výběr z 25 jazyků<br>4. GEDCOM rodokmenový analyzátor<br>5. Výukový kvíz rodinných vztahů |
+| Podklad | Rozměry | Formát | Soubor | Poznámka |
+| :--- | :--- | :--- | :--- | :--- |
+| **Ikona aplikace** | 512 × 512 px | PNG (32-bit, bez průhlednosti) | `google-play/assets/icon-512.png` | Čisté logo rodinného stromu s kalkulačkovým motivem na tmavém pozadí `#09090b`. |
+| **Hlavní grafika (Feature Graphic)** | 1024 × 500 px | PNG (max 15 MB) | `google-play/assets/feature-graphic-1024x500.png` | Reklamní banner v záhlaví Google Play profilu s nápisem a ukázkou AMOLED rozhraní. |
+| **Screenshot 1: Hlavní displej kalkulačky** | 1080 × 2400 px | PNG | `google-play/assets/screenshot_1_calculator.png` | AMOLED displej s výsledkem Strýc (otcův bratr), odhadem DNA, stupněm příbuzenství a klávesnicí. |
+| **Screenshot 2: Vizuální minirodokmen** | 1080 × 2400 px | PNG | `google-play/assets/screenshot_2_tree.png` | Grafické schéma cesty JÁ ➔ otec ➔ starší bratr se zlatým zvýrazněním cíle. |
+| **Screenshot 3: Výběr z 25 jazyků** | 1080 × 2400 px | PNG | `google-play/assets/screenshot_3_languages.png` | Vyhledávací pole, rychlé čipy nedávných jazyků a kategorizované vlajky. |
+| **Screenshot 4: GEDCOM analyzátor** | 1080 × 2400 px | PNG | `google-play/assets/screenshot_4_gedcom.png` | Načtený genealogický rodokmen, výběr dvou osob a výpočet vztahu. |
+| **Screenshot 5: Výukový kvíz vztahů** | 1080 × 2400 px | PNG | `google-play/assets/screenshot_5_quiz.png` | Otázka na historický pojem (Zeť), správná odpověď, počítadlo série a skóre. |
 
 ---
 
 ## 5. URL adresy pro registraci v Google Play Console
 * **URL zásad ochrany osobních údajů (Privacy Policy URL)**:
-  `https://storytold.github.io/family-calc/privacy.html` (nebo URL vaší domény).
-* **E-mail podpory**: `support@familycalc.app` (nebo váš vývojářský e-mail).
+  `https://fila73.github.io/family-calc/privacy.html` (nebo URL vaší domény).
+* **E-mail podpory**: `filip.novak@post.cz` (nebo váš vývojářský e-mail).

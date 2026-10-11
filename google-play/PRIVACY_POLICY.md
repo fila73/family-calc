@@ -55,5 +55,5 @@ Aplikace neshromažďuje žádné údaje od nikoho, včetně dětí jakéhokoliv
 
 ## 7. Kontakt na vývojáře
 V případě jakýchkoliv dotazů ohledně těchto zásad nebo fungování aplikace můžete vývojáře kontaktovat prostřednictvím:
-* E-mail: `support@familycalc.app` (nebo kontaktní e-mail vývojářského účtu Google Play)
-* GitHub: `https://github.com/storytold/family-calc`
+* E-mail: `filip.novak@post.cz` (nebo kontaktní e-mail vývojářského účtu Google Play)
+* GitHub: `https://github.com/fila73/family-calc`
