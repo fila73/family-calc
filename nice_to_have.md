@@ -60,6 +60,10 @@
   - Přímé spojení dětí stejného `FAMC` (1kroková sestra namísto okliky otec ➔ dcera), směrové šipky `↗` nahoru, `↘` dolů, `→` sourozenci, `↔` manželé a disambiguace jmen podle roků života.
 - [x] 26. **Oprava biologického DNA a právního výpočtu pro afinitní sešvagření**:
   - Sešvagření synovci a prasynovci (např. *manžel ➔ sestra ➔ syn ➔ syn*) mají striktně **0 % sdílené DNA**, nulovou překážku sňatku a statut mimo zákonné dědické třídy.
+- [x] 27. **Oficiální nová AMOLED ikona aplikace v Androidu i PWA**:
+  - Vygenerovány ikony z `google-play/assets/icon-512.png` do všech rozlišení `mipmap-*` (mdpi, hdpi, xhdpi, xxhdpi, xxxhdpi) pro standardní i adaptivní ikonu s tmavým AMOLED pozadím `#09090b` a PWA `icons/icon-512.png` a `icons/icon-192.png`.
+- [x] 28. **Aktualizované sestavení (APK/AAB), instalace na mobil a nahrání GEDCOM souborů**:
+  - Sestaven nový debug APK (4,76 MB) a release AAB (3,41 MB). Debug balíček nainstalován do připojeného mobilu Xiaomi Redmi Note 11 Pro 5G přes ADB a do `/sdcard/Download/` nahrány GEDCOM stromy `9i7efa_248548bkfd5396b740a9bl_A.ged` i `bb2769_70868886mn5a77f2196bb9_A.ged`.
 
 
 ## Nové nápady a budoucí rozšíření

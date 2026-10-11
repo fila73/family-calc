@@ -34,7 +34,7 @@ Interaktivní webová aplikace inspirovaná čínskou kalkulačkou příbuzenstv
   - Čeština 🇨🇿, Slovenčina 🇸🇰, Polski 🇵🇱, Deutsch 🇩🇪, English 🇬🇧, Français 🇫🇷, Italiano 🇮🇹, Español 🇪🇸, Русский 🇷🇺, 中文 🇨🇳, 日本語 🇯🇵, 한국어 🇰🇷, Tiếng Việt 🇻🇳,
   - Українська 🇺🇦, Português 🇵🇹, Nederlands 🇳🇱, Magyar 🇭🇺, Türkçe 🇹🇷, Ελληνικά 🇬🇷, Svenska 🇸🇪, हिन्दी 🇮🇳, Bahasa Indonesia 🇮🇩, العربية 🇸🇦, Hrvatski 🇭🇷, Română 🇷🇴.
 - **Připraveno pro mobilní aplikace**: čistý kód bez zbytečných závislostí, podpora PWA a plná integrace s nativním Android projektem přes Capacitor (`cz.fila73.familycalc`).
-- **Sestavené Android balíčky**: v adresáři `build-android/` jsou k dispozici sestavené balíčky `Rodinna-Kalkulacka-debug.apk` (4,25 MB pro přímou instalaci do mobilu) a `Rodinna-Kalkulacka-release.aab` (3,11 MB pro Google Play Console).
+- **Sestavené Android balíčky s novou ikonou**: v adresáři `build-android/` jsou k dispozici sestavené balíčky `Rodinna-Kalkulacka-debug.apk` (4,76 MB pro přímou instalaci do mobilu) a `Rodinna-Kalkulacka-release.aab` (3,41 MB pro Google Play Console) s plně integrovanou oficiální AMOLED ikonou (všechny hustoty mipmap a adaptivní vrstva s tmavým pozadím `#09090b`).
 - **Registrace do Google Play Store**: kompletní podklady v adresáři `google-play/` (Zásady ochrany soukromí `privacy.html`, texty zápisu `STORE_LISTING.md`, příručka pro podpis a vydání `RELEASE_GUIDE.md`).
 - **Grafické podklady pro Google Play v `google-play/assets/`**:
   - Ikona aplikace 512 × 512 px PNG (`icon-512.png`).

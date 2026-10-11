@@ -31,7 +31,7 @@ An interactive web application inspired by the Chinese kinship calculator (亲�
   - Czech 🇨🇿, Slovak 🇸🇰, Polish 🇵🇱, German 🇩🇪, English 🇬🇧, French 🇫🇷, Italian 🇮🇹, Spanish 🇪🇸, Russian 🇷🇺, Chinese 🇨🇳, Japanese 🇯🇵, Korean 🇰🇷, Vietnamese 🇻🇳,
   - Ukrainian 🇺🇦, Portuguese 🇵🇹, Dutch 🇳🇱, Hungarian 🇭🇺, Turkish 🇹🇷, Greek 🇬🇷, Swedish 🇸🇪, Hindi 🇮🇳, Indonesian 🇮🇩, Arabic 🇸🇦, Croatian 🇭🇷, Romanian 🇷🇴.
 - **Mobile Native Ready**: PWA compliant with Network-First Service Worker, full Capacitor native Android project (`cz.fila73.familycalc`).
-- **Pre-Built Android Packages**: Ready-to-use binaries in `build-android/` — `Rodinna-Kalkulacka-debug.apk` (4.25 MB) for instant phone sideloading and `Rodinna-Kalkulacka-release.aab` (3.11 MB) for Google Play Console.
+- **Pre-Built Android Packages with New AMOLED Icon**: Ready-to-use binaries in `build-android/` — `Rodinna-Kalkulacka-debug.apk` (4.76 MB) for instant phone sideloading and `Rodinna-Kalkulacka-release.aab` (3.41 MB) for Google Play Console with full AMOLED mipmap densities and dark adaptive background `#09090b`.
 - **Google Play Store Assets & Guide**: Complete store registration package in `google-play/` (Privacy Policy `privacy.html`, Store listing texts `STORE_LISTING.md`, Keystore and release instructions `RELEASE_GUIDE.md`).
 - **Store Graphics & Screenshots in `google-play/assets/`**:
   - High-res App Icon 512 × 512 px PNG (`icon-512.png`).

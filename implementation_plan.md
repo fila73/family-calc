@@ -77,4 +77,7 @@ Vytvoření webové kalkulačky rodinných vztahů inspirované čínskou kalkul
 24. Oprava a zjednodušení vyhledávání příbuzenské cesty v GEDCOMu (`js/engine/gedcom-parser.js`): doplnění přímých sourozeneckých hran přes `famc` (např. *manžel ➔ sestra* namísto oklikové cesty *manžel ➔ otec ➔ dcera*).
 25. Vizuální zobrazení generačních šipek v GEDCOM cestě (`↗` nahoru k rodičům/předkům, `↘` dolů k dětem/potomkům, `→` sourozenci, `↔` manželé) a přesné rozlišení jmenných shod (Ladislav Červinka st. vs ml.) pomocí roků života a odznaků.
 26. Zpřesnění biologického výpočtu DNA a právních vazeb u sešvagření (afinity): odstraněna chybná redukce odstraňující token manžela/manželky u synovců/prasynovců; řetězec *manžel ➔ sestra ➔ syn ➔ syn* nyní striktně zachovává afinitní vztah, **0 % sdílené DNA**, neexistenci překážky sňatku dle § 675 NOZ a zařazení mimo zákonné dědické třídy.
+27. Zavedení oficiální nové ikony aplikace ze souboru `google-play/assets/icon-512.png` do Android `mipmap-*` hustot (klasická i kulatá ikona, adaptivní popředí a pozadí `#09090b`) a generování PWA ikon.
+28. Sestavení nové verze aplikace (`scripts/build.js`, `cap sync`, Gradle `assembleDebug` a `bundleRelease`): `build-android/Rodinna-Kalkulacka-debug.apk` (4,76 MB) a `build-android/Rodinna-Kalkulacka-release.aab` (3,41 MB).
+29. Nahrání rodokmenových GEDCOM souborů do úložiště telefonu (`/sdcard/Download/`) a instalace aktualizovaného APK balíčku do připojeného mobilu Xiaomi Redmi Note 11 Pro 5G přes ADB s ověřením spuštění.
 

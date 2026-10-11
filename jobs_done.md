@@ -220,4 +220,28 @@
 - [x] Spuštění a ověření lokálního vývojového serveru na portu **30099** (`http://localhost:30099/`):
   - Spuštěn proces `server.js` na pozadí, HTTP dotaz ověřil úspěšné servírování aplikace.
 
+## [2026-10-12]
+- [x] Nahrání reálných GEDCOM souborů do připojeného mobilu (Xiaomi Redmi Note 11 Pro 5G) přes ADB:
+  - Soubor `C:\Users\filip\Downloads\9i7efa_248548bkfd5396b740a9bl_A.ged` (40 633 B) nahrán do `/sdcard/Download/9i7efa_248548bkfd5396b740a9bl_A.ged`.
+  - Soubor `C:\Users\filip\Downloads\bb2769_70868886mn5a77f2196bb9_A.ged` (9 879 B) nahrán do `/sdcard/Download/bb2769_70868886mn5a77f2196bb9_A.ged`.
+  - Integrita a dostupnost na mobilu ověřena příkazem `adb shell ls -la /sdcard/Download/*ged`.
+- [x] Zavedení nové oficiální ikony aplikace do nativního Androidu i webu/PWA:
+  - Zdroj: `google-play/assets/icon-512.png` (neonový rodokmen s kalkulačkou v AMOLED stylu).
+  - Vygenerovány webové a PWA ikony v `icons/icon-512.png` a `icons/icon-192.png`.
+  - Vygenerovány všechny hustoty Android mipmap v `android/app/src/main/res/`:
+    - `mipmap-mdpi/`: `ic_launcher.png` (48×48), `ic_launcher_round.png` (48×48), `ic_launcher_foreground.png` (108×108).
+    - `mipmap-hdpi/`: `ic_launcher.png` (72×72), `ic_launcher_round.png` (72×72), `ic_launcher_foreground.png` (162×162).
+    - `mipmap-xhdpi/`: `ic_launcher.png` (96×96), `ic_launcher_round.png` (96×96), `ic_launcher_foreground.png` (216×216).
+    - `mipmap-xxhdpi/`: `ic_launcher.png` (144×144), `ic_launcher_round.png` (144×144), `ic_launcher_foreground.png` (324×324).
+    - `mipmap-xxxhdpi/`: `ic_launcher.png` (192×192), `ic_launcher_round.png` (192×192), `ic_launcher_foreground.png` (432×432).
+  - V `android/app/src/main/res/values/ic_launcher_background.xml` změněna barva pozadí adaptivní ikony z výchozí bílé na AMOLED `#09090b`.
+- [x] Sestavení aktualizované verze mobilní aplikace a distribuce:
+  - Sestavení nového webového balíčku (`scripts/build.js`) a synchronizace přes `npx cap sync android`.
+  - Úspěšný build **debug APK**: `build-android/Rodinna-Kalkulacka-debug.apk` (4,76 MB).
+  - Úspěšný build produkčního **release AAB**: `build-android/Rodinna-Kalkulacka-release.aab` (3,41 MB).
+- [x] Instalace a ověření na reálném zařízení přes ADB:
+  - Nová debug verze s novou ikonou nainstalována přímo do připojeného telefonu Xiaomi Redmi Note 11 Pro 5G (`adb install -r`).
+  - Spuštění aplikace na zařízení otestováno a ověřeno příkazem `adb shell monkey -p cz.fila73.familycalc -c android.intent.category.LAUNCHER 1`.
+
+
 
