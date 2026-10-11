@@ -175,5 +175,8 @@
   - Matematický dopočet a ověření IBANu dle standardu ČNB: `CZ5863630000003649682601`.
   - Vygenerován ostrý skenovatelný SPAYD platební řetězec: `SPD*1.0*ACC:CZ5863630000003649682601*CC:CZK*MSG:Podpora Rodinna kalkulacka*`.
   - Vygenerován ostrý vektorový formát `img/qr-platba.svg` i rastrový PNG formát `img/qr-platba.png`.
-  - Přepracováno vizuální rozvržení platby: vycentrovaný QR kód s jemným stínem, elegantní boxy údajů bez lámání textu, okamžité kopírování účtu do schránky.
   - Vše otestováno a ověřeno v headless testech (75/75 testů) i živě v prohlížeči.
+- [x] Nastavení reálného odkazu na mezinárodní podporu Ko-fi:
+  - Do dialogu `#donateModal` nastaven přímý odkaz na profil autora: `https://ko-fi.com/filipnovak58405`.
+  - Tlačítko pro Buy Me a Coffee dočasně skryto a připraveno pro snadné odkomentování, jakmile uživatel dodá odkaz.
+  - Aktualizována verze Service Workeru (`sw.js`) na `family-calc-v14`.
