@@ -48,21 +48,12 @@
           <span class="lang-trigger-arrow">▾</span>
         </button>
 
-        <!-- Quiz Game Button -->
-        <button class="icon-action-btn" id="openQuizBtn" title="Kvíz rodinných vztahů" aria-label="Kvíz rodinných vztahů">
-          <span class="btn-emoji">🎓</span>
-        </button>
-
-        <!-- History Button -->
-        <button class="icon-action-btn" id="openHistoryBtn" title="Historie výpočtů" aria-label="Historie výpočtů">
-          <span class="btn-emoji">🕒</span>
-        </button>
-
-        <!-- Dictionary Explorer Button -->
-        <button class="icon-action-btn" id="openDictBtn" title="Otevřít slovník pojmů" aria-label="Slovník příbuzenských vztahů">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
-            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+        <!-- Hamburger Menu Button -->
+        <button class="icon-action-btn hamburger-btn" id="openMenuBtn" type="button" title="Menu aplikace a nástroje" aria-label="Menu aplikace">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
           </svg>
         </button>
       </div>
@@ -260,6 +251,155 @@
         <button class="history-clear-btn" id="clearHistoryBtn" type="button">Vymazat historii</button>
       </div>
       <div class="modal-list history-list" id="historyList"></div>
+    </div>
+
+    <!-- Sandwich Menu Drawer Modal -->
+    <div class="modal-overlay menu-overlay" id="menuModal" role="dialog" aria-modal="true" aria-labelledby="menuModalTitle">
+      <div class="modal-header">
+        <h2 id="menuModalTitle">Menu a nástroje ☰</h2>
+        <button class="modal-close-btn" id="closeMenuModalBtn" aria-label="Zavřít menu">&times;</button>
+      </div>
+      <div class="menu-items-list">
+        <!-- 1. Slovník rodinných vztahů -->
+        <button class="menu-item-btn" id="menuDictBtn" type="button">
+          <span class="menu-item-icon">📖</span>
+          <div class="menu-item-content">
+            <div class="menu-item-title">Slovník rodinných vztahů</div>
+            <div class="menu-item-desc">Reverzní vyhledávač pojmů (ujec, deveř, zelva, šurin...)</div>
+          </div>
+          <span class="menu-item-arrow">➔</span>
+        </button>
+
+        <!-- 2. Kvíz rodinných vztahů -->
+        <button class="menu-item-btn" id="menuQuizBtn" type="button">
+          <span class="menu-item-icon">🎓</span>
+          <div class="menu-item-content">
+            <div class="menu-item-title">Kvíz a procvičování</div>
+            <div class="menu-item-desc">Otestuj své genealogické znalosti se skóre a sérií</div>
+          </div>
+          <span class="menu-item-arrow">➔</span>
+        </button>
+
+        <!-- 3. Historie výpočtů -->
+        <button class="menu-item-btn" id="menuHistoryBtn" type="button">
+          <span class="menu-item-icon">🕒</span>
+          <div class="menu-item-content">
+            <div class="menu-item-title">Historie výpočtů</div>
+            <div class="menu-item-desc">Záznam předchozích kalkulací a rychlé obnovení</div>
+          </div>
+          <span class="menu-item-arrow">➔</span>
+        </button>
+
+        <div class="menu-divider"></div>
+        <div class="menu-section-label">Pokročilé nástroje & Právo</div>
+
+        <!-- 4. Export PNG kartičky -->
+        <button class="menu-item-btn" id="menuDownloadCardBtn" type="button">
+          <span class="menu-item-icon">🖼️</span>
+          <div class="menu-item-content">
+            <div class="menu-item-title">Uložit kartičku jako PNG obrázek</div>
+            <div class="menu-item-desc">Vygenerovat reprezentativní vizitku pro sociální sítě</div>
+          </div>
+          <span class="menu-item-arrow">➔</span>
+        </button>
+
+        <!-- 5. Kalkulačka dědických tříd -->
+        <button class="menu-item-btn" id="menuInheritanceBtn" type="button">
+          <span class="menu-item-icon">⚖️</span>
+          <div class="menu-item-content">
+            <div class="menu-item-title">Kalkulačka dědických tříd</div>
+            <div class="menu-item-desc">Zákonná dědická posloupnost ČR dle NOZ (1.–6. třída)</div>
+          </div>
+          <span class="menu-item-arrow">➔</span>
+        </button>
+
+        <!-- 6. Detektor překážek manželství -->
+        <button class="menu-item-btn" id="menuImpedimentBtn" type="button">
+          <span class="menu-item-icon">💍</span>
+          <div class="menu-item-content">
+            <div class="menu-item-title">Překážky manželství (§ 675 NOZ)</div>
+            <div class="menu-item-desc">Zákonné posouzení přípustnosti sňatku dle českého práva</div>
+          </div>
+          <span class="menu-item-arrow">➔</span>
+        </button>
+
+        <!-- 7. Hlasové zadávání (Diktování) -->
+        <button class="menu-item-btn" id="menuVoiceBtn" type="button">
+          <span class="menu-item-icon">🎙️</span>
+          <div class="menu-item-content">
+            <div class="menu-item-title">Hlasové zadávání (Diktování)</div>
+            <div class="menu-item-desc">Diktuj rodinný vztah hlasem přes mikrofon</div>
+          </div>
+          <span class="menu-item-arrow">➔</span>
+        </button>
+
+        <!-- 8. Porovnání dvou osob v rodokmenu -->
+        <button class="menu-item-btn" id="menuCompareBtn" type="button">
+          <span class="menu-item-icon">👥</span>
+          <div class="menu-item-content">
+            <div class="menu-item-title">Porovnání dvou osob</div>
+            <div class="menu-item-desc">Určení vzájemného vztahu dvou různých členů rodiny</div>
+          </div>
+          <span class="menu-item-arrow">➔</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Inheritance Modal (Dědické třídy dle NOZ) -->
+    <div class="modal-overlay" id="inheritanceModal" role="dialog" aria-modal="true" aria-labelledby="inheritanceModalTitle">
+      <div class="modal-header">
+        <h2 id="inheritanceModalTitle">Dědické třídy (NOZ ČR) ⚖️</h2>
+        <button class="modal-close-btn" id="closeInheritanceModalBtn" aria-label="Zavřít dědické třídy">&times;</button>
+      </div>
+      <div class="tree-modal-body" id="inheritanceModalBody"></div>
+    </div>
+
+    <!-- Marriage Impediment Modal (§ 675 NOZ) -->
+    <div class="modal-overlay" id="impedimentModal" role="dialog" aria-modal="true" aria-labelledby="impedimentModalTitle">
+      <div class="modal-header">
+        <h2 id="impedimentModalTitle">Překážky manželství (§ 675 NOZ) 💍</h2>
+        <button class="modal-close-btn" id="closeImpedimentModalBtn" aria-label="Zavřít překážky manželství">&times;</button>
+      </div>
+      <div class="tree-modal-body" id="impedimentModalBody"></div>
+    </div>
+
+    <!-- Voice Input Modal (Diktování) -->
+    <div class="modal-overlay" id="voiceModal" role="dialog" aria-modal="true" aria-labelledby="voiceModalTitle">
+      <div class="modal-header">
+        <h2 id="voiceModalTitle">Hlasové zadávání 🎙️</h2>
+        <button class="modal-close-btn" id="closeVoiceModalBtn" aria-label="Zavřít hlasové zadávání">&times;</button>
+      </div>
+      <div class="voice-modal-body">
+        <div class="voice-mic-circle" id="voiceMicCircle">🎙️</div>
+        <div class="voice-status-text" id="voiceStatusText">Poslouchám... Mluvte zřetelně</div>
+        <div class="voice-transcript-box" id="voiceTranscriptBox">Řekněte například: „otec matka bratr syn“ nebo „father brother“</div>
+        <div class="voice-keywords-hint">
+          Podporovaná klíčová slova: <strong>otec, matka, bratr, sestra, syn, dcera, manžel, manželka, macecha, otčím, kmotr, kmotra</strong>
+        </div>
+      </div>
+    </div>
+
+    <!-- Compare Two Persons Modal -->
+    <div class="modal-overlay" id="compareModal" role="dialog" aria-modal="true" aria-labelledby="compareModalTitle">
+      <div class="modal-header">
+        <h2 id="compareModalTitle">Porovnání dvou příbuzných 👥</h2>
+        <button class="modal-close-btn" id="closeCompareModalBtn" aria-label="Zavřít porovnání">&times;</button>
+      </div>
+      <div class="compare-modal-body">
+        <div class="compare-row">
+          <label class="compare-label" for="comparePersonA">První osoba (vztah ke mně):</label>
+          <select class="compare-select" id="comparePersonA"></select>
+        </div>
+        <div class="compare-row">
+          <label class="compare-label" for="comparePersonB">Druhá osoba (vztah ke mně):</label>
+          <select class="compare-select" id="comparePersonB"></select>
+        </div>
+        <button class="compare-btn" id="executeCompareBtn" type="button">Spočítat vzájemný vztah ➔</button>
+        <div class="compare-result-card" id="compareResultCard" style="display: none;">
+          <div class="compare-result-title" id="compareResultTitle"></div>
+          <div class="compare-result-desc" id="compareResultDesc"></div>
+        </div>
+      </div>
     </div>
 
     <!-- Feedback Toast -->

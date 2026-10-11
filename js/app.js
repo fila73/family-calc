@@ -62,9 +62,18 @@ class FamilyCalcApp {
     this.shareBtn = document.getElementById('shareBtn');
     this.openTreeBtn = document.getElementById('openTreeBtn');
 
-    // Header buttons (Quiz, History)
-    this.openQuizBtn = document.getElementById('openQuizBtn');
-    this.openHistoryBtn = document.getElementById('openHistoryBtn');
+    // Hamburger Menu elements
+    this.openMenuBtn = document.getElementById('openMenuBtn');
+    this.closeMenuModalBtn = document.getElementById('closeMenuModalBtn');
+    this.menuModal = document.getElementById('menuModal');
+    this.menuDictBtn = document.getElementById('menuDictBtn');
+    this.menuQuizBtn = document.getElementById('menuQuizBtn');
+    this.menuHistoryBtn = document.getElementById('menuHistoryBtn');
+    this.menuDownloadCardBtn = document.getElementById('menuDownloadCardBtn');
+    this.menuInheritanceBtn = document.getElementById('menuInheritanceBtn');
+    this.menuImpedimentBtn = document.getElementById('menuImpedimentBtn');
+    this.menuVoiceBtn = document.getElementById('menuVoiceBtn');
+    this.menuCompareBtn = document.getElementById('menuCompareBtn');
 
     // Keypad keys
     this.keypad = document.getElementById('keypad');
@@ -115,6 +124,33 @@ class FamilyCalcApp {
     this.historyCount = document.getElementById('historyCount');
     this.clearHistoryBtn = document.getElementById('clearHistoryBtn');
     this.historyList = document.getElementById('historyList');
+
+    // Inheritance Modal
+    this.inheritanceModal = document.getElementById('inheritanceModal');
+    this.closeInheritanceModalBtn = document.getElementById('closeInheritanceModalBtn');
+    this.inheritanceModalBody = document.getElementById('inheritanceModalBody');
+
+    // Marriage Impediment Modal
+    this.impedimentModal = document.getElementById('impedimentModal');
+    this.closeImpedimentModalBtn = document.getElementById('closeImpedimentModalBtn');
+    this.impedimentModalBody = document.getElementById('impedimentModalBody');
+
+    // Voice Input Modal
+    this.voiceModal = document.getElementById('voiceModal');
+    this.closeVoiceModalBtn = document.getElementById('closeVoiceModalBtn');
+    this.voiceMicCircle = document.getElementById('voiceMicCircle');
+    this.voiceStatusText = document.getElementById('voiceStatusText');
+    this.voiceTranscriptBox = document.getElementById('voiceTranscriptBox');
+
+    // Compare Modal
+    this.compareModal = document.getElementById('compareModal');
+    this.closeCompareModalBtn = document.getElementById('closeCompareModalBtn');
+    this.comparePersonA = document.getElementById('comparePersonA');
+    this.comparePersonB = document.getElementById('comparePersonB');
+    this.executeCompareBtn = document.getElementById('executeCompareBtn');
+    this.compareResultCard = document.getElementById('compareResultCard');
+    this.compareResultTitle = document.getElementById('compareResultTitle');
+    this.compareResultDesc = document.getElementById('compareResultDesc');
   }
 
   initEventListeners() {
@@ -138,6 +174,67 @@ class FamilyCalcApp {
       this.langSearchInput.addEventListener('input', () => this.filterLanguages());
     }
 
+    // Hamburger Menu handlers
+    if (this.openMenuBtn) {
+      this.openMenuBtn.addEventListener('click', () => this.openMenu());
+    }
+    if (this.closeMenuModalBtn) {
+      this.closeMenuModalBtn.addEventListener('click', () => this.closeMenu());
+    }
+    if (this.menuModal) {
+      this.menuModal.addEventListener('click', (e) => {
+        if (e.target === this.menuModal) this.closeMenu();
+      });
+    }
+    if (this.menuDictBtn) {
+      this.menuDictBtn.addEventListener('click', () => {
+        this.closeMenu();
+        this.openDictionary();
+      });
+    }
+    if (this.menuQuizBtn) {
+      this.menuQuizBtn.addEventListener('click', () => {
+        this.closeMenu();
+        this.openQuizModal();
+      });
+    }
+    if (this.menuHistoryBtn) {
+      this.menuHistoryBtn.addEventListener('click', () => {
+        this.closeMenu();
+        this.openHistoryModal();
+      });
+    }
+    if (this.menuDownloadCardBtn) {
+      this.menuDownloadCardBtn.addEventListener('click', () => {
+        this.closeMenu();
+        this.downloadCardAsPNG();
+      });
+    }
+    if (this.menuInheritanceBtn) {
+      this.menuInheritanceBtn.addEventListener('click', () => {
+        this.closeMenu();
+        this.openInheritanceModal();
+      });
+    }
+    if (this.menuImpedimentBtn) {
+      this.menuImpedimentBtn.addEventListener('click', () => {
+        this.closeMenu();
+        this.openImpedimentModal();
+      });
+    }
+    if (this.menuVoiceBtn) {
+      this.menuVoiceBtn.addEventListener('click', () => {
+        this.closeMenu();
+        this.openVoiceModal();
+      });
+    }
+    if (this.menuCompareBtn) {
+      this.menuCompareBtn.addEventListener('click', () => {
+        this.closeMenu();
+        this.openCompareModal();
+      });
+    }
+
     // Action buttons (TTS, Share, Tree)
     if (this.ttsBtn) {
       this.ttsBtn.addEventListener('click', () => this.speakResult());
@@ -159,10 +256,7 @@ class FamilyCalcApp {
       });
     }
 
-    // Quiz Modal open/close
-    if (this.openQuizBtn) {
-      this.openQuizBtn.addEventListener('click', () => this.openQuizModal());
-    }
+    // Quiz Modal close
     if (this.closeQuizModalBtn) {
       this.closeQuizModalBtn.addEventListener('click', () => this.closeQuizModal());
     }
@@ -175,10 +269,7 @@ class FamilyCalcApp {
       this.quizNextBtn.addEventListener('click', () => this.nextQuizQuestion());
     }
 
-    // History Modal open/close
-    if (this.openHistoryBtn) {
-      this.openHistoryBtn.addEventListener('click', () => this.openHistoryModal());
-    }
+    // History Modal close
     if (this.closeHistoryModalBtn) {
       this.closeHistoryModalBtn.addEventListener('click', () => this.closeHistoryModal());
     }
@@ -189,6 +280,49 @@ class FamilyCalcApp {
     }
     if (this.clearHistoryBtn) {
       this.clearHistoryBtn.addEventListener('click', () => this.clearHistory());
+    }
+
+    // Inheritance Modal close
+    if (this.closeInheritanceModalBtn) {
+      this.closeInheritanceModalBtn.addEventListener('click', () => this.closeInheritanceModal());
+    }
+    if (this.inheritanceModal) {
+      this.inheritanceModal.addEventListener('click', (e) => {
+        if (e.target === this.inheritanceModal) this.closeInheritanceModal();
+      });
+    }
+
+    // Impediment Modal close
+    if (this.closeImpedimentModalBtn) {
+      this.closeImpedimentModalBtn.addEventListener('click', () => this.closeImpedimentModal());
+    }
+    if (this.impedimentModal) {
+      this.impedimentModal.addEventListener('click', (e) => {
+        if (e.target === this.impedimentModal) this.closeImpedimentModal();
+      });
+    }
+
+    // Voice Modal close
+    if (this.closeVoiceModalBtn) {
+      this.closeVoiceModalBtn.addEventListener('click', () => this.closeVoiceModal());
+    }
+    if (this.voiceModal) {
+      this.voiceModal.addEventListener('click', (e) => {
+        if (e.target === this.voiceModal) this.closeVoiceModal();
+      });
+    }
+
+    // Compare Modal close & execute
+    if (this.closeCompareModalBtn) {
+      this.closeCompareModalBtn.addEventListener('click', () => this.closeCompareModal());
+    }
+    if (this.compareModal) {
+      this.compareModal.addEventListener('click', (e) => {
+        if (e.target === this.compareModal) this.closeCompareModal();
+      });
+    }
+    if (this.executeCompareBtn) {
+      this.executeCompareBtn.addEventListener('click', () => this.executeCompare());
     }
 
     // Reset button
@@ -221,20 +355,35 @@ class FamilyCalcApp {
     this.keyEquals.addEventListener('click', () => this.onEquals());
 
     // Dictionary modal
-    this.openDictBtn.addEventListener('click', () => this.openDictionary());
-    this.closeDictBtn.addEventListener('click', () => this.closeDictionary());
-    this.dictModal.addEventListener('click', (e) => {
-      if (e.target === this.dictModal) this.closeDictionary();
-    });
-    this.dictSearchInput.addEventListener('input', () => this.filterDictionary());
+    if (this.closeDictBtn) {
+      this.closeDictBtn.addEventListener('click', () => this.closeDictionary());
+    }
+    if (this.dictModal) {
+      this.dictModal.addEventListener('click', (e) => {
+        if (e.target === this.dictModal) this.closeDictionary();
+      });
+    }
+    if (this.dictSearchInput) {
+      this.dictSearchInput.addEventListener('input', () => this.filterDictionary());
+    }
 
     // Click on reciprocal link in details box to swap perspective
     this.detailReciprocal.addEventListener('click', () => this.toggleMutual());
 
     // Keyboard shortcuts for convenience
     window.addEventListener('keydown', (e) => {
-      const anyModalOpen = [this.dictModal, this.langModal, this.treeModal, this.quizModal, this.historyModal]
-        .some((m) => m && m.classList.contains('open'));
+      const anyModalOpen = [
+        this.dictModal,
+        this.langModal,
+        this.treeModal,
+        this.quizModal,
+        this.historyModal,
+        this.menuModal,
+        this.inheritanceModal,
+        this.impedimentModal,
+        this.voiceModal,
+        this.compareModal
+      ].some((m) => m && m.classList.contains('open'));
 
       if (anyModalOpen) {
         if (e.key === 'Escape') {
@@ -243,6 +392,11 @@ class FamilyCalcApp {
           if (this.treeModal && this.treeModal.classList.contains('open')) this.closeTreeModal();
           if (this.quizModal && this.quizModal.classList.contains('open')) this.closeQuizModal();
           if (this.historyModal && this.historyModal.classList.contains('open')) this.closeHistoryModal();
+          if (this.menuModal && this.menuModal.classList.contains('open')) this.closeMenu();
+          if (this.inheritanceModal && this.inheritanceModal.classList.contains('open')) this.closeInheritanceModal();
+          if (this.impedimentModal && this.impedimentModal.classList.contains('open')) this.closeImpedimentModal();
+          if (this.voiceModal && this.voiceModal.classList.contains('open')) this.closeVoiceModal();
+          if (this.compareModal && this.compareModal.classList.contains('open')) this.closeCompareModal();
         }
         return;
       }
@@ -753,6 +907,20 @@ class FamilyCalcApp {
       this.metaBadges.appendChild(bDna);
     }
 
+    if (resolved.inheritance && resolved.inheritance.badge) {
+      const bInh = document.createElement('span');
+      bInh.className = 'meta-badge badge-inheritance';
+      bInh.textContent = resolved.inheritance.badge;
+      this.metaBadges.appendChild(bInh);
+    }
+
+    if (resolved.marriageImpediment && resolved.marriageImpediment.badge) {
+      const bImp = document.createElement('span');
+      bImp.className = `meta-badge ${resolved.marriageImpediment.allowed ? 'badge-impediment-allowed' : 'badge-impediment-blocked'}`;
+      bImp.textContent = resolved.marriageImpediment.badge;
+      this.metaBadges.appendChild(bImp);
+    }
+
     // 4. Render Details Box
     if (this.chain.length === 0) {
       this.detailExplanation.textContent = resolved.description;
@@ -764,7 +932,8 @@ class FamilyCalcApp {
       // Calculate reciprocal perspective
       const invertedChain = invertChain(effectiveChain, this.egoGender);
       const reciprocalResolved = resolveKinship(invertedChain, this.egoGender, dict);
-      this.detailReciprocal.textContent = `${reciprocalResolved.name} (klikni pro přepnutí)`;
+      this.detailReciprocal.textContent = reciprocalResolved.name;
+      this.detailReciprocal.title = 'Kliknutím přepneš perspektivu výpočtu';
       this.detailReciprocal.classList.add('reciprocal-clickable');
 
       // Auto-save to calculation history
@@ -1292,6 +1461,429 @@ class FamilyCalcApp {
     } catch (e) {}
     this.renderHistory();
     this.showToast('Historie vymazána');
+  }
+
+  // === Sandwich Menu Methods ===
+  openMenu() {
+    this.triggerHaptic();
+    if (this.menuModal) this.menuModal.classList.add('open');
+  }
+
+  closeMenu() {
+    if (this.menuModal) this.menuModal.classList.remove('open');
+  }
+
+  // === Download Card As PNG (HTML5 Canvas) ===
+  downloadCardAsPNG() {
+    this.triggerHaptic();
+    const dict = getDictionary(this.currentLang);
+    const activeChain = this.isMutualView ? invertChain(this.chain, this.egoGender) : this.chain;
+    const resolved = resolveKinship(activeChain, this.egoGender, dict);
+
+    const canvas = document.createElement('canvas');
+    const width = 800;
+    const height = 480;
+    canvas.width = width * 2;
+    canvas.height = height * 2;
+    const ctx = canvas.getContext('2d');
+    ctx.scale(2, 2);
+
+    // 1. Dark Gradient Background
+    const bgGradient = ctx.createLinearGradient(0, 0, width, height);
+    bgGradient.addColorStop(0, '#09090b');
+    bgGradient.addColorStop(0.5, '#121218');
+    bgGradient.addColorStop(1, '#09090b');
+    ctx.fillStyle = bgGradient;
+    ctx.fillRect(0, 0, width, height);
+
+    // Subtle radial glow at top
+    const glow = ctx.createRadialGradient(width / 2, 0, 10, width / 2, 0, 300);
+    glow.addColorStop(0, 'rgba(139, 92, 246, 0.25)');
+    glow.addColorStop(1, 'rgba(139, 92, 246, 0)');
+    ctx.fillStyle = glow;
+    ctx.fillRect(0, 0, width, height);
+
+    // Rounded Border
+    ctx.strokeStyle = '#27272a';
+    ctx.lineWidth = 2;
+    ctx.strokeRect(16, 16, width - 32, height - 32);
+
+    // Inner subtle card
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.02)';
+    ctx.fillRect(24, 24, width - 48, height - 48);
+
+    // 2. Header
+    ctx.fillStyle = '#a78bfa';
+    ctx.font = 'bold 13px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+    ctx.fillText('👨‍👩‍👧‍👦 RODINNÁ KALKULAČKA', 44, 58);
+
+    ctx.fillStyle = '#71717a';
+    ctx.font = '12px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+    ctx.fillText('TERMS OF KINSHIP · VÝPOČET RODINNÝCH VZTAHŮ', 44, 76);
+
+    // Divider
+    ctx.strokeStyle = '#27272a';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(44, 92);
+    ctx.lineTo(width - 44, 92);
+    ctx.stroke();
+
+    // 3. Chain Path
+    const pathText = this.chain.length > 0
+      ? `Já ➔ ${this.formatKeyPath(this.chain.join(','), dict)}`
+      : 'Já (výchozí bod)';
+    ctx.fillStyle = '#a1a1aa';
+    ctx.font = '500 15px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+    ctx.fillText(`Vztah: ${pathText}`, 44, 126);
+
+    // 4. Main Result
+    ctx.fillStyle = '#ffffff';
+    ctx.font = 'bold 44px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+    ctx.fillText(resolved.name, 44, 184);
+
+    // Archaic badge / term
+    let currentY = 220;
+    if (resolved.archaic) {
+      ctx.fillStyle = '#fbbf24';
+      ctx.font = 'italic 16px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+      ctx.fillText(`📜 Staročesky: ${resolved.archaic}`, 44, currentY);
+      currentY += 32;
+    }
+
+    // Description
+    if (resolved.description) {
+      ctx.fillStyle = '#cbd5e1';
+      ctx.font = '16px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+      ctx.fillText(resolved.description, 44, currentY);
+      currentY += 38;
+    }
+
+    // 5. Badges
+    const badges = [];
+    if (resolved.consanguinity && resolved.consanguinity.badge) {
+      badges.push({ text: `🧬 ${resolved.consanguinity.badge}`, color: '#a78bfa', bg: 'rgba(167, 139, 250, 0.15)' });
+    }
+    if (resolved.inheritance && resolved.inheritance.badge) {
+      badges.push({ text: `⚖️ ${resolved.inheritance.badge}`, color: '#38bdf8', bg: 'rgba(56, 189, 248, 0.15)' });
+    }
+    if (resolved.marriageImpediment && resolved.marriageImpediment.badge) {
+      badges.push({
+        text: `💍 ${resolved.marriageImpediment.badge}`,
+        color: resolved.marriageImpediment.allowed ? '#4ade80' : '#f87171',
+        bg: resolved.marriageImpediment.allowed ? 'rgba(74, 222, 128, 0.15)' : 'rgba(248, 113, 113, 0.15)'
+      });
+    }
+
+    let badgeX = 44;
+    badges.forEach((b) => {
+      ctx.font = 'bold 13px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+      const textWidth = ctx.measureText(b.text).width;
+      const bW = textWidth + 24;
+      const bH = 30;
+
+      // pill background
+      ctx.fillStyle = b.bg;
+      ctx.beginPath();
+      ctx.roundRect(badgeX, currentY, bW, bH, 15);
+      ctx.fill();
+
+      // pill border
+      ctx.strokeStyle = b.color;
+      ctx.lineWidth = 1;
+      ctx.stroke();
+
+      // pill text
+      ctx.fillStyle = b.color;
+      ctx.fillText(b.text, badgeX + 12, currentY + 20);
+
+      badgeX += bW + 12;
+    });
+
+    // 6. Footer
+    ctx.fillStyle = '#52525b';
+    ctx.font = '12px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+    ctx.fillText('Vypočteno rodinnou kalkulačkou dle NOZ ČR (zákon č. 89/2012 Sb.)', 44, height - 36);
+
+    // Trigger download
+    canvas.toBlob((blob) => {
+      if (!blob) return;
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      const safeName = (resolved.name || 'vztah').replace(/\s+/g, '_').toLowerCase();
+      link.download = `rodina-${safeName}.png`;
+      link.href = url;
+      link.click();
+      URL.revokeObjectURL(url);
+      this.showToast('🖼️ Kartička stažena jako PNG!');
+    }, 'image/png');
+  }
+
+  // === Inheritance Modal (Dědické třídy dle NOZ) ===
+  openInheritanceModal() {
+    this.triggerHaptic();
+    const dict = getDictionary(this.currentLang);
+    const activeChain = this.isMutualView ? invertChain(this.chain, this.egoGender) : this.chain;
+    const resolved = resolveKinship(activeChain, this.egoGender, dict);
+    const inh = resolved.inheritance || { class: null, title: 'Mimo zákonnou posloupnost', description: 'Není v 1.–6. dědické třídě.', badge: 'Mimo dědické třídy' };
+
+    const classesInfo = [
+      { num: 1, title: '1. dědická třída (§ 1635 NOZ)', who: 'Děti zůstavitele a manžel/partner', share: 'Každý rovným dílem. Nedědí-li dítě, podíl připadá jeho dětem (vnukům).' },
+      { num: 2, title: '2. dědická třída (§ 1636 NOZ)', who: 'Manžel/partner, rodiče a spolužijící osoby', share: 'Manžel vždy nejméně polovinu pozůstalosti.' },
+      { num: 3, title: '3. dědická třída (§ 1637 NOZ)', who: 'Sourozenci zůstavitele a spolužijící osoby', share: 'Rovným dílem. Nedědí-li sourozenec, nastupují jeho děti (synovci/neteře).' },
+      { num: 4, title: '4. dědická třída (§ 1638 NOZ)', who: 'Prarodiče zůstavitele', share: 'Každý dědí rovným dílem.' },
+      { num: 5, title: '5. dědická třída (§ 1639 NOZ)', who: 'Prarodiče rodičů zůstavitele (praprarodiče)', share: 'Polovina připadá prarodičům otce, polovina prarodičům matky.' },
+      { num: 6, title: '6. dědická třída (§ 1640 NOZ)', who: 'Děti dětí sourozenců (prasynovci/prasneteře) a děti prarodičů (strýcové a tety)', share: 'Pokud strýc/teta nedědí, jejich děti (bratranci/sestřenice).' }
+    ];
+
+    let html = `
+      <div class="legal-summary-card">
+        <div class="legal-summary-badge ${inh.class ? 'highlight' : ''}">${inh.badge}</div>
+        <div class="legal-summary-title">Aktuální vztah: <strong>${resolved.name}</strong></div>
+        <div class="legal-summary-desc">${inh.description}</div>
+      </div>
+      <h3 style="margin: 16px 0 8px; font-size: 15px; color: var(--text-secondary);">Zákonná posloupnost podle občanského zákoníku:</h3>
+      <div class="inheritance-classes-list">
+    `;
+
+    classesInfo.forEach((c) => {
+      const isCurrent = inh.class === c.num;
+      html += `
+        <div class="inheritance-class-card ${isCurrent ? 'active-class' : ''}">
+          <div class="class-card-header">
+            <span class="class-num">${c.num}.</span>
+            <strong>${c.title}</strong>
+            ${isCurrent ? '<span class="class-match-tag">🌟 Váš výpočet</span>' : ''}
+          </div>
+          <div class="class-card-who"><strong>Kdo dědí:</strong> ${c.who}</div>
+          <div class="class-card-share"><strong>Pravidlo:</strong> ${c.share}</div>
+        </div>
+      `;
+    });
+
+    html += `</div>`;
+    this.inheritanceModalBody.innerHTML = html;
+    this.inheritanceModal.classList.add('open');
+  }
+
+  closeInheritanceModal() {
+    this.inheritanceModal.classList.remove('open');
+  }
+
+  // === Marriage Impediment Modal (§ 675 NOZ) ===
+  openImpedimentModal() {
+    this.triggerHaptic();
+    const dict = getDictionary(this.currentLang);
+    const activeChain = this.isMutualView ? invertChain(this.chain, this.egoGender) : this.chain;
+    const resolved = resolveKinship(activeChain, this.egoGender, dict);
+    const imp = resolved.marriageImpediment || { allowed: true, reason: 'Příbuzenský vztah nebrání uzavření manželství.', badge: 'Sňatek možný' };
+
+    let html = `
+      <div class="legal-summary-card ${imp.allowed ? 'allowed' : 'blocked'}">
+        <div class="legal-summary-badge ${imp.allowed ? 'badge-impediment-allowed' : 'badge-impediment-blocked'}">${imp.badge}</div>
+        <div class="legal-summary-title">Vztah: <strong>${resolved.name}</strong></div>
+        <div class="legal-summary-desc">${imp.reason}</div>
+      </div>
+
+      <div class="law-article-box" style="margin-top: 16px; padding: 14px; background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: 12px; font-size: 13px; line-height: 1.6; color: var(--text-secondary);">
+        <strong style="color: var(--text-primary); display: block; margin-bottom: 6px;">📜 § 675 Občanského zákoníku (zákon č. 89/2012 Sb.):</strong>
+        <em>„Manželství nemůže být uzavřeno mezi předky a potomky, ani mezi sourozenci; totéž platí o osobách, jejichž příbuzenství vzniklo osvojením.“</em>
+        <div style="margin-top: 10px; color: #a1a1aa;">
+          💡 <strong>Zajímavost z české genealogie a práva:</strong> Mezi bratrancem a sestřenicí (4. stupeň pobočné linie), stejně jako mezi strýcem a neteří (3. stupeň pobočné linie) <u>není sňatek zákonem zakázán</u>, jelikož se nejedná o linii přímou ani sourozence.
+        </div>
+      </div>
+    `;
+
+    this.impedimentModalBody.innerHTML = html;
+    this.impedimentModal.classList.add('open');
+  }
+
+  closeImpedimentModal() {
+    this.impedimentModal.classList.remove('open');
+  }
+
+  // === Voice Recognition (Web Speech API) ===
+  openVoiceModal() {
+    this.triggerHaptic();
+    this.voiceModal.classList.add('open');
+    this.startVoiceRecognition();
+  }
+
+  closeVoiceModal() {
+    this.stopVoiceRecognition();
+    this.voiceModal.classList.remove('open');
+  }
+
+  startVoiceRecognition() {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRecognition) {
+      this.voiceStatusText.textContent = 'Váš prohlížeč nepodporuje Web Speech API.';
+      return;
+    }
+
+    if (this.recognition) {
+      try { this.recognition.abort(); } catch (e) {}
+    }
+
+    this.recognition = new SpeechRecognition();
+    this.recognition.lang = 'cs-CZ';
+    this.recognition.continuous = false;
+    this.recognition.interimResults = true;
+
+    this.voiceMicCircle.classList.add('listening');
+    this.voiceStatusText.textContent = 'Poslouchám... Mluvte (např. otec sestra syn)';
+
+    this.recognition.onresult = (event) => {
+      const transcript = Array.from(event.results)
+        .map((r) => r[0].transcript)
+        .join(' ')
+        .toLowerCase();
+
+      this.voiceTranscriptBox.textContent = `„${transcript}“`;
+
+      if (event.results[0].isFinal) {
+        this.processVoiceTranscript(transcript);
+      }
+    };
+
+    this.recognition.onerror = (event) => {
+      this.voiceMicCircle.classList.remove('listening');
+      this.voiceStatusText.textContent = `Chyba rozpoznávání: ${event.error}`;
+    };
+
+    this.recognition.onend = () => {
+      this.voiceMicCircle.classList.remove('listening');
+      if (this.voiceStatusText.textContent.includes('Poslouchám')) {
+        this.voiceStatusText.textContent = 'Zadávání dokončeno. Klepněte na mikrofon pro nový poslech.';
+      }
+    };
+
+    try {
+      this.recognition.start();
+    } catch (e) {}
+  }
+
+  stopVoiceRecognition() {
+    if (this.recognition) {
+      try { this.recognition.abort(); } catch (e) {}
+    }
+    if (this.voiceMicCircle) this.voiceMicCircle.classList.remove('listening');
+  }
+
+  processVoiceTranscript(transcript) {
+    const wordMap = {
+      'otec': TOKENS.FATHER, 'táta': TOKENS.FATHER, 'taťka': TOKENS.FATHER, 'father': TOKENS.FATHER,
+      'matka': TOKENS.MOTHER, 'máma': TOKENS.MOTHER, 'mamka': TOKENS.MOTHER, 'mother': TOKENS.MOTHER,
+      'syn': TOKENS.SON, 'son': TOKENS.SON,
+      'dcera': TOKENS.DAUGHTER, 'daughter': TOKENS.DAUGHTER,
+      'bratr': TOKENS.BROTHER, 'brácha': TOKENS.BROTHER, 'brother': TOKENS.BROTHER,
+      'sestra': TOKENS.SISTER, 'ségra': TOKENS.SISTER, 'sister': TOKENS.SISTER,
+      'manžel': TOKENS.HUSBAND, 'husband': TOKENS.HUSBAND,
+      'manželka': TOKENS.WIFE, 'žena': TOKENS.WIFE, 'wife': TOKENS.WIFE,
+      'macecha': TOKENS.STEP_MOTHER, 'otčím': TOKENS.STEP_FATHER,
+      'nevlastní bratr': TOKENS.STEP_BROTHER, 'nevlastní sestra': TOKENS.STEP_SISTER,
+      'kmotr': TOKENS.GOD_FATHER, 'kmotra': TOKENS.GOD_MOTHER,
+      'děda': [TOKENS.FATHER, TOKENS.FATHER], 'babička': [TOKENS.FATHER, TOKENS.MOTHER],
+      'strýc': [TOKENS.FATHER, TOKENS.BROTHER], 'teta': [TOKENS.FATHER, TOKENS.SISTER],
+      'bratranec': [TOKENS.FATHER, TOKENS.BROTHER, TOKENS.SON], 'sestřenice': [TOKENS.FATHER, TOKENS.BROTHER, TOKENS.DAUGHTER]
+    };
+
+    const words = transcript.split(/\s+/);
+    const addedTokens = [];
+
+    for (let i = 0; i < words.length; i++) {
+      const w2 = i < words.length - 1 ? `${words[i]} ${words[i + 1]}` : null;
+      if (w2 && wordMap[w2]) {
+        const val = wordMap[w2];
+        if (Array.isArray(val)) addedTokens.push(...val);
+        else addedTokens.push(val);
+        i++;
+        continue;
+      }
+      const w1 = words[i];
+      if (wordMap[w1]) {
+        const val = wordMap[w1];
+        if (Array.isArray(val)) addedTokens.push(...val);
+        else addedTokens.push(val);
+      }
+    }
+
+    if (addedTokens.length > 0) {
+      this.chain.push(...addedTokens);
+      this.render();
+      this.showToast(`Hlasem přidáno: ${addedTokens.length} vztahů`);
+      setTimeout(() => this.closeVoiceModal(), 1200);
+    } else {
+      this.voiceStatusText.textContent = 'Nerozpoznán žádný známý rodinný výraz. Zkuste to znovu.';
+    }
+  }
+
+  // === Compare Two Persons Modal ===
+  openCompareModal() {
+    this.triggerHaptic();
+
+    const commonRel = [
+      { label: 'Otec', chain: [TOKENS.FATHER] },
+      { label: 'Matka', chain: [TOKENS.MOTHER] },
+      { label: 'Bratr', chain: [TOKENS.BROTHER] },
+      { label: 'Sestra', chain: [TOKENS.SISTER] },
+      { label: 'Syn', chain: [TOKENS.SON] },
+      { label: 'Dcera', chain: [TOKENS.DAUGHTER] },
+      { label: 'Dědeček (otec otce)', chain: [TOKENS.FATHER, TOKENS.FATHER] },
+      { label: 'Babička (matka otce)', chain: [TOKENS.FATHER, TOKENS.MOTHER] },
+      { label: 'Strýc (bratr otce)', chain: [TOKENS.FATHER, TOKENS.BROTHER] },
+      { label: 'Teta (sestra matky)', chain: [TOKENS.MOTHER, TOKENS.SISTER] },
+      { label: 'Bratranec (syn strýce)', chain: [TOKENS.FATHER, TOKENS.BROTHER, TOKENS.SON] },
+      { label: 'Sestřenice (dcera tety)', chain: [TOKENS.MOTHER, TOKENS.SISTER, TOKENS.DAUGHTER] },
+      { label: 'Vnuk (syn syna)', chain: [TOKENS.SON, TOKENS.SON] },
+      { label: 'Vnučka (dcera dcery)', chain: [TOKENS.DAUGHTER, TOKENS.DAUGHTER] },
+      { label: 'Aktuální kalkulačka', chain: this.chain.length > 0 ? [...this.chain] : null }
+    ].filter((r) => r.chain !== null);
+
+    const renderOptions = (selectEl, defaultIdx) => {
+      selectEl.innerHTML = '';
+      commonRel.forEach((rel, idx) => {
+        const opt = document.createElement('option');
+        opt.value = rel.chain.join(',');
+        opt.textContent = rel.label;
+        if (idx === defaultIdx) opt.selected = true;
+        selectEl.appendChild(opt);
+      });
+    };
+
+    renderOptions(this.comparePersonA, 0);
+    renderOptions(this.comparePersonB, Math.min(10, commonRel.length - 1));
+
+    this.compareResultCard.style.display = 'none';
+    this.compareModal.classList.add('open');
+  }
+
+  closeCompareModal() {
+    this.compareModal.classList.remove('open');
+  }
+
+  executeCompare() {
+    this.triggerHaptic();
+    const chainA = this.comparePersonA.value.split(',').filter(Boolean);
+    const chainB = this.comparePersonB.value.split(',').filter(Boolean);
+    const dict = getDictionary(this.currentLang);
+
+    const egoGender = this.egoGender;
+    const invA = invertChain(chainA, egoGender);
+    const combinedChain = [...invA, ...chainB];
+
+    const resolved = resolveKinship(combinedChain, 'm', dict);
+
+    const nameA = this.comparePersonA.options[this.comparePersonA.selectedIndex].text;
+    const nameB = this.comparePersonB.options[this.comparePersonB.selectedIndex].text;
+
+    this.compareResultTitle.textContent = `${nameB} je pro ${nameA}:`;
+    this.compareResultDesc.innerHTML = `
+      <div style="font-size: 24px; font-weight: 700; color: #fff; margin: 8px 0;">${resolved.name}</div>
+      <div style="font-size: 14px; color: var(--text-secondary);">${resolved.description || ''}</div>
+      <div style="margin-top: 8px; font-size: 13px; color: #a78bfa;">🔗 Propojení přes rodokmen: ${invA.map((t) => dict.labels.tokens[t] || t).join(' ➔ ')} ➔ ${chainB.map((t) => dict.labels.tokens[t] || t).join(' ➔ ')}</div>
+    `;
+    this.compareResultCard.style.display = 'block';
   }
 }
 

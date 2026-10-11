@@ -332,6 +332,35 @@ it('Afinitní a duchovní vztahy (0% biologická DNA)', () => {
   assert.strictEqual(rGod.consanguinity.dnaPercent, 0);
 });
 
+console.log('\n12. Dědické třídy (NOZ ČR) a překážky manželství (§ 675 NOZ):');
+it('Dědické třídy: potomci (1. třída), rodiče (2. třída), sourozenci (3. třída), prarodiče (4. třída)', () => {
+  const rSon = resolveKinship(['s'], 'm', cs);
+  assert.strictEqual(rSon.inheritance.classNumber, 1);
+
+  const rMother = resolveKinship(['m'], 'm', cs);
+  assert.strictEqual(rMother.inheritance.classNumber, 2);
+
+  const rBro = resolveKinship(['b'], 'm', cs);
+  assert.strictEqual(rBro.inheritance.classNumber, 3);
+
+  const rGrand = resolveKinship(['f', 'f'], 'm', cs);
+  assert.strictEqual(rGrand.inheritance.classNumber, 4);
+
+  const rCousin = resolveKinship(['f', 'b', 's'], 'm', cs);
+  assert.strictEqual(rCousin.inheritance.classNumber, null); // Bratranci jsou mimo zákonné třídy
+});
+
+it('Překážky manželství: zákaz v přímé linii a mezi sourozenci, povoleno u bratranců', () => {
+  const rFather = resolveKinship(['f'], 'm', cs);
+  assert.strictEqual(rFather.marriageImpediment.hasImpediment, true);
+
+  const rSister = resolveKinship(['z'], 'm', cs);
+  assert.strictEqual(rSister.marriageImpediment.hasImpediment, true);
+
+  const rCousin = resolveKinship(['f', 'b', 'd'], 'm', cs);
+  assert.strictEqual(rCousin.marriageImpediment.hasImpediment, false);
+});
+
 console.log(`\n========================================`);
 console.log(`Výsledky testů: ${passed} / ${total} prošlo.`);
 if (passed !== total) {

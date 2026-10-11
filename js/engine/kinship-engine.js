@@ -556,6 +556,170 @@ export function calculateConsanguinity(chain) {
 }
 
 /**
+ * Vypočte zákonnou dědickou třídu dle českého Občanského zákoníku (NOZ č. 89/2012 Sb., §§ 1635-1640)
+ */
+export function calculateInheritanceClass(chain) {
+  if (!chain || chain.length === 0) {
+    return {
+      classNumber: 0,
+      title: 'Zůstavitel (EGO)',
+      description: 'Výchozí osoba, jejíž pozůstalost je předmětem dědického práva.',
+      badge: '🏛️ Zůstavitel'
+    };
+  }
+
+  const norm = chain.map(normalizeToken);
+  const len = norm.length;
+
+  // 1. třída: Děti zůstavitele a jejich potomci (§ 1635)
+  const allDescendants = norm.every((t) => t === 's' || t === 'd');
+  if (allDescendants) {
+    return {
+      classNumber: 1,
+      title: '1. dědická třída (§ 1635 NOZ)',
+      description: 'Zůstavitelovy děti a jejich potomci dědí rovným dílem (spolu s manželem).',
+      badge: '🏛️ 1. dědická třída'
+    };
+  }
+
+  if (len === 1 && (norm[0] === 'h' || norm[0] === 'w')) {
+    return {
+      classNumber: 1,
+      title: '1. a 2. dědická třída (§ 1635 & § 1636 NOZ)',
+      description: 'Manžel dědí v 1. třídě společně s dětmi, nedědí-li děti, dědí ve 2. třídě nejméně polovinu pozůstalosti.',
+      badge: '🏛️ 1. / 2. dědická třída'
+    };
+  }
+
+  // 2. třída: Rodiče zůstavitele (§ 1636)
+  if (len === 1 && (norm[0] === 'f' || norm[0] === 'm')) {
+    return {
+      classNumber: 2,
+      title: '2. dědická třída (§ 1636 NOZ)',
+      description: 'Rodiče zůstavitele dědí ve 2. třídě rovným dílem (spolu s manželem a spolužijícími osobami).',
+      badge: '🏛️ 2. dědická třída'
+    };
+  }
+
+  // 3. třída: Sourozenci a jejich děti (§ 1637)
+  const firstIsSibling = norm[0] === 'b' || norm[0] === 'z';
+  const restAreChildren = norm.slice(1).every((t) => t === 's' || t === 'd');
+  if (firstIsSibling && (len === 1 || (len === 2 && restAreChildren))) {
+    return {
+      classNumber: 3,
+      title: '3. dědická třída (§ 1637 NOZ)',
+      description: 'Sourozenci zůstavitele (a nedědí-li některý z nich, jeho děti – synovci a neteře).',
+      badge: '🏛️ 3. dědická třída'
+    };
+  }
+
+  // 4. třída: Prarodiče zůstavitele (§ 1638)
+  if (len === 2 && (norm[0] === 'f' || norm[0] === 'm') && (norm[1] === 'f' || norm[1] === 'm')) {
+    return {
+      classNumber: 4,
+      title: '4. dědická třída (§ 1638 NOZ)',
+      description: 'Prarodiče zůstavitele (z otcovy i matčiny strany rovným dílem).',
+      badge: '🏛️ 4. dědická třída'
+    };
+  }
+
+  // 5. třída: Prarodiče rodičů zůstavitele (praprarodiče, § 1639)
+  if (len === 3 && norm.every((t) => t === 'f' || t === 'm')) {
+    return {
+      classNumber: 5,
+      title: '5. dědická třída (§ 1639 NOZ)',
+      description: 'Prarodiče rodičů zůstavitele (praprarodiče – celkem až 8 osob).',
+      badge: '🏛️ 5. dědická třída'
+    };
+  }
+
+  // 6. třída: Děti dětí sourozenců (prasynovci/praneteře) a děti prarodičů (strýcové a tety, § 1640)
+  if (firstIsSibling && len === 3 && restAreChildren) {
+    return {
+      classNumber: 6,
+      title: '6. dědická třída (§ 1640 NOZ)',
+      description: 'Děti dětí sourozenců zůstavitele (prasynovci a praneteře).',
+      badge: '🏛️ 6. dědická třída'
+    };
+  }
+  if (len === 2 && (norm[0] === 'f' || norm[0] === 'm') && (norm[1] === 'b' || norm[1] === 'z')) {
+    return {
+      classNumber: 6,
+      title: '6. dědická třída (§ 1640 NOZ)',
+      description: 'Děti prarodičů zůstavitele (strýcové a tety).',
+      badge: '🏛️ 6. dědická třída'
+    };
+  }
+
+  return {
+    classNumber: null,
+    title: 'Mimo zákonné dědické třídy',
+    description: 'Vzdálenější příbuzní (např. bratranci) nebo nepokrevní osoby ze zákona nedědí, ledaže by byli uvedeni v závěti.',
+    badge: '🏛️ Mimo dědické třídy'
+  };
+}
+
+/**
+ * Zjišťuje zákonnou překážku manželství dle § 675 Občanského zákoníku (NOZ)
+ */
+export function calculateMarriageImpediment(chain) {
+  if (!chain || chain.length === 0) {
+    return {
+      hasImpediment: false,
+      reason: 'Sama se sebou nelze uzavřít manželství',
+      badge: '—'
+    };
+  }
+
+  const norm = chain.map(normalizeToken);
+  const len = norm.length;
+
+  // Manžel / manželka: překážka trvajícího manželství (§ 672 NOZ)
+  if (len === 1 && (norm[0] === 'h' || norm[0] === 'w')) {
+    return {
+      hasImpediment: true,
+      reason: 'Překážka trvajícího manželství / bigamie (§ 672 NOZ)',
+      badge: '⛔ Trvající manželství (§ 672 NOZ)'
+    };
+  }
+
+  // Přímá linie předků nebo potomků (§ 675 NOZ)
+  const allAncestors = norm.every((t) => t === 'f' || t === 'm');
+  const allDescendants = norm.every((t) => t === 's' || t === 'd');
+  if (allAncestors || allDescendants) {
+    return {
+      hasImpediment: true,
+      reason: 'Zákonný zákaz sňatku mezi předky a potomky (§ 675 NOZ)',
+      badge: '⛔ Zákaz sňatku (přímá linie, § 675 NOZ)'
+    };
+  }
+
+  // Sourozenci plnorodí i polorodí (§ 675 NOZ)
+  if (len === 1 && (norm[0] === 'b' || norm[0] === 'z')) {
+    return {
+      hasImpediment: true,
+      reason: 'Zákonný zákaz sňatku mezi sourozenci (§ 675 NOZ)',
+      badge: '⛔ Zákaz sňatku (sourozenci, § 675 NOZ)'
+    };
+  }
+
+  const key = chainToKey(chain);
+  if (key === 'm,step_h,s' || key === 'm,step_h,d' || key === 'f,step_w,s' || key === 'f,step_w,d' || key === 'step_b' || key === 'step_z') {
+    return {
+      hasImpediment: true,
+      reason: 'Zákonný zákaz sňatku mezi polorodými sourozenci (§ 675 NOZ)',
+      badge: '⛔ Zákaz sňatku (polorodí sourozenci, § 675 NOZ)'
+    };
+  }
+
+  return {
+    hasImpediment: false,
+    reason: 'Podle českého práva (§ 675 NOZ) nevzniká zákonná překážka sňatku (příbuzenství v pobočné linii od 3. stupně je přípustné).',
+    badge: '🟢 Sňatek právně možný (§ 675 NOZ)'
+  };
+}
+
+/**
  * Převede řetězec na normalizovaný klíč (např. ['f', 'b'] -> "f,b")
  */
 export function chainToKey(chain) {
@@ -574,6 +738,8 @@ export function resolveKinship(chain, egoGender = 'm', dictionary) {
       description: dictionary.labels.selfDesc || 'Výchozí osoba genealogického výzkumu',
       generation: 0,
       consanguinity: calculateConsanguinity([]),
+      inheritance: calculateInheritanceClass([]),
+      marriageImpediment: calculateMarriageImpediment([]),
       chain: [],
       rawChain: [],
       key: ''
@@ -599,6 +765,8 @@ export function resolveKinship(chain, egoGender = 'm', dictionary) {
       description: dictionary.labels.unknownDesc || 'Složený vztah přesahuje běžné jednoslovné pojmenování',
       generation: calculateGeneration(simplified),
       consanguinity: calculateConsanguinity(simplified),
+      inheritance: calculateInheritanceClass(simplified),
+      marriageImpediment: calculateMarriageImpediment(simplified),
       chain: simplified,
       rawChain: chain,
       key
@@ -609,6 +777,8 @@ export function resolveKinship(chain, egoGender = 'm', dictionary) {
     ...entry,
     generation: calculateGeneration(simplified),
     consanguinity: calculateConsanguinity(simplified),
+    inheritance: calculateInheritanceClass(simplified),
+    marriageImpediment: calculateMarriageImpediment(simplified),
     chain: simplified,
     rawChain: chain,
     key
