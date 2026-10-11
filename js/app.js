@@ -2454,6 +2454,23 @@ class FamilyCalcApp {
 
 // Start application when DOM is ready
 document.addEventListener('DOMContentLoaded', () => {
+  // Mobile / Fullscreen / Native App detection
+  const isCapacitor = Boolean(window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform());
+  const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.matchMedia('(display-mode: fullscreen)').matches;
+  const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent) || (window.matchMedia && window.matchMedia('(pointer: coarse)').matches);
+
+  if (isCapacitor || isStandalone || isMobile) {
+    document.body.classList.add('is-mobile-fullscreen');
+    document.body.classList.add('is-mobile-device');
+  }
+
+  // Attempt JS screen orientation lock to portrait
+  try {
+    if (screen.orientation && typeof screen.orientation.lock === 'function') {
+      screen.orientation.lock('portrait').catch(() => {});
+    }
+  } catch (e) {}
+
   window.app = new FamilyCalcApp();
 
   // Register service worker if available
