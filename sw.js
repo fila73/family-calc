@@ -2,7 +2,7 @@
  * Service Worker pro offline běh rodinné kalkulačky
  */
 
-const CACHE_NAME = 'family-calc-v7';
+const CACHE_NAME = 'family-calc-v8';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
@@ -12,18 +12,30 @@ const ASSETS_TO_CACHE = [
   './js/i18n/index.js',
   './js/i18n/languages.js',
   './js/i18n/cs.js',
-  './js/i18n/en.js',
-  './js/i18n/zh.js',
   './js/i18n/sk.js',
-  './js/i18n/ko.js',
-  './js/i18n/ru.js',
   './js/i18n/pl.js',
+  './js/i18n/uk.js',
+  './js/i18n/hr.js',
+  './js/i18n/ru.js',
+  './js/i18n/en.js',
   './js/i18n/de.js',
+  './js/i18n/nl.js',
+  './js/i18n/sv.js',
   './js/i18n/fr.js',
   './js/i18n/it.js',
   './js/i18n/es.js',
+  './js/i18n/pt.js',
+  './js/i18n/ro.js',
+  './js/i18n/hu.js',
+  './js/i18n/el.js',
+  './js/i18n/tr.js',
+  './js/i18n/hi.js',
+  './js/i18n/ar.js',
+  './js/i18n/zh.js',
   './js/i18n/ja.js',
+  './js/i18n/ko.js',
   './js/i18n/vi.js',
+  './js/i18n/id.js',
   './manifest.json'
 ];
 

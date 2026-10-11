@@ -16,6 +16,18 @@ import { it as itLang } from '../js/i18n/it.js';
 import { es } from '../js/i18n/es.js';
 import { ja } from '../js/i18n/ja.js';
 import { vi } from '../js/i18n/vi.js';
+import { uk } from '../js/i18n/uk.js';
+import { pt } from '../js/i18n/pt.js';
+import { nl } from '../js/i18n/nl.js';
+import { hu } from '../js/i18n/hu.js';
+import { tr } from '../js/i18n/tr.js';
+import { el } from '../js/i18n/el.js';
+import { sv } from '../js/i18n/sv.js';
+import { hi } from '../js/i18n/hi.js';
+import { id as idLang } from '../js/i18n/id.js';
+import { ar } from '../js/i18n/ar.js';
+import { hr } from '../js/i18n/hr.js';
+import { ro } from '../js/i18n/ro.js';
 
 let passed = 0;
 let total = 0;
@@ -359,6 +371,91 @@ it('Překážky manželství: zákaz v přímé linii a mezi sourozenci, povolen
 
   const rCousin = resolveKinship(['f', 'b', 'd'], 'm', cs);
   assert.strictEqual(rCousin.marriageImpediment.hasImpediment, false);
+});
+
+console.log('\n13. Nově přidané jazyky (Ukrajinština, Portugalština, Nizozemština, Maďarština, Turečtina, Řečtina, Švédština, Hindština, Indonéština, Arabština, Chorvatština, Rumunština):');
+it('Ukrajinský překlad (Дід, Дядько, Невістка, Вітчим)', () => {
+  assert.strictEqual(resolveKinship(['f', 'f'], 'm', uk).name, 'Дід (по батькові)');
+  assert.strictEqual(resolveKinship(['f', 'b'], 'm', uk).name, 'Дядько (по батькові)');
+  assert.strictEqual(resolveKinship(['s', 'w'], 'm', uk).name, 'Невістка');
+  assert.strictEqual(resolveKinship(['step_f'], 'm', uk).name, 'Вітчим');
+});
+
+it('Portugalský překlad (Avô, Tio, Nora, Padrasto)', () => {
+  assert.strictEqual(resolveKinship(['f', 'f'], 'm', pt).name, 'Avô paterno');
+  assert.strictEqual(resolveKinship(['f', 'b'], 'm', pt).name, 'Tio paterno');
+  assert.strictEqual(resolveKinship(['s', 'w'], 'm', pt).name, 'Nora');
+  assert.strictEqual(resolveKinship(['step_f'], 'm', pt).name, 'Padrasto');
+});
+
+it('Nizozemský překlad (Grootvader, Oom, Schoondochter, Stiefvader)', () => {
+  assert.strictEqual(resolveKinship(['f', 'f'], 'm', nl).name, 'Grootvader (vaderszijde)');
+  assert.strictEqual(resolveKinship(['f', 'b'], 'm', nl).name, 'Oom (vaderszijde)');
+  assert.strictEqual(resolveKinship(['s', 'w'], 'm', nl).name, 'Schoondochter');
+  assert.strictEqual(resolveKinship(['step_f'], 'm', nl).name, 'Stiefvader');
+});
+
+it('Maďarský překlad (Nagyapa, Nagybátya, Meny, Mostohaapa)', () => {
+  assert.strictEqual(resolveKinship(['f', 'f'], 'm', hu).name, 'Apai nagyapa');
+  assert.strictEqual(resolveKinship(['f', 'b'], 'm', hu).name, 'Nagybátya (apai)');
+  assert.strictEqual(resolveKinship(['s', 'w'], 'm', hu).name, 'Meny');
+  assert.strictEqual(resolveKinship(['step_f'], 'm', hu).name, 'Mostohaapa');
+});
+
+it('Turecký překlad (Dede, Amca, Gelin, Üvey baba)', () => {
+  assert.strictEqual(resolveKinship(['f', 'f'], 'm', tr).name, 'Dede (baba tarafı)');
+  assert.strictEqual(resolveKinship(['f', 'b'], 'm', tr).name, 'Amca');
+  assert.strictEqual(resolveKinship(['s', 'w'], 'm', tr).name, 'Gelin');
+  assert.strictEqual(resolveKinship(['step_f'], 'm', tr).name, 'Üvey baba');
+});
+
+it('Řecký překlad (Παππούς, Θείος, Νύφη, Πατριός)', () => {
+  assert.strictEqual(resolveKinship(['f', 'f'], 'm', el).name, 'Παππούς (πατρικός)');
+  assert.strictEqual(resolveKinship(['f', 'b'], 'm', el).name, 'Θείος (πατρικός)');
+  assert.strictEqual(resolveKinship(['s', 'w'], 'm', el).name, 'Νύφη');
+  assert.strictEqual(resolveKinship(['step_f'], 'm', el).name, 'Πατριός');
+});
+
+it('Švédský překlad (Farfar, Farbror, Svärdotter, Styvfar)', () => {
+  assert.strictEqual(resolveKinship(['f', 'f'], 'm', sv).name, 'Farfar');
+  assert.strictEqual(resolveKinship(['f', 'b'], 'm', sv).name, 'Farbror');
+  assert.strictEqual(resolveKinship(['s', 'w'], 'm', sv).name, 'Svärdotter');
+  assert.strictEqual(resolveKinship(['step_f'], 'm', sv).name, 'Styvfar');
+});
+
+it('Hindský překlad (दादा, चाचा, बहू, सौतेले पिता)', () => {
+  assert.strictEqual(resolveKinship(['f', 'f'], 'm', hi).name, 'दादा');
+  assert.strictEqual(resolveKinship(['f', 'b'], 'm', hi).name, 'चाचा');
+  assert.strictEqual(resolveKinship(['s', 'w'], 'm', hi).name, 'बहू');
+  assert.strictEqual(resolveKinship(['step_f'], 'm', hi).name, 'सौतेले पिता');
+});
+
+it('Indonéský překlad (Kakek, Paman, Menantu perempuan, Ayah tiri)', () => {
+  assert.strictEqual(resolveKinship(['f', 'f'], 'm', idLang).name, 'Kakek (dari pihak ayah)');
+  assert.strictEqual(resolveKinship(['f', 'b'], 'm', idLang).name, 'Paman (dari pihak ayah)');
+  assert.strictEqual(resolveKinship(['s', 'w'], 'm', idLang).name, 'Menantu perempuan');
+  assert.strictEqual(resolveKinship(['step_f'], 'm', idLang).name, 'Ayah tiri');
+});
+
+it('Arabský překlad (الجد لأب, العم, زوجة الابن, زوج الأم)', () => {
+  assert.strictEqual(resolveKinship(['f', 'f'], 'm', ar).name, 'الجد لأب');
+  assert.strictEqual(resolveKinship(['f', 'b'], 'm', ar).name, 'العم');
+  assert.strictEqual(resolveKinship(['s', 'w'], 'm', ar).name, 'زوجة الابن');
+  assert.strictEqual(resolveKinship(['step_f'], 'm', ar).name, 'زوج الأم');
+});
+
+it('Chorvatský překlad (Djed, Stric, Snaha, Očuh)', () => {
+  assert.strictEqual(resolveKinship(['f', 'f'], 'm', hr).name, 'Djed (po ocu)');
+  assert.strictEqual(resolveKinship(['f', 'b'], 'm', hr).name, 'Stric');
+  assert.strictEqual(resolveKinship(['s', 'w'], 'm', hr).name, 'Snaha');
+  assert.strictEqual(resolveKinship(['step_f'], 'm', hr).name, 'Očuh');
+});
+
+it('Rumunský překlad (Bunic, Unchi, Noră, Tată vitreg)', () => {
+  assert.strictEqual(resolveKinship(['f', 'f'], 'm', ro).name, 'Bunic (pe linie paternă)');
+  assert.strictEqual(resolveKinship(['f', 'b'], 'm', ro).name, 'Unchi (fratele tatălui)');
+  assert.strictEqual(resolveKinship(['s', 'w'], 'm', ro).name, 'Noră');
+  assert.strictEqual(resolveKinship(['step_f'], 'm', ro).name, 'Tată vitreg');
 });
 
 console.log(`\n========================================`);
