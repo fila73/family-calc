@@ -81,5 +81,11 @@ Vytvoření webové kalkulačky rodinných vztahů inspirované čínskou kalkul
 28. Sestavení nové verze aplikace (`scripts/build.js`, `cap sync`, Gradle `assembleDebug` a `bundleRelease`): `build-android/Rodinna-Kalkulacka-debug.apk` (4,76 MB) a `build-android/Rodinna-Kalkulacka-release.aab` (3,41 MB).
 29. Nahrání rodokmenových GEDCOM souborů do úložiště telefonu (`/sdcard/Download/`) a instalace aktualizovaného APK balíčku do připojeného mobilu Xiaomi Redmi Note 11 Pro 5G přes ADB s ověřením spuštění.
 30. Implementace nativního Immersive Sticky Fullscreenu v Androidu (`MainActivity.java`, `styles.xml`, `css/style.css`, `manifest.json`) a trvalého uzamčení orientace do portrait režimu (`android:screenOrientation="portrait"` v `AndroidManifest.xml` a `screen.orientation.lock('portrait')` v JS) s ověřením na reálném zařízení.
+31. Zřízení veřejného repozitáře `fila73/family-calc` na GitHubu a aktivace GitHub Pages pro hosting aplikace a Privacy Policy (`https://fila73.github.io/family-calc/privacy.html`).
+32. Zjednodušení vztahů v `cs.js` na čisté přirozené názvy bez nadbytečných duplicitních závorek v poli `name` (ponechání detailů pouze v `description`).
+33. Sjednocení displeje do jedné stabilní karty `.result-unified-card` obsahující cestu i výsledek a vyřešení ořezu horní části na mobilních displejích.
+34. Integrace barevných neonových generačních směrových šipek (`↗`, `↘`, `↔`, `→`) do kalkulačkové cesty (breadcrumbs).
+35. Přesun akčních tlačítek (repro, share, strom) do svislého overlay sloupce vpravo (`.result-actions-vertical`) pro maximální šířku textu a odznaků.
+36. Sestavení finálních instalačních balíčků APK i AAB a jejich ověření na reálném telefonu Xiaomi Redmi Note 11 Pro 5G.
 
 

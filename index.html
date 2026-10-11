@@ -79,16 +79,23 @@
       </div>
     </div>
 
-    <!-- Display Area -->
+    <!-- Display Area (Unified Result Card with embedded path & vertical actions overlay) -->
     <section class="calculator-display" id="calcDisplay">
-      <!-- Breadcrumb Chain -->
-      <div class="chain-container" id="chainContainer" aria-live="polite"></div>
+      <div class="result-unified-card" id="resultUnifiedCard">
+        <!-- 1. Genealogická cesta přímo v kartě výsledku s generačními šipkami -->
+        <div class="chain-header">
+          <div class="chain-container" id="chainContainer" aria-live="polite"></div>
+        </div>
 
-      <!-- Main Result -->
-      <div class="result-container" id="resultContainer">
-        <div class="result-header-row">
-          <div class="result-main" id="resultMain">Já (proband)</div>
-          <div class="result-actions" id="resultActions">
+        <!-- 2. Hlavní výsledek a svislý sloupec akčních tlačítek (overlay) -->
+        <div class="result-main-wrapper">
+          <div class="result-title-section">
+            <div class="result-main" id="resultMain">Já (proband)</div>
+            <div class="result-meta-badges" id="metaBadges"></div>
+          </div>
+
+          <!-- 3 ikony (repro, share, strom) umístěné vertikálně nad sebou -->
+          <div class="result-actions-vertical" id="resultActions">
             <button class="result-action-btn" id="ttsBtn" type="button" title="Přečíst nahlas (TTS)" aria-label="Přečíst nahlas">
               <span class="action-icon">🔊</span>
             </button>
@@ -100,18 +107,17 @@
             </button>
           </div>
         </div>
-        <div class="result-meta-badges" id="metaBadges"></div>
-      </div>
 
-      <!-- Result Details Box -->
-      <div class="result-details-box" id="resultDetailsBox">
-        <div class="detail-row">
-          <span class="detail-label" id="explanationLabel">Vysvětlení cesty:</span>
-          <span class="detail-value" id="detailExplanation">Výchozí osoba, od níž se odvíjí genealogický vztah</span>
-        </div>
-        <div class="detail-row">
-          <span class="detail-label" id="reciprocalLabel">Vzájemné oslovení:</span>
-          <span class="detail-value" id="detailReciprocal">—</span>
+        <!-- 3. Detailní box: vysvětlení cesty a vzájemné oslovení -->
+        <div class="result-details-box" id="resultDetailsBox">
+          <div class="detail-row">
+            <span class="detail-label" id="explanationLabel">Vysvětlení:</span>
+            <span class="detail-value" id="detailExplanation">Výchozí osoba, od níž se odvíjí genealogický vztah</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label" id="reciprocalLabel">Vzájemně:</span>
+            <span class="detail-value" id="detailReciprocal">—</span>
+          </div>
         </div>
       </div>
     </section>

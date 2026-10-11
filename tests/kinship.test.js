@@ -57,7 +57,7 @@ it('Otec a Matka', () => {
 
 it('Prarodiče s historickými variantami (stařeček, stařenka)', () => {
   const rFF = resolveKinship(['f', 'f'], 'm', cs);
-  assert.strictEqual(rFF.name, 'Dědeček (otcův otec)');
+  assert.strictEqual(rFF.name, 'Dědeček');
   const rMF = resolveKinship(['m', 'f'], 'm', cs);
   assert.ok(rMF.archaic.includes('stařeček'));
   const rMM = resolveKinship(['m', 'm'], 'm', cs);
@@ -73,9 +73,9 @@ it('Předkové ve 4. a vyšší generaci (pra-pra-)', () => {
 console.log('\n2. Strýcové, tety a staročeské názvy (ujec, stryna, tetec...):');
 it('Bratr otce (strýc) a bratr matky (stč. ujec)', () => {
   const rFB = resolveKinship(['f', 'b'], 'm', cs);
-  assert.strictEqual(rFB.name, 'Strýc (otcův bratr)');
+  assert.strictEqual(rFB.name, 'Strýc');
   const rMB = resolveKinship(['m', 'b'], 'm', cs);
-  assert.strictEqual(rMB.name, 'Strýc (matčin bratr)');
+  assert.strictEqual(rMB.name, 'Strýc');
   assert.ok(rMB.archaic.includes('ujec'));
 });
 
@@ -129,13 +129,13 @@ console.log('\n5. Vzájemný vztah (互查 - Mutual query / Invert perspective):
 it('Muž: Strýc -> já jsem jeho synovec', () => {
   const inv = invertChain(['f', 'b'], 'm');
   const rInv = resolveKinship(inv, 'm', cs);
-  assert.strictEqual(rInv.name, 'Synovec (bratrův syn)');
+  assert.strictEqual(rInv.name, 'Synovec');
 });
 
 it('Žena: Strýc -> já jsem jeho neteř', () => {
   const inv = invertChain(['f', 'b'], 'f');
   const rInv = resolveKinship(inv, 'm', cs);
-  assert.strictEqual(rInv.name, 'Neteř (bratrova dcera)');
+  assert.strictEqual(rInv.name, 'Neteř');
 });
 
 it('Muž: Manželčin otec (tchán) -> já jsem jeho zeť', () => {
@@ -215,11 +215,11 @@ it('Shift modifikátor: Macecha (step_m) a Otčím (step_f)', () => {
 it('Polobratři (jednobřišní a jednokrevní)', () => {
   // matka -> nevlastní manžel -> syn = polobratr jednobřišní
   const rUterine = resolveKinship(['m', 'step_h', 's'], 'm', cs);
-  assert.ok(rUterine.name.includes('Polobratr (jednobřišní)'), `Expected Polobratr (jednobřišní) but got ${rUterine.name}`);
+  assert.ok(rUterine.name.includes('Polobratr jednobřišní'), `Expected Polobratr jednobřišní but got ${rUterine.name}`);
 
   // otec -> nevlastní manželka -> syn = polobratr jednokrevní
   const rConsanguine = resolveKinship(['f', 'step_w', 's'], 'm', cs);
-  assert.ok(rConsanguine.name.includes('Polobratr (jednokrevní)'), `Expected Polobratr (jednokrevní) but got ${rConsanguine.name}`);
+  assert.ok(rConsanguine.name.includes('Polobratr jednokrevní'), `Expected Polobratr jednokrevní but got ${rConsanguine.name}`);
 });
 
 it('Nevlastní sourozenci (nepokrevní svazek rodičů)', () => {
@@ -518,7 +518,7 @@ it('Parsování GEDCOM struktury a extrakce osob a rodin', () => {
   const pathGrandfather = parsed.findKinshipChain('@I5@', '@I1@');
   assert.deepStrictEqual(pathGrandfather.chain, ['f', 'f']);
   const resGF = resolveKinship(pathGrandfather.chain, 'm', cs);
-  assert.strictEqual(resGF.name, 'Dědeček (otcův otec)');
+  assert.strictEqual(resGF.name, 'Dědeček');
 
   // Test 2: Josef (@I3@) -> Anna (@I4@) = Sestra (přímý sourozenec přes FAMC = 1 krok 'z')
   const pathSister = parsed.findKinshipChain('@I3@', '@I4@');
@@ -530,7 +530,7 @@ it('Parsování GEDCOM struktury a extrakce osob a rodin', () => {
   const pathAunt = parsed.findKinshipChain('@I5@', '@I4@');
   assert.deepStrictEqual(pathAunt.chain, ['f', 'z']);
   const resAunt = resolveKinship(pathAunt.chain, 'm', cs);
-  assert.strictEqual(resAunt.name, 'Teta (otcova sestra)');
+  assert.strictEqual(resAunt.name, 'Teta');
 });
 
 it('Detekce nepropojených větví rodokmenu', () => {

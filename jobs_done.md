@@ -253,7 +253,24 @@
   - **Build a ověření**:
     - Sestaven nový balíček `Rodinna-Kalkulacka-debug.apk` (4,76 MB) a `Rodinna-Kalkulacka-release.aab` (3,41 MB).
     - Aktualizace nainstalována přes ADB na telefon a ověřena reálným screenshotem (`google-play/assets/fullscreen_check.png`): status bar i navigační lišta jsou skryté, aplikace zabírá 100 % AMOLED displeje.
-
-
-
-
+- [x] Zřízení a aktivace oficiálního webu na GitHub Pages:
+  - Vytvořen veřejný repozitář `fila73/family-calc` přes GitHub CLI a pushnut na `https://github.com/fila73/family-calc.git`.
+  - Aktivován GitHub Pages hosting nad větví `master` z kořenového adresáře `/`.
+  - Ověřena dostupnost URL: `https://fila73.github.io/family-calc/` a povinných zásad ochrany soukromí na `https://fila73.github.io/family-calc/privacy.html`.
+- [x] Zjednodušení a vyčištění názvosloví rodinných vztahů v `cs.js`:
+  - Odstraněny nadbytečné duplicitní závorky z názvů vztahů v poli `name` (např. *Dědeček (otcův otec)* ➔ **Dědeček**, *Strýc (otcův bratr)* ➔ **Strýc**, *Vnuk (syn syna)* ➔ **Vnuk**, *Synovec (bratrův syn)* ➔ **Synovec**).
+  - Přesný genealogický popis zůstává přehledně v poli `description` a v cestě, čímž vznikl čistý a přirozený název vztahu bez zbytečné vizuální složitosti.
+  - Všechny testy (49 základních + 33 redukčních + 320 auditních běhů) aktualizovány a 100% prochází.
+- [x] Sjednocení displeje kalkulačky do jedné kompaktní karty (`.result-unified-card`):
+  - Genealogická cesta (`#chainContainer`), název výsledku (`#resultMain`), odznaky (`#metaBadges`) i vysvětlení se vzájemným oslovením (`#resultDetailsBox`) sloučeny do jednoho společného bloku.
+  - Vyřešen problém s mizením cesty na mobilu při delším popisu: odstraněn problematický `justify-content: flex-end`, karta je ukotvena pomocí `margin-top: auto` a má adaptivní rozestupy.
+- [x] Vertikální sloupec akčních tlačítek (Overlay v pravém rohu):
+  - 3 tlačítka akcí (🔊 předčítání TTS `#ttsBtn`, ↗ sdílení `#shareBtn`, 🌳 rodokmen `#openTreeBtn`) přemístěna do pravého horního sloupce `.result-actions-vertical`.
+  - Uvolněna plná horizontální šířka pro dlouhé názvy vztahů, odznaky a vysvětlení bez jakéhokoliv stísnění.
+- [x] Generační směrové šipky v kalkulačce:
+  - Zapojena funkce `getStepDirection(token)` do vykreslování cesty breadcrumbs (`renderChainBreadcrumbs`).
+  - Směry generací jsou vizuálně odlišeny jasnými barvami: `↗` (modrá, předek), `↘` (zelená, potomek), `↔` (růžová, partner), `→` (oranžová, sourozenec).
+- [x] Sestavení, nasazení a vizuální verifikace na reálném telefonu:
+  - Zkompilován nový debug balíček `Rodinna-Kalkulacka-debug.apk` (4,76 MB) a produkční `Rodinna-Kalkulacka-release.aab` (3,41 MB).
+  - Nainstalováno na Xiaomi Redmi Note 11 Pro 5G přes ADB.
+  - Otestováno stisknutím kláves *otec* ➔ *otec* a pořízen ověřovací screenshot `google-play/assets/display_perfect_verified.png`. Celá karta včetně cesty, šipek a odznaků se perfektně vejde na obrazovku.

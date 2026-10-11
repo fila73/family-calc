@@ -423,68 +423,136 @@ body.is-mobile-device .app-wrapper {
 /* Display Section (Expression & Result) */
 .calculator-display {
   flex: 1;
-  padding: 12px 20px 10px;
+  padding: 4px 14px 2px;
   display: flex;
   flex-direction: column;
   position: relative;
   overflow-y: auto;
-  min-height: 160px;
+  min-height: 140px;
 }
 
-/* Chain Breadcrumb Scroll */
-.chain-container {
+/* Unified Result Card - spojuje cestu, výsledek i detaily do jednoho stabilního celku */
+.result-unified-card {
   margin-top: auto;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 6px;
-  margin-bottom: 10px;
-  max-height: 80px;
-  overflow-y: auto;
-  padding-right: 4px;
-}
-
-.chain-item {
-  display: inline-flex;
-  align-items: center;
-  background: rgba(255, 255, 255, 0.06);
+  background: var(--bg-card);
   border: 1px solid var(--border-light);
-  padding: 4px 10px;
-  border-radius: var(--radius-pill);
-  font-size: 0.85rem;
-  color: var(--text-secondary);
-  transition: all 0.2s ease;
-  cursor: pointer;
-}
-
-.chain-item:hover {
-  background: rgba(255, 255, 255, 0.12);
-  color: var(--text-primary);
-  border-color: var(--accent-orange);
-}
-
-.chain-arrow {
-  color: var(--text-muted);
-  font-size: 0.75rem;
-  user-select: none;
-}
-
-.chain-self {
-  background: rgba(255, 122, 24, 0.12);
-  border-color: rgba(255, 122, 24, 0.3);
-  color: var(--accent-orange);
-  font-weight: 500;
-}
-
-/* Result Title (Prominent, like in photo) */
-.result-container {
-  margin-bottom: 6px;
+  border-radius: var(--radius-lg);
+  padding: 8px 12px 6px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  backdrop-filter: blur(14px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.45);
   animation: fadeInResult 0.25s ease-out;
 }
 
 @keyframes fadeInResult {
   from { opacity: 0; transform: translateY(6px); }
   to { opacity: 1; transform: translateY(0); }
+}
+
+/* 1. Genealogická cesta (Breadcrumbs) přímo uvnitř karty */
+.chain-header {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  padding-bottom: 4px;
+  margin-bottom: 6px;
+}
+
+.chain-container {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 5px;
+  max-height: 64px;
+  overflow-y: auto;
+  scrollbar-width: none;
+}
+.chain-container::-webkit-scrollbar {
+  display: none;
+}
+
+.chain-item {
+  display: inline-flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--border-light);
+  padding: 3px 9px;
+  border-radius: var(--radius-pill);
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  transition: all 0.18s ease;
+  cursor: pointer;
+  user-select: none;
+}
+
+.chain-item:hover {
+  background: rgba(255, 255, 255, 0.16);
+  color: #ffffff;
+  border-color: var(--accent-orange);
+}
+
+.chain-self {
+  background: rgba(255, 122, 24, 0.15);
+  border-color: rgba(255, 122, 24, 0.4);
+  color: var(--accent-orange);
+  font-weight: 600;
+}
+
+/* Nové barevné směrové šipky v cestě */
+.chain-arrow {
+  font-size: 0.88rem;
+  font-weight: 800;
+  user-select: none;
+  padding: 0 2px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.chain-arrow.arrow-up {
+  color: #60a5fa; /* Neonová modrá - nahoru ke generaci rodičů/předků */
+  text-shadow: 0 0 8px rgba(96, 165, 250, 0.5);
+}
+
+.chain-arrow.arrow-down {
+  color: #34d399; /* Neonová smaragdová - dolů ke generaci potomků */
+  text-shadow: 0 0 8px rgba(52, 211, 153, 0.5);
+}
+
+.chain-arrow.arrow-partner {
+  color: #f472b6; /* Neonová růžová - manželský svazek */
+  text-shadow: 0 0 8px rgba(244, 114, 182, 0.5);
+}
+
+.chain-arrow.arrow-level {
+  color: #fb923c; /* Neonová oranžová - stejná generace / sourozenec */
+  text-shadow: 0 0 8px rgba(251, 146, 60, 0.5);
+}
+
+.chain-mutual-indicator {
+  font-size: 0.72rem;
+  color: #60a5fa;
+  font-weight: 600;
+  padding: 2px 6px;
+  background: rgba(59, 130, 246, 0.15);
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  border-radius: var(--radius-sm);
+  margin-right: 4px;
+}
+
+/* 2. Hlavní výsledek + Vertikální akční overlay (ikony nad sebou) */
+.result-main-wrapper {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  position: relative;
+  min-height: 52px;
+}
+
+.result-title-section {
+  flex: 1;
+  min-width: 0;
 }
 
 .result-main {
@@ -496,21 +564,57 @@ body.is-mobile-device .app-wrapper {
   word-break: break-word;
 }
 
+/* Akční ikony umístěné vertikálně nad sebou (overlay v pravém rohu) */
+.result-actions-vertical {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.result-action-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-pill);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--border-light);
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  padding: 0;
+  outline: none;
+}
+
+.result-action-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: var(--accent-orange);
+  transform: scale(1.08);
+}
+
+.result-action-btn .action-icon {
+  font-size: 0.95rem;
+  line-height: 1;
+}
+
 /* Meta Badges (Archaic, generation, mutual) */
 .result-meta-badges {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
-  margin-top: 8px;
+  gap: 4px;
+  margin-top: 5px;
 }
 
 .meta-badge {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
-  padding: 3px 8px;
+  gap: 3px;
+  padding: 2px 7px;
   border-radius: var(--radius-sm);
-  font-size: 0.72rem;
+  font-size: 0.69rem;
   font-weight: 500;
 }
 
@@ -532,23 +636,26 @@ body.is-mobile-device .app-wrapper {
   border: 1px solid rgba(139, 92, 246, 0.25);
 }
 
-/* Details Box (Reciprocal + Explanation) */
+.badge-mutual-mode {
+  background: rgba(59, 130, 246, 0.18);
+  color: #93c5fd;
+  border: 1px solid rgba(59, 130, 246, 0.35);
+}
+
+/* 3. Details Box (Kompaktní součást sjednocené karty) */
 .result-details-box {
-  margin-top: 10px;
-  background: var(--bg-card);
-  border: 1px solid var(--border-light);
-  border-radius: var(--radius-md);
-  padding: 10px 14px;
-  font-size: 0.8rem;
-  line-height: 1.4;
-  backdrop-filter: blur(8px);
+  margin-top: 5px;
+  padding-top: 5px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  font-size: 0.76rem;
+  line-height: 1.3;
 }
 
 .detail-row {
   display: flex;
   align-items: flex-start;
-  gap: 8px;
-  margin-bottom: 4px;
+  gap: 6px;
+  margin-bottom: 2px;
 }
 
 .detail-row:last-child {
@@ -557,9 +664,9 @@ body.is-mobile-device .app-wrapper {
 
 .detail-label {
   color: var(--text-muted);
-  min-width: 90px;
+  min-width: 76px;
   font-weight: 500;
-  font-size: 0.75rem;
+  font-size: 0.74rem;
 }
 
 .detail-value {

@@ -1107,10 +1107,10 @@ class FamilyCalcApp {
       const selfResolved = resolveKinship([], this.egoGender, dict);
       this.renderChainBreadcrumbs(dict);
       this.resultMain.textContent = selfResolved.name;
-      this.metaBadges.innerHTML = '';
-      if (this.explanationLabel) this.explanationLabel.textContent = dict.labels.explanationLabel || 'Vysvětlení cesty:';
-      this.detailExplanation.textContent = selfResolved.description;
-      if (this.reciprocalLabel) this.reciprocalLabel.textContent = dict.labels.reciprocal || 'Vzájemné oslovení:';
+      this.metaBadges.innerHTML = '<span class="meta-badge badge-line">📍 Výchozí osoba</span>';
+      if (this.explanationLabel) this.explanationLabel.textContent = 'Vysvětlení:';
+      this.detailExplanation.textContent = 'Výchozí bod rodokmenu. Vyberte příbuzného stiskem kláves níže.';
+      if (this.reciprocalLabel) this.reciprocalLabel.textContent = 'Vzájemně:';
       this.detailReciprocal.textContent = '—';
       this.detailReciprocal.classList.remove('reciprocal-clickable');
       return;
@@ -1190,15 +1190,15 @@ class FamilyCalcApp {
 
     // 4. Render Details Box
     if (this.isMutualView) {
-      if (this.explanationLabel) this.explanationLabel.textContent = 'Vysvětlení vzájemného vztahu:';
+      if (this.explanationLabel) this.explanationLabel.textContent = 'Vysvětlení:';
       this.detailExplanation.textContent = `Z pohledu ${directResolved.name}: Jste pro něj „${mutualResolved.name}“. ${mutualResolved.description || ''}`;
       if (this.reciprocalLabel) this.reciprocalLabel.textContent = 'Základní vztah:';
       this.detailReciprocal.textContent = `${directResolved.name} (kliknutím zpět)`;
       this.detailReciprocal.title = 'Kliknutím přepneš zpět na základní pohled';
     } else {
-      if (this.explanationLabel) this.explanationLabel.textContent = dict.labels.explanationLabel || 'Vysvětlení cesty:';
+      if (this.explanationLabel) this.explanationLabel.textContent = 'Vysvětlení:';
       this.detailExplanation.textContent = displayedResolved.description;
-      if (this.reciprocalLabel) this.reciprocalLabel.textContent = dict.labels.reciprocal || 'Vzájemné oslovení:';
+      if (this.reciprocalLabel) this.reciprocalLabel.textContent = 'Vzájemně:';
       this.detailReciprocal.textContent = mutualResolved.name;
       this.detailReciprocal.title = 'Kliknutím přepneš na vzájemný vztah (jak mi říká on)';
     }
@@ -1221,17 +1221,21 @@ class FamilyCalcApp {
     // "Self" starting node
     const selfItem = document.createElement('span');
     selfItem.className = 'chain-item chain-self';
-    selfItem.textContent = dict.labels.self;
+    selfItem.textContent = dict.labels.self || 'JÁ';
+    selfItem.title = 'Výchozí osoba (proband)';
     selfItem.addEventListener('click', () => this.clearAll());
     this.chainContainer.appendChild(selfItem);
 
     if (this.chain.length === 0) return;
 
     this.chain.forEach((token, index) => {
-      // Arrow
+      // Směrová šipka podle generačního posunu
+      const dir = getStepDirection(token);
       const arrow = document.createElement('span');
-      arrow.className = 'chain-arrow';
-      arrow.textContent = '➔';
+      const arrowClass = dir.arrow === '↗' ? 'arrow-up' : dir.arrow === '↘' ? 'arrow-down' : dir.arrow === '↔' ? 'arrow-partner' : 'arrow-level';
+      arrow.className = `chain-arrow ${arrowClass}`;
+      arrow.textContent = dir.arrow;
+      arrow.title = dir.arrow === '↗' ? 'Předek (+1 generace)' : dir.arrow === '↘' ? 'Potomek (-1 generace)' : dir.arrow === '↔' ? 'Manželský partner' : 'Sourozenec';
       this.chainContainer.appendChild(arrow);
 
       // Token Item

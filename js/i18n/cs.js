@@ -106,49 +106,49 @@ export const cs = {
       lineType: 'step'
     },
     'm,step_h,s': {
-      name: 'Polobratr (jednobřišní)',
+      name: 'Polobratr jednobřišní',
       archaic: 'Staročesky/latinsky frater uterinus',
       description: 'Syn tvé matky s jiným mužem (máte společnou matku, ale jiného otce)',
       lineType: 'step'
     },
     'm,step_h,d': {
-      name: 'Polosestra (jednobřišní)',
+      name: 'Polosestra jednobřišní',
       archaic: 'Staročesky/latinsky soror uterina',
       description: 'Dcera tvé matky s jiným mužem (máte společnou matku, ale jiného otce)',
       lineType: 'step'
     },
     'f,step_w,s': {
-      name: 'Polobratr (jednokrevní)',
+      name: 'Polobratr jednokrevní',
       archaic: 'Staročesky/latinsky frater consanguineus',
       description: 'Syn tvého otce s jinou ženou/macechou (máte společného otce, ale jinou matku)',
       lineType: 'step'
     },
     'f,step_w,d': {
-      name: 'Polosestra (jednokrevní)',
+      name: 'Polosestra jednokrevní',
       archaic: 'Staročesky/latinsky soror consanguinea',
       description: 'Dcera tvého otce s jinou ženou/macechou (máte společného otce, ale jinou matku)',
       lineType: 'step'
     },
     'step_m,s': {
-      name: 'Polobratr (jednokrevní)',
+      name: 'Polobratr jednokrevní',
       archaic: 'Syn otce a macechy (jednokrevní polobratr)',
       description: 'Syn tvého otce a macechy',
       lineType: 'step'
     },
     'step_m,d': {
-      name: 'Polosestra (jednokrevní)',
+      name: 'Polosestra jednokrevní',
       archaic: 'Dcera otce a macechy (jednokrevní polosestra)',
       description: 'Dcera tvého otce a macechy',
       lineType: 'step'
     },
     'step_f,s': {
-      name: 'Polobratr (jednobřišní)',
+      name: 'Polobratr jednobřišní',
       archaic: 'Syn matky a otčíma (jednobřišní polobratr)',
       description: 'Syn tvé matky a otčíma',
       lineType: 'step'
     },
     'step_f,d': {
-      name: 'Polosestra (jednobřišní)',
+      name: 'Polosestra jednobřišní',
       archaic: 'Dcera matky a otčíma (jednobřišní polosestra)',
       description: 'Dcera tvé matky a otčíma',
       lineType: 'step'
@@ -196,25 +196,25 @@ export const cs = {
 
     // === 2. generace předků (Prarodiče) ===
     'f,f': {
-      name: 'Dědeček (otcův otec)',
+      name: 'Dědeček',
       archaic: 'Děda, děd, expresivně dědek',
       description: 'Otec tvého otce (prarodič z otcovy strany)',
       lineType: 'direct_ascendant'
     },
     'f,m': {
-      name: 'Babička (otcova matka)',
+      name: 'Babička',
       archaic: 'Bába, babka',
       description: 'Matka tvého otce (prarodič z otcovy strany)',
       lineType: 'direct_ascendant'
     },
     'm,f': {
-      name: 'Dědeček (matčin otec)',
+      name: 'Dědeček',
       archaic: 'Lidově/nářečně stařeček',
       description: 'Otec tvé matky (prarodič z matčiny strany)',
       lineType: 'direct_ascendant'
     },
     'm,m': {
-      name: 'Babička (matčina matka)',
+      name: 'Babička',
       archaic: 'Lidově/nářečně stařenka, starucha',
       description: 'Matka tvé matky (prarodič z matčiny strany)',
       lineType: 'direct_ascendant'
@@ -300,25 +300,25 @@ export const cs = {
 
     // === Vnoučata (2. generace potomků) ===
     's,s': {
-      name: 'Vnuk (syn syna)',
+      name: 'Vnuk',
       archaic: 'Vnouček',
       description: 'Syn tvého syna',
       lineType: 'direct_descendant'
     },
     's,d': {
-      name: 'Vnučka (dcera syna)',
+      name: 'Vnučka',
       archaic: 'Vnučka',
       description: 'Dcera tvého syna',
       lineType: 'direct_descendant'
     },
     'd,s': {
-      name: 'Vnuk (syn dcery)',
+      name: 'Vnuk',
       archaic: 'Vnouček',
       description: 'Syn tvé dcery',
       lineType: 'direct_descendant'
     },
     'd,d': {
-      name: 'Vnučka (dcera dcery)',
+      name: 'Vnučka',
       archaic: 'Vnučka',
       description: 'Dcera tvé dcery',
       lineType: 'direct_descendant'
@@ -352,49 +352,49 @@ export const cs = {
 
     // === Strýcové a tety (Pobočná linie +1) ===
     'f,b': {
-      name: 'Strýc (otcův bratr)',
+      name: 'Strýc',
       archaic: 'Strýček, strejda',
       description: 'Bratr tvého otce',
       lineType: 'collateral'
     },
     'f,z': {
-      name: 'Teta (otcova sestra)',
+      name: 'Teta',
       archaic: 'Tetička, staročesky stryna (otcova sestra)',
       description: 'Sestra tvého otce',
       lineType: 'collateral'
     },
     'm,b': {
-      name: 'Strýc (matčin bratr)',
+      name: 'Strýc',
       archaic: 'Staročesky ujec',
       description: 'Bratr tvé matky (v historické češtině striktně rozlišován jako ujec)',
       lineType: 'collateral'
     },
     'm,z': {
-      name: 'Teta (matčina sestra)',
+      name: 'Teta',
       archaic: 'Tetička',
       description: 'Sestra tvé matky',
       lineType: 'collateral'
     },
     'f,b,w': {
-      name: 'Teta (manželka otcova bratra)',
+      name: 'Teta',
       archaic: 'Staročesky stryna (žena otcova bratra)',
       description: 'Manželka bratra tvého otce',
       lineType: 'affinity'
     },
     'm,b,w': {
-      name: 'Teta (manželka matčina bratra)',
+      name: 'Teta',
       archaic: 'Staročesky ujčina (žena matčina bratra)',
       description: 'Manželka bratra tvé matky (ujce)',
       lineType: 'affinity'
     },
     'f,z,h': {
-      name: 'Strýc (manžel otcovy sestry)',
+      name: 'Strýc',
       archaic: 'Staročesky tetec (muž otcovy sestry)',
       description: 'Manžel sestry tvého otce',
       lineType: 'affinity'
     },
     'm,z,h': {
-      name: 'Strýc (manžel matčiny sestry)',
+      name: 'Strýc',
       archaic: 'Staročesky posel (muž matčiny sestry)',
       description: 'Manžel sestry tvé matky',
       lineType: 'affinity'
@@ -402,49 +402,49 @@ export const cs = {
 
     // === Prastrýcové a pratety (+2 generace) ===
     'f,f,b': {
-      name: 'Prastrýc (dědečkův bratr)',
+      name: 'Prastrýc',
       archaic: 'Prastrýc',
       description: 'Bratr tvého dědečka',
       lineType: 'collateral'
     },
     'f,f,z': {
-      name: 'Prateta (dědečkova sestra)',
+      name: 'Prateta',
       archaic: 'Prateta',
       description: 'Sestra tvého dědečka',
       lineType: 'collateral'
     },
     'f,m,b': {
-      name: 'Prastrýc (babiččin bratr)',
+      name: 'Prastrýc',
       archaic: 'Prastrýc',
       description: 'Bratr tvé babičky',
       lineType: 'collateral'
     },
     'f,m,z': {
-      name: 'Prateta (babiččina sestra)',
+      name: 'Prateta',
       archaic: 'Prateta',
       description: 'Sestra tvé babičky',
       lineType: 'collateral'
     },
     'm,f,b': {
-      name: 'Prastrýc (dědečkův bratr z matčiny strany)',
+      name: 'Prastrýc',
       archaic: 'Prastrýc / praujec',
       description: 'Bratr matčina otce',
       lineType: 'collateral'
     },
     'm,f,z': {
-      name: 'Prateta (dědečkova sestra z matčiny strany)',
+      name: 'Prateta',
       archaic: 'Prateta',
       description: 'Sestra matčina otce',
       lineType: 'collateral'
     },
     'm,m,b': {
-      name: 'Prastrýc (babiččin bratr z matčiny strany)',
+      name: 'Prastrýc',
       archaic: 'Prastrýc / praujec',
       description: 'Bratr matčiny matky',
       lineType: 'collateral'
     },
     'm,m,z': {
-      name: 'Prateta (babiččina sestra z matčiny strany)',
+      name: 'Prateta',
       archaic: 'Prateta',
       description: 'Sestra matčiny matky',
       lineType: 'collateral'
@@ -452,49 +452,49 @@ export const cs = {
 
     // === Bratranci a sestřenice (Stejná generace) ===
     'f,b,s': {
-      name: 'Bratranec (otcova bratra syn)',
+      name: 'Bratranec',
       archaic: 'Staročesky strýčenec, bratran, bratřec, bratřenec',
       description: 'Syn otcova bratra (strýce)',
       lineType: 'collateral'
     },
     'f,b,d': {
-      name: 'Sestřenice (otcova bratra dcera)',
+      name: 'Sestřenice',
       archaic: 'Staročesky strýčena, strýčenice, bratrana',
       description: 'Dcera otcova bratra (strýce)',
       lineType: 'collateral'
     },
     'm,b,s': {
-      name: 'Bratranec (matčina bratra syn)',
+      name: 'Bratranec',
       archaic: 'Staročesky ujčen, ujčenec',
       description: 'Syn matčina bratra (ujce)',
       lineType: 'collateral'
     },
     'm,b,d': {
-      name: 'Sestřenice (matčina bratra dcera)',
+      name: 'Sestřenice',
       archaic: 'Staročesky ujčena, ujčenice',
       description: 'Dcera matčina bratra (ujce)',
       lineType: 'collateral'
     },
     'f,z,s': {
-      name: 'Bratranec (otcovy sestry syn)',
+      name: 'Bratranec',
       archaic: 'Staročesky tetěnec, tetčic, sestrovec',
       description: 'Syn otcovy sestry (tety)',
       lineType: 'collateral'
     },
     'f,z,d': {
-      name: 'Sestřenice (otcovy sestry dcera)',
+      name: 'Sestřenice',
       archaic: 'Staročesky tetěnice, tetěna',
       description: 'Dcera otcovy sestry (tety)',
       lineType: 'collateral'
     },
     'm,z,s': {
-      name: 'Bratranec (matčiny sestry syn)',
+      name: 'Bratranec',
       archaic: 'Staročesky tetěnec, tetčic, sestrovec',
       description: 'Syn matčiny sestry (tety)',
       lineType: 'collateral'
     },
     'm,z,d': {
-      name: 'Sestřenice (matčiny sestry dcera)',
+      name: 'Sestřenice',
       archaic: 'Staročesky tetěnice, tetěna',
       description: 'Dcera matčiny sestry (tety)',
       lineType: 'collateral'
@@ -502,25 +502,25 @@ export const cs = {
 
     // Bratranci z druhého kolene
     'f,f,b,s,s': {
-      name: 'Bratranec z 2. kolene (druhý bratranec)',
+      name: 'Bratranec z 2. kolene',
       archaic: 'Staročesky vlastník, vlastně, stříník',
       description: 'Vnuk prastrýce, mají společné prarodiče',
       lineType: 'collateral'
     },
     'f,f,b,s,d': {
-      name: 'Sestřenice z 2. kolene (druhá sestřenice)',
+      name: 'Sestřenice z 2. kolene',
       archaic: 'Staročesky vlastnice, vlastně, střínice',
       description: 'Vnučka prastrýce, mají společné prarodiče',
       lineType: 'collateral'
     },
     'f,b,s,s': {
-      name: 'Syn bratrance (bratranec z 2. kolene mladší gen.)',
+      name: 'Syn bratrance',
       archaic: 'Druhý bratranec sestupně',
       description: 'Syn tvého bratrance',
       lineType: 'collateral'
     },
     'f,b,s,d': {
-      name: 'Dcera bratrance (sestřenice z 2. kolene mladší gen.)',
+      name: 'Dcera bratrance',
       archaic: 'Druhá sestřenice sestupně',
       description: 'Dcera tvého bratrance',
       lineType: 'collateral'
@@ -528,25 +528,25 @@ export const cs = {
 
     // === Synovci a neteře (Potomci sourozenců) ===
     'b,s': {
-      name: 'Synovec (bratrův syn)',
+      name: 'Synovec',
       archaic: 'Staročesky bratrovec',
       description: 'Syn tvého bratra',
       lineType: 'collateral'
     },
     'b,d': {
-      name: 'Neteř (bratrova dcera)',
+      name: 'Neteř',
       archaic: 'Staročesky synovkyně',
       description: 'Dcera tvého bratra',
       lineType: 'collateral'
     },
     'z,s': {
-      name: 'Synovec (sestřin syn)',
+      name: 'Synovec',
       archaic: 'Staročesky sestřenec, potet',
       description: 'Syn tvé sestry',
       lineType: 'collateral'
     },
     'z,d': {
-      name: 'Neteř (sestřina dcera)',
+      name: 'Neteř',
       archaic: 'Staročesky neť',
       description: 'Dcera tvé sestry',
       lineType: 'collateral'
@@ -592,25 +592,25 @@ export const cs = {
 
     // Rodiče partnera (Tchán a tchyně)
     'w,f': {
-      name: 'Tchán (manželčin otec)',
+      name: 'Tchán',
       archaic: 'Staročesky test, švekr',
       description: 'Otec tvé manželky',
       lineType: 'affinity'
     },
     'w,m': {
-      name: 'Tchyně (manželčina matka)',
+      name: 'Tchyně',
       archaic: 'Staročesky testa, švekruše',
       description: 'Matka tvé manželky',
       lineType: 'affinity'
     },
     'h,f': {
-      name: 'Tchán (manželův otec)',
+      name: 'Tchán',
       archaic: 'Staročesky test, švekr',
       description: 'Otec tvého manžela',
       lineType: 'affinity'
     },
     'h,m': {
-      name: 'Tchyně (manželova matka)',
+      name: 'Tchyně',
       archaic: 'Staročesky testa, švekruše',
       description: 'Matka tvého manžela',
       lineType: 'affinity'
@@ -642,49 +642,49 @@ export const cs = {
 
     // Švagři a švagrové
     'b,w': {
-      name: 'Švagrová (bratrova žena)',
+      name: 'Švagrová',
       archaic: 'Staročesky bratřina',
       description: 'Manželka tvého bratra',
       lineType: 'affinity'
     },
     'z,h': {
-      name: 'Švagr (sestřin muž)',
+      name: 'Švagr',
       archaic: 'Staročesky svokr, švakr, domácky švára',
       description: 'Manžel tvé sestry',
       lineType: 'affinity'
     },
     'w,b': {
-      name: 'Švagr (manželčin bratr)',
+      name: 'Švagr',
       archaic: 'Staročesky šurin, stč. šir/sír',
       description: 'Bratr tvé manželky (v historické češtině specificky zván šurin)',
       lineType: 'affinity'
     },
     'w,z': {
-      name: 'Švagrová (manželčina sestra)',
+      name: 'Švagrová',
       archaic: 'Staročesky zelva, zelvice',
       description: 'Sestra tvé manželky (v historické češtině specificky zvána zelva)',
       lineType: 'affinity'
     },
     'h,b': {
-      name: 'Švagr (manželův bratr)',
+      name: 'Švagr',
       archaic: 'Staročesky deveř',
       description: 'Bratr tvého manžela (v historické češtině specificky zván deveř)',
       lineType: 'affinity'
     },
     'h,z': {
-      name: 'Švagrová (manželova sestra)',
+      name: 'Švagrová',
       archaic: 'Švagrová',
       description: 'Sestra tvého manžela',
       lineType: 'affinity'
     },
     'w,b,w': {
-      name: 'Švagrová (manželka švagra)',
+      name: 'Švagrová',
       archaic: 'Švagrová',
       description: 'Manželka bratra tvé manželky',
       lineType: 'affinity'
     },
     'w,z,h': {
-      name: 'Švagr (manžel švagrové)',
+      name: 'Švagr',
       archaic: 'Švagr',
       description: 'Manžel sestry tvé manželky',
       lineType: 'affinity'
@@ -704,49 +704,49 @@ export const cs = {
 
     // Synovci a neteře z partnerovy strany (Sešvagření synovci - 0% DNA)
     'h,b,s': {
-      name: 'Synovec (manželův synovec)',
+      name: 'Synovec',
       archaic: 'Sešvagřený synovec',
       description: 'Syn bratra tvého manžela (sešvagření, biologicky nepříbuzný)',
       lineType: 'affinity'
     },
     'h,b,d': {
-      name: 'Neteř (manželova neteř)',
+      name: 'Neteř',
       archaic: 'Sešvagřená neteř',
       description: 'Dcera bratra tvého manžela (sešvagření, biologicky nepříbuzná)',
       lineType: 'affinity'
     },
     'h,z,s': {
-      name: 'Synovec (manželův synovec)',
+      name: 'Synovec',
       archaic: 'Sešvagřený synovec',
       description: 'Syn sestry tvého manžela (sešvagření, biologicky nepříbuzný)',
       lineType: 'affinity'
     },
     'h,z,d': {
-      name: 'Neteř (manželova neteř)',
+      name: 'Neteř',
       archaic: 'Sešvagřená neteř',
       description: 'Dcera sestry tvého manžela (sešvagření, biologicky nepříbuzná)',
       lineType: 'affinity'
     },
     'w,b,s': {
-      name: 'Synovec (manželčin synovec)',
+      name: 'Synovec',
       archaic: 'Sešvagřený synovec',
       description: 'Syn bratra tvé manželky (sešvagření, biologicky nepříbuzný)',
       lineType: 'affinity'
     },
     'w,b,d': {
-      name: 'Neteř (manželčina neteř)',
+      name: 'Neteř',
       archaic: 'Sešvagřená neteř',
       description: 'Dcera bratra tvé manželky (sešvagření, biologicky nepříbuzná)',
       lineType: 'affinity'
     },
     'w,z,s': {
-      name: 'Synovec (manželčin synovec)',
+      name: 'Synovec',
       archaic: 'Sešvagřený synovec',
       description: 'Syn sestry tvé manželky (sešvagření, biologicky nepříbuzný)',
       lineType: 'affinity'
     },
     'w,z,d': {
-      name: 'Neteř (manželčina neteř)',
+      name: 'Neteř',
       archaic: 'Sešvagřená neteř',
       description: 'Dcera sestry tvé manželky (sešvagření, biologicky nepříbuzná)',
       lineType: 'affinity'
@@ -754,49 +754,49 @@ export const cs = {
 
     // Prasynovci a praneteře z partnerovy strany (Sešvagření prasynovci - 0% DNA)
     'h,b,s,s': {
-      name: 'Prasynovec (manželův prasynovec)',
+      name: 'Prasynovec',
       archaic: 'Sešvagřený prasynovec',
       description: 'Vnuk bratra tvého manžela (sešvagření, biologicky nepříbuzný)',
       lineType: 'affinity'
     },
     'h,b,s,d': {
-      name: 'Praneteř (manželova praneteř)',
+      name: 'Praneteř',
       archaic: 'Sešvagřená praneteř',
       description: 'Vnučka bratra tvého manžela (sešvagření, biologicky nepříbuzná)',
       lineType: 'affinity'
     },
     'h,z,s,s': {
-      name: 'Prasynovec (manželův prasynovec)',
+      name: 'Prasynovec',
       archaic: 'Sešvagřený prasynovec',
       description: 'Vnuk sestry tvého manžela (sešvagření, biologicky nepříbuzný)',
       lineType: 'affinity'
     },
     'h,z,s,d': {
-      name: 'Praneteř (manželova praneteř)',
+      name: 'Praneteř',
       archaic: 'Sešvagřená praneteř',
       description: 'Vnučka sestry tvého manžela (sešvagření, biologicky nepříbuzná)',
       lineType: 'affinity'
     },
     'w,b,s,s': {
-      name: 'Prasynovec (manželčin prasynovec)',
+      name: 'Prasynovec',
       archaic: 'Sešvagřený prasynovec',
       description: 'Vnuk bratra tvé manželky (sešvagření, biologicky nepříbuzný)',
       lineType: 'affinity'
     },
     'w,b,s,d': {
-      name: 'Praneteř (manželčina praneteř)',
+      name: 'Praneteř',
       archaic: 'Sešvagřená praneteř',
       description: 'Vnučka bratra tvé manželky (sešvagření, biologicky nepříbuzná)',
       lineType: 'affinity'
     },
     'w,z,s,s': {
-      name: 'Prasynovec (manželčin prasynovec)',
+      name: 'Prasynovec',
       archaic: 'Sešvagřený prasynovec',
       description: 'Vnuk sestry tvé manželky (sešvagření, biologicky nepříbuzný)',
       lineType: 'affinity'
     },
     'w,z,s,d': {
-      name: 'Praneteř (manželčina praneteř)',
+      name: 'Praneteř',
       archaic: 'Sešvagřená praneteř',
       description: 'Vnučka sestry tvé manželky (sešvagření, biologicky nepříbuzná)',
       lineType: 'affinity'
@@ -804,25 +804,25 @@ export const cs = {
 
     // Doplňkové a stejnopohlavní afinitní inverze
     'f,b,h': {
-      name: 'Strýc (manžel otcova bratra)',
+      name: 'Strýc',
       archaic: 'Přiženěný strýc',
       description: 'Manžel bratra tvého otce',
       lineType: 'affinity'
     },
     'm,b,h': {
-      name: 'Strýc (manžel matčina bratra)',
+      name: 'Strýc',
       archaic: 'Posel / přiženěný strýc',
       description: 'Manžel bratra tvé matky',
       lineType: 'affinity'
     },
     'f,z,w': {
-      name: 'Teta (manželka otcovy sestry)',
+      name: 'Teta',
       archaic: 'Přivdaná teta',
       description: 'Manželka sestry tvého otce',
       lineType: 'affinity'
     },
     'm,z,w': {
-      name: 'Teta (manželka matčiny sestry)',
+      name: 'Teta',
       archaic: 'Přivdaná teta',
       description: 'Manželka sestry tvé matky',
       lineType: 'affinity'
@@ -830,49 +830,49 @@ export const cs = {
 
     // Sešvagření prastrýcové a pratety (inverze prasynovců a praneteří)
     'f,f,b,w': {
-      name: 'Prateta (manželka prastrýce)',
+      name: 'Prateta',
       archaic: 'Přivdaná prateta',
       description: 'Manželka prastrýce z otcovy strany',
       lineType: 'affinity'
     },
     'f,f,b,h': {
-      name: 'Prastrýc (manžel prastrýce)',
+      name: 'Prastrýc',
       archaic: 'Přiženěný prastrýc',
       description: 'Manžel prastrýce z otcovy strany',
       lineType: 'affinity'
     },
     'f,m,b,w': {
-      name: 'Prateta (manželka prastrýce)',
+      name: 'Prateta',
       archaic: 'Přivdaná prateta',
       description: 'Manželka prastrýce z matčiny strany',
       lineType: 'affinity'
     },
     'f,m,b,h': {
-      name: 'Prastrýc (manžel prastrýce)',
+      name: 'Prastrýc',
       archaic: 'Přiženěný prastrýc',
       description: 'Manžel prastrýce z matčiny strany',
       lineType: 'affinity'
     },
     'f,f,z,h': {
-      name: 'Prastrýc (manžel pratety)',
+      name: 'Prastrýc',
       archaic: 'Přiženěný prastrýc',
       description: 'Manžel pratety z otcovy strany',
       lineType: 'affinity'
     },
     'f,f,z,w': {
-      name: 'Prateta (manželka pratety)',
+      name: 'Prateta',
       archaic: 'Přivdaná prateta',
       description: 'Manželka pratety z otcovy strany',
       lineType: 'affinity'
     },
     'f,m,z,h': {
-      name: 'Prastrýc (manžel pratety)',
+      name: 'Prastrýc',
       archaic: 'Přiženěný prastrýc',
       description: 'Manžel pratety z matčiny strany',
       lineType: 'affinity'
     },
     'f,m,z,w': {
-      name: 'Prateta (manželka pratety)',
+      name: 'Prateta',
       archaic: 'Přivdaná prateta',
       description: 'Manželka pratety z matčiny strany',
       lineType: 'affinity'
@@ -1056,25 +1056,25 @@ export const cs = {
 
     // Rodiče partnerů dětí (Svat a svatka)
     's,w,f': {
-      name: 'Svat (otec snachy)',
+      name: 'Svat',
       archaic: 'Starosvat',
       description: 'Otec manželky tvého syna',
       lineType: 'affinity'
     },
     's,w,m': {
-      name: 'Svatka (matka snachy)',
+      name: 'Svatka',
       archaic: 'Starosvatka',
       description: 'Matka manželky tvého syna',
       lineType: 'affinity'
     },
     'd,h,f': {
-      name: 'Svat (otec zetě)',
+      name: 'Svat',
       archaic: 'Starosvat',
       description: 'Otec manžela tvé dcery',
       lineType: 'affinity'
     },
     'd,h,m': {
-      name: 'Svatka (matka zetě)',
+      name: 'Svatka',
       archaic: 'Starosvatka',
       description: 'Matka manžela tvé dcery',
       lineType: 'affinity'

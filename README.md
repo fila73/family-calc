@@ -41,6 +41,11 @@ An interactive web application inspired by the Chinese kinship calculator (亲�
   - `https://fila73.github.io/family-calc/`
   - `https://fila73.github.io/family-calc/privacy.html`
 - **Immersive Fullscreen & Portrait Lock**: Native Android Immersive Sticky mode hiding system status and navigation bars for an uninterrupted AMOLED experience, paired with rigid portrait orientation locking.
+- **Unified Result Card & Vertical Overlay Actions**:
+  - The relationship breadcrumbs, term name, badges, and explanation are merged into a single stable card `.result-unified-card` — preventing top clipping on mobile displays even with lengthy descriptions.
+  - Action buttons (🔊 TTS, ↗ Share, 🌳 Family tree) are vertically arranged as an overlay in the upper-right corner, freeing full horizontal width for title text and metadata badges.
+  - Directional generation arrows (`↗` blue ancestor, `↘` green descendant, `↔` pink partner, `→` orange sibling).
+  - Streamlined and natural Czech kinship terminology free of redundant brackets (e.g., pure **Dědeček**, **Strýc**, **Synovec**).
 - **Ethical Zero-Ad & Zero-Tracking Monetization**: Strictly no ads, no trackers, and no third-party telemetry. 100% offline functionality. Voluntary donation tip jar modal (`#donateModal`) supporting Czech QR SPAYD payments, Ko-fi, Buy Me a Coffee, and Google Play ratings.
 
 

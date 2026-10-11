@@ -67,7 +67,16 @@
 - [x] 29. **Nativní Immersive Fullscreen a uzamčení Portrait orientace**:
   - Odstraněn status bar a navigation bar přes `WindowInsetsControllerCompat` v `MainActivity.java` a `styles.xml`.
   - Pevně uzamčena orientace na výšku přes `android:screenOrientation="portrait"` v `AndroidManifest.xml` a `screen.orientation.lock('portrait')` v JS.
-
+- [x] 30. **Sjednocení displeje do jediné kompaktní karty (`.result-unified-card`)**:
+  - Genealogická cesta, název vztahu, odznaky a vysvětlení sloučeny do jednoho bloku. Odstraněno vytlačování cesty mimo displej na mobilech.
+- [x] 31. **Vertikální overlay akčních tlačítek (repro, share, strom)**:
+  - Přesunuto 3 tlačítek do svislého sloupce v pravém horním rohu karty, uvolněna plná horizontální šířka pro texty.
+- [x] 32. **Generační směrové šipky v kalkulačce**:
+  - Dynamické šipky `↗` (modrá, předek), `↘` (zelená, potomek), `↔` (růžová, partner), `→` (oranžová, sourozenec) v řetězci breadcrumbs.
+- [x] 33. **Zjednodušení českého názvosloví v `cs.js`**:
+  - Odstranění zbytečných závorek z primárního názvu vztahu (*Dědeček*, *Strýc*, *Synovec*...), přesný genealogický popis ponechán v detailním vysvětlení.
+- [x] 34. **Oficiální hosting na GitHub Pages**:
+  - Zřízen repozitář `fila73/family-calc` s funkčními GitHub Pages na `https://fila73.github.io/family-calc/` a `https://fila73.github.io/family-calc/privacy.html`.
 
 ## Nové nápady a budoucí rozšíření
 1. **Export rodokmenu do vektorového SVG / PDF**:
