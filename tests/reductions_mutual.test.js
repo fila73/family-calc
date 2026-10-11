@@ -89,20 +89,30 @@ console.log('\n3. Compound step chains (f, step_w, h, s):');
   assertEquals(res3.name, 'Nevlastní bratr', 'm, step_h, w, s = Nevlastní bratr');
 }
 
-// 4. In-law synovci a neteře (Spouse brother/sister son/daughter)
-console.log('\n4. In-law nephews/nieces reduction:');
+// 4. In-law synovci a neteře (Spouse brother/sister son/daughter - 0% DNA)
+console.log('\n4. In-law nephews/nieces & grand-nephews (0% DNA affinity):');
 {
-  // w, b, s = Synovec
+  // w, b, s = Synovec z manželčiny strany
   const res1 = resolveKinship(['w', 'b', 's'], 'm', cs);
   assert(res1.name.includes('Synovec'), 'w, b, s = Synovec');
+  assertEquals(res1.consanguinity.dnaPercent, 0, 'w, b, s má 0% DNA (afinitní vztah)');
 
-  // h, b, s = Synovec
+  // h, b, s = Synovec z manželovy strany
   const res2 = resolveKinship(['h', 'b', 's'], 'f', cs);
   assert(res2.name.includes('Synovec'), 'h, b, s = Synovec');
+  assertEquals(res2.consanguinity.dnaPercent, 0, 'h, b, s má 0% DNA (afinitní vztah)');
 
-  // w, z, d = Neteř
+  // w, z, d = Neteř z manželčiny strany
   const res3 = resolveKinship(['w', 'z', 'd'], 'm', cs);
   assert(res3.name.includes('Neteř'), 'w, z, d = Neteř');
+  assertEquals(res3.consanguinity.dnaPercent, 0, 'w, z, d má 0% DNA (afinitní vztah)');
+
+  // Uživatelský scénář: Alena Krejčíková -> manžel -> sestra -> syn -> syn (h, z, s, s)
+  const res4 = resolveKinship(['h', 'z', 's', 's'], 'f', cs);
+  assert(res4.name.includes('Prasynovec'), 'h, z, s, s = Prasynovec');
+  assertEquals(res4.consanguinity.dnaPercent, 0, 'h, z, s, s má 0% DNA (žádná pokrevní příbuznost)');
+  assert(res4.inheritance.classNumber === null, 'h, z, s, s je mimo zákonné dědické třídy');
+  assert(res4.marriageImpediment.hasImpediment === false, 'h, z, s, s nemá překážku sňatku');
 }
 
 // 5. InvertChain tests for step relations

@@ -520,15 +520,15 @@ it('Parsování GEDCOM struktury a extrakce osob a rodin', () => {
   const resGF = resolveKinship(pathGrandfather.chain, 'm', cs);
   assert.strictEqual(resGF.name, 'Dědeček (otcův otec)');
 
-  // Test 2: Josef (@I3@) -> Anna (@I4@) = Sestra (f -> d)
+  // Test 2: Josef (@I3@) -> Anna (@I4@) = Sestra (přímý sourozenec přes FAMC = 1 krok 'z')
   const pathSister = parsed.findKinshipChain('@I3@', '@I4@');
-  assert.deepStrictEqual(pathSister.chain, ['f', 'd']);
+  assert.deepStrictEqual(pathSister.chain, ['z']);
   const resSister = resolveKinship(pathSister.chain, 'm', cs);
   assert.strictEqual(resSister.name, 'Sestra');
 
-  // Test 3: Tomáš (@I5@) -> Anna (@I4@) = Teta (f -> f -> d)
+  // Test 3: Tomáš (@I5@) -> Anna (@I4@) = Teta (f -> z = otcova sestra)
   const pathAunt = parsed.findKinshipChain('@I5@', '@I4@');
-  assert.deepStrictEqual(pathAunt.chain, ['f', 'f', 'd']);
+  assert.deepStrictEqual(pathAunt.chain, ['f', 'z']);
   const resAunt = resolveKinship(pathAunt.chain, 'm', cs);
   assert.strictEqual(resAunt.name, 'Teta (otcova sestra)');
 });

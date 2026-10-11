@@ -56,6 +56,10 @@
   - 5 oficiálních snímků obrazovky nasnímaných přímo na připojeném telefonu Xiaomi Redmi Note 11 Pro 5G: kalkulačka, minirodokmen, 25 jazyků, GEDCOM analyzátor a kvíz.
 - [x] 24. **GitHub Pages nasazení a Privacy Policy URL**:
   - Soubor `.nojekyll`, stránka `privacy.html` a nastavený remote pro `https://fila73.github.io/family-calc/privacy.html`.
+- [x] 25. **Přímé sourozenecké vazby a generační směrové šipky v GEDCOMu**:
+  - Přímé spojení dětí stejného `FAMC` (1kroková sestra namísto okliky otec ➔ dcera), směrové šipky `↗` nahoru, `↘` dolů, `→` sourozenci, `↔` manželé a disambiguace jmen podle roků života.
+- [x] 26. **Oprava biologického DNA a právního výpočtu pro afinitní sešvagření**:
+  - Sešvagření synovci a prasynovci (např. *manžel ➔ sestra ➔ syn ➔ syn*) mají striktně **0 % sdílené DNA**, nulovou překážku sňatku a statut mimo zákonné dědické třídy.
 
 
 ## Nové nápady a budoucí rozšíření

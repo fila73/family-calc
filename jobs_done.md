@@ -205,4 +205,17 @@
   - Vytvořen soubor `.nojekyll` zabraňující ignorování systémových souborů Jekyllem.
   - Zásady ochrany osobních údajů v `privacy.html` v kořenu repozitáře připraveny k okamžitému servírování.
   - Nastaven lokální Git remote `origin` na `https://github.com/fila73/family-calc.git`.
+- [x] Optimalizace GEDCOM parseru o přímé sourozenecké vazby (`js/engine/gedcom-parser.js`):
+  - Doplněny přímé sourozenecké hrany (`TOKENS.BROTHER` a `TOKENS.SISTER`) v `getNeighbors` pro všechny děti sdílející stejný rodinný záznam `FAMC`.
+  - Vyřešen uživatelský dotaz *„Proč tam je já ➔ manžel ➔ otec ➔ dcera, a ne já ➔ manžel ➔ sestra?“*: BFS algoritmus nyní okamžitě nachází přímý 1krokový vztah mezi sourozenci bez nutnosti okliky přes společného otce/matku.
+- [x] Generační směrové šipky a rozlišení jmen v genealogické cestě GEDCOM:
+  - Implementována funkce `getStepDirection(token)` rozlišující posun generací: `↗` (stoupání o generaci k rodiči/předkovi), `↘` (klesání o generaci k potomkovi), `→` (stejná generace / sourozenec), `↔` (manželský svazek).
+  - V GEDCOM výsledkovém boxu nahrazen statický text `A ➔ B ➔ C` responzivním grafickým kontejnerem `.gedcom-path-flow` s avatary, neonovými šipkami, popisky vztahových vazeb (`manžel`, `sestra`, `syn`...) a roky narození/úmrtí (např. `*1958` nebo `1925–1999`).
+  - Automatické rozlišení osob se shodným jménem (např. *Ladislav Červinka starší* vs *Ladislav Červinka mladší*).
+- [x] Oprava výpočtu DNA a afinitních vazeb u sešvagřených synovců a prasynovců:
+  - Odstraněna redukce v `reduceKinshipChain`, která odřezávala token `h`/`w` a měnila sešvagřeného synovce/prasynovce na pokrevního s chybně udávanými 12,5 % DNA.
+  - Řetězec *Já ➔ manžel ➔ sestra ➔ syn ➔ syn* (`h, z, s, s`) nyní striktně zachovává afinitu se správnou hodnotou **0 % sdílené DNA** (`💍 Sešvagření (afinitní vztah)`), statutem mimo zákonné dědické třídy a potvrzením přípustnosti sňatku dle § 675 NOZ.
+  - Slovník `cs.js` a generátor hlubokých generací rozšířen o kompletní sadu sešvagřených synovců, neteří, prasynovců, praneteří a jejich doplňkových recipročních protějšků (celkem 160 vztahů / 320 invertních auditních běhů se 100% úspěšností).
+  - Rozšířena testovací sada na **82 / 82 úspěšně procházejících testů** (`npm test`).
+
 

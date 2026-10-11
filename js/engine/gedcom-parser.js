@@ -128,6 +128,28 @@ export function parseGedcom(gedcomText) {
 }
 
 /**
+ * Určí směr generační šipky pro daný vztahový krok
+ * ↗ = o generaci výše (rodič / předek)
+ * ↘ = o generaci níže (dítě / potomek)
+ * → = stejná generace (sourozenec)
+ * ↔ = manželský partner
+ */
+export function getStepDirection(token) {
+  if (!token) return { arrow: '→', genShift: 0 };
+  const t = token.toLowerCase();
+  if (t === 'f' || t === 'm' || t.startsWith('step_f') || t.startsWith('step_m') || t.startsWith('god_f') || t.startsWith('god_m')) {
+    return { arrow: '↗', genShift: 1 };
+  }
+  if (t === 's' || t === 'd' || t.startsWith('step_s') || t.startsWith('step_d') || t.startsWith('god_s') || t.startsWith('god_d')) {
+    return { arrow: '↘', genShift: -1 };
+  }
+  if (t === 'h' || t === 'w' || t.startsWith('step_h') || t.startsWith('step_w')) {
+    return { arrow: '↔', genShift: 0 };
+  }
+  return { arrow: '→', genShift: 0 };
+}
+
+/**
  * BFS pro nalezení nejkratší příbuzenské cesty mezi dvěma osobami v rodokmenu
  */
 export function findShortestKinshipPath(individuals, families, startId, targetId) {
@@ -141,9 +163,19 @@ export function findShortestKinshipPath(individuals, families, startId, targetId
     if (!person) return [];
     const neighbors = [];
 
-    // 1. Rodiče (přes FAMC)
+    // 1. Rodiče a sourozenci (přes FAMC)
     if (person.famc && families.has(person.famc)) {
       const fam = families.get(person.famc);
+
+      // Přímí plnorodí sourozenci (děti stejné rodiny FAMC) - 1 krok (namísto otec -> dcera)
+      for (const sibId of fam.children) {
+        if (sibId !== personId && individuals.has(sibId)) {
+          const sib = individuals.get(sibId);
+          const sibToken = sib.sex === 'F' ? TOKENS.SISTER : TOKENS.BROTHER;
+          neighbors.push({ targetId: sibId, token: sibToken, type: 'sibling' });
+        }
+      }
+
       if (fam.husb && individuals.has(fam.husb)) {
         neighbors.push({ targetId: fam.husb, token: TOKENS.FATHER, type: 'parent' });
       }

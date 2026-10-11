@@ -11,19 +11,19 @@ Interaktivní webová aplikace inspirovaná čínskou kalkulačkou příbuzenstv
   - **`⇧ Nevlastní`**: zadávání nevlastních rodičů (*Otčím*, *Macecha*), pastorků i polorodých a nevlastních sourozenců (*jednobřišní* i *jednokrevní* bratr/sestra, nepokrevní nevlastní bratr ze svazku rodičů).
   - **`✝ Křestní`**: duchovní příbuzenství (*Kmotr*, *Kmotra*, *Kmotřenec*, *Kmotřenka*).
 - **Oboustranný výpočet (互查 / Vzájemný vztah)**: přepnutí perspektivy s vizuálním neonovým zvýrazněním tlačítka a breadcrumbs – okamžité zjištění, jak daný příbuzný oslovuje vás ("Kdo jsem já pro něj?"), s automatickým určením mluvčího dle cílové osoby.
-- **Rychlé headless testování**: sada unit testů pokrývající 75 scénářů (`npm test`) bez nutnosti spouštět prohlížeč.
+- **Rychlé headless testování**: sada unit testů pokrývající 82 scénářů (`npm test`) a 160 vztahů (320 obousměrných auditních běhů) bez nutnosti spouštět prohlížeč.
 - **Volba pohlaví EGO / probanda**: muž / žena (výrazně ovlivňuje partnerské a vzájemné vztahy).
 - **Vizuální minirodokmen (`#treeModal`)**: grafické schéma genealogické cesty s avatary, vztahovými štítky a zvýrazněním cíle.
 - **Kvíz rodinných vztahů (`#quizModal`)**: interaktivní procvičování a trénink genealogických i archaických pojmů se skóre a sériemi.
 - **Hlasové předčítání výsledku (🔊 TTS)**: syntéza řeči ve všech 25 jazycích pro usnadnění přístupnosti a výslovnosti.
 - **Sdílení výsledku (↗ Share)**: generování formátované vizitky vztahu s emoji pro rychlé sdílení na sociálních sítích či zkopírování do schránky.
 - **Generátor PNG kartiček (HTML5 Canvas)**: vytvoření a stažení reprezentativní vizitky s tmavým motivem přímo do obrázkového souboru PNG.
-- **Genetická shoda a stupeň příbuzenství (🧬 DNA %)**: výpočet kanonického stupně příbuzenství dle počtu porodů v linii a odhadu sdílené DNA.
+- **Genetická shoda a stupeň příbuzenství (🧬 DNA %)**: výpočet kanonického stupně příbuzenství dle počtu porodů v linii a odhadu sdílené DNA (včetně striktního odlišení afinitního sešvagření s 0 % DNA od pokrevního příbuzenství).
 - **Kalkulačka dědických tříd ČR (⚖️ NOZ)**: automatické právní zařazení příbuzného do 1.–6. dědické třídy podle nového občanského zákoníku s výkladem dědických podílů.
 - **Detektor překážek manželství (💍 § 675 NOZ)**: vyhodnocení zákonné přípustnosti sňatku (přísný zákaz v přímé linii a mezi sourozenci).
 - **Hlasové zadávání / Diktování (🎙️ Speech Recognition)**: nadiktování rodinného řetězce hlasem s automatickým rozpoznáváním klíčových slov.
 - **Porovnání dvou osob v rodokmenu (👥)**: stanovení vzájemného vztahu dvou libovolných členů rodiny.
-- **Import a analýza GEDCOM souborů (📜 .ged)**: načtení reálných rodokmenů z Ancestry, MyHeritage či Gramps, vestavěný ukázkový 4-generační strom, grafové vyhledání cesty a přenos vztahu do kalkulačky.
+- **Import a analýza GEDCOM souborů (📜 .ged)**: načtení reálných rodokmenů z Ancestry, MyHeritage či Gramps, vestavěný ukázkový 4-generační strom, přímé propojování sourozenců, vizualizace cesty s generačními šipkami (`↗` nahoru, `↘` dolů, `→` sourozenec, `↔` partner), rozlišením shodných jmen a přenosem vztahu do kalkulačky.
 - **Klávesové zkratky pro desktop (⌨️ Hotkeys)**: plnohodnotné ovládání z fyzické klávesnice s nápovědním modálem (`?`).
 - **Zvukové efekty klávesnice (🔊 Web Audio)**: diskrétní syntetizované kliknutí při stisku klávesy s přepínačem v záhlaví.
 - **Historie výpočtů (🕒)**: automatický záznam provedených kalkulací s možností návratu k libovolnému předchozímu vztahu.

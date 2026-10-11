@@ -3,7 +3,7 @@
  */
 
 import { resolveKinship, invertChain, TOKENS, getTokenGender } from './engine/kinship-engine.js';
-import { parseGedcom } from './engine/gedcom-parser.js';
+import { parseGedcom, getStepDirection } from './engine/gedcom-parser.js';
 import { getDictionary, languagesRegistry, languageCategories, getLanguageMeta } from './i18n/index.js';
 
 class FamilyCalcApp {
@@ -2370,17 +2370,65 @@ class FamilyCalcApp {
     const resolved = resolveKinship(pathResult.chain, personA.sex === 'F' ? 'f' : 'm', dict);
     this.gedcomKinshipResult = { chain: pathResult.chain, resolved, personA, personB };
 
-    const pathNames = pathResult.pathPersons.map((pId) => {
-      const p = this.activeGedcom.individuals.get(pId);
-      return p ? p.name : pId;
+    const personsInPath = pathResult.pathPersons.map((pId) => this.activeGedcom.individuals.get(pId));
+
+    // Zjistíme duplicitní jména v cestě pro rozlišení (např. Ladislav Červinka ml. vs st.)
+    const nameCounts = {};
+    personsInPath.forEach((p) => {
+      if (p && p.name) {
+        nameCounts[p.name] = (nameCounts[p.name] || 0) + 1;
+      }
     });
 
+    const pathHtmlParts = [];
+    for (let i = 0; i < pathResult.pathPersons.length; i++) {
+      const p = personsInPath[i];
+      let years = '';
+      if (p) {
+        if (p.birthYear && p.deathYear) {
+          years = ` (${p.birthYear}–${p.deathYear})`;
+        } else if (p.birthYear) {
+          years = ` (*${p.birthYear})`;
+        } else if (p.deathYear) {
+          years = ` (†${p.deathYear})`;
+        }
+      }
+
+      let disambig = '';
+      if (p && nameCounts[p.name] > 1 && !years) {
+        disambig = i === 1 ? ' (starší)' : ' (mladší)';
+      }
+
+      const pDisplayName = p ? `${p.name}${years}${disambig}` : pathResult.pathPersons[i];
+      const isStart = i === 0;
+      const isTarget = i === pathResult.pathPersons.length - 1;
+      const nodeClass = isStart ? 'node-start' : isTarget ? 'node-target' : '';
+
+      pathHtmlParts.push(`<span class="gedcom-path-node ${nodeClass}">${pDisplayName}</span>`);
+
+      if (i < pathResult.chain.length) {
+        const token = pathResult.chain[i];
+        const step = getStepDirection(token);
+        const tokenLabel = (dict.labels && dict.labels.tokens && dict.labels.tokens[token]) || token;
+        const arrowClass = step.genShift > 0 ? 'gedcom-arrow-up' : step.genShift < 0 ? 'gedcom-arrow-down' : 'gedcom-arrow-same';
+
+        pathHtmlParts.push(
+          `<span class="gedcom-path-edge" title="${tokenLabel}">` +
+          `<span class="${arrowClass}">${step.arrow}</span> ` +
+          `<span class="gedcom-edge-label">${tokenLabel}</span>` +
+          `</span>`
+        );
+      }
+    }
+
+    const stepWord = pathResult.chain.length === 1 ? 'krok' : pathResult.chain.length < 5 ? 'kroky' : 'kroků';
     this.gedcomResultTitle.textContent = `${personB.name} je pro ${personA.name}:`;
     this.gedcomResultDesc.innerHTML = `
       <div style="font-size: 24px; font-weight: 700; color: #fff; margin: 8px 0;">${resolved.name}</div>
-      <div style="font-size: 14px; color: var(--text-secondary);">${resolved.description || ''}</div>
-      <div style="margin: 8px 0; font-size: 13px; color: #a78bfa;">🔗 Genealogická cesta: ${pathNames.join(' ➔ ')}</div>
-      <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 6px;">
+      <div style="font-size: 14px; color: var(--text-secondary); margin-bottom: 8px;">${resolved.description || ''}</div>
+      <div style="font-size: 12px; color: #a78bfa; font-weight: 600; margin-bottom: 4px;">🔗 Genealogická cesta (${pathResult.chain.length} ${stepWord}):</div>
+      <div class="gedcom-path-flow">${pathHtmlParts.join('')}</div>
+      <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px;">
         ${resolved.consanguinity && resolved.consanguinity.badge ? `<span class="meta-badge badge-consanguinity">${resolved.consanguinity.badge}</span>` : ''}
         ${resolved.inheritance && resolved.inheritance.badge ? `<span class="meta-badge badge-inheritance">${resolved.inheritance.badge}</span>` : ''}
         ${resolved.marriageImpediment && resolved.marriageImpediment.badge ? `<span class="meta-badge ${resolved.marriageImpediment.allowed ? 'badge-impediment-allowed' : 'badge-impediment-blocked'}">${resolved.marriageImpediment.badge}</span>` : ''}

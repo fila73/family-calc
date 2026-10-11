@@ -176,24 +176,6 @@ export function simplifyChain(rawChain, egoGender = 'm') {
         continue;
       }
 
-      // F) Manžel/Manželka ➔ Sourozenec ➔ Syn/Dcera = Synovec / Neteř (manželčina/manželova bratra/sestry dítě)
-      if ((curNorm === 'h' || curNorm === 'w') && (nextNorm === 'b' || nextNorm === 'z')) {
-        if (thirdNorm === 's') {
-          newChain.push('b');
-          newChain.push('s');
-          i += 3;
-          changed = true;
-          continue;
-        }
-        if (thirdNorm === 'd') {
-          newChain.push('b');
-          newChain.push('d');
-          i += 3;
-          changed = true;
-          continue;
-        }
-      }
-
       // G) Rodič ➔ Nevlastní choť ➔ Dítě v invertovaných řetězcích (m, step_w, s/d nebo f, step_h, s/d)
       if (curNorm === 'm' && nextNorm === 'step_w') {
         if (thirdNorm === 's' || thirdNorm === 'step_s') {
@@ -958,6 +940,68 @@ function generateDeepKinshipEntry(chain, dictionary) {
         lineType: 'collateral'
       };
     }
+  }
+
+  // Partner + sourozenec + samí potomci: sešvagřený synovec / prasynovec (0% DNA, afinitní vztah)
+  const firstIsSpouse = norm[0] === 'h' || norm[0] === 'w';
+  const secondIsSibling = norm[1] === 'b' || norm[1] === 'z';
+  const restAreChildren = norm.length >= 3 && norm.slice(2).every(t => t === 's' || t === 'd');
+  if (firstIsSpouse && secondIsSibling && restAreChildren) {
+    const isWifeSide = norm[0] === 'w';
+    const lastToken = norm[len - 1];
+    const isMale = lastToken === 's';
+    const childGen = len - 2; // h,b,s = 1 (synovec), h,b,s,s = 2 (prasynovec)
+    const praCount = childGen - 1;
+    const praPrefix = 'pra'.repeat(praCount);
+
+    if (dictionary.code === 'cs') {
+      const base = isMale ? 'synovec' : 'neteř';
+      const term = praCount > 0 ? `${praPrefix}${base}` : base;
+      const termCap = term.charAt(0).toUpperCase() + term.slice(1);
+      const side = isWifeSide ? 'manželčin' : 'manželův';
+      return {
+        id: `inlaw_nephew_${len}_${lastToken}`,
+        name: `${termCap} (${side} ${term})`,
+        archaic: `Sešvagřený ${term}`,
+        description: `Potomek sourozence tvé/tvého ${isWifeSide ? 'manželky' : 'manžela'} (sešvagření, biologicky nepříbuzný)`,
+        lineType: 'affinity'
+      };
+    }
+    if (dictionary.code === 'sk') {
+      const base = isMale ? 'synovec' : 'neter';
+      const term = praCount > 0 ? `${praPrefix}${base}` : base;
+      const termCap = term.charAt(0).toUpperCase() + term.slice(1);
+      const side = isWifeSide ? 'manželkin' : 'manželov';
+      return {
+        id: `inlaw_nephew_${len}_${lastToken}`,
+        name: `${termCap} (${side} ${term})`,
+        archaic: `Zošvagrený ${term}`,
+        description: `Potomok súrodenca tvojho/tvojej ${isWifeSide ? 'manželky' : 'manžela'} (zošvagrenie, biologicky nepríbuzný)`,
+        lineType: 'affinity'
+      };
+    }
+    if (dictionary.code === 'en') {
+      const base = isMale ? 'nephew' : 'niece';
+      const greatPrefix = 'great-'.repeat(praCount);
+      const term = `${greatPrefix}${base}-in-law`;
+      const termCap = term.charAt(0).toUpperCase() + term.slice(1);
+      return {
+        id: `inlaw_nephew_${len}_${lastToken}`,
+        name: termCap,
+        archaic: null,
+        description: `Child of your spouse's sibling (affinity, no blood relation)`,
+        lineType: 'affinity'
+      };
+    }
+
+    const base = isMale ? 'synovec' : 'neteř';
+    return {
+      id: `inlaw_nephew_${len}_${lastToken}`,
+      name: `${base.charAt(0).toUpperCase() + base.slice(1)} (in-law)`,
+      archaic: null,
+      description: `Affinity relative via spouse's sibling`,
+      lineType: 'affinity'
+    };
   }
 
   return null;

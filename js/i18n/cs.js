@@ -702,6 +702,182 @@ export const cs = {
       lineType: 'affinity'
     },
 
+    // Synovci a neteře z partnerovy strany (Sešvagření synovci - 0% DNA)
+    'h,b,s': {
+      name: 'Synovec (manželův synovec)',
+      archaic: 'Sešvagřený synovec',
+      description: 'Syn bratra tvého manžela (sešvagření, biologicky nepříbuzný)',
+      lineType: 'affinity'
+    },
+    'h,b,d': {
+      name: 'Neteř (manželova neteř)',
+      archaic: 'Sešvagřená neteř',
+      description: 'Dcera bratra tvého manžela (sešvagření, biologicky nepříbuzná)',
+      lineType: 'affinity'
+    },
+    'h,z,s': {
+      name: 'Synovec (manželův synovec)',
+      archaic: 'Sešvagřený synovec',
+      description: 'Syn sestry tvého manžela (sešvagření, biologicky nepříbuzný)',
+      lineType: 'affinity'
+    },
+    'h,z,d': {
+      name: 'Neteř (manželova neteř)',
+      archaic: 'Sešvagřená neteř',
+      description: 'Dcera sestry tvého manžela (sešvagření, biologicky nepříbuzná)',
+      lineType: 'affinity'
+    },
+    'w,b,s': {
+      name: 'Synovec (manželčin synovec)',
+      archaic: 'Sešvagřený synovec',
+      description: 'Syn bratra tvé manželky (sešvagření, biologicky nepříbuzný)',
+      lineType: 'affinity'
+    },
+    'w,b,d': {
+      name: 'Neteř (manželčina neteř)',
+      archaic: 'Sešvagřená neteř',
+      description: 'Dcera bratra tvé manželky (sešvagření, biologicky nepříbuzná)',
+      lineType: 'affinity'
+    },
+    'w,z,s': {
+      name: 'Synovec (manželčin synovec)',
+      archaic: 'Sešvagřený synovec',
+      description: 'Syn sestry tvé manželky (sešvagření, biologicky nepříbuzný)',
+      lineType: 'affinity'
+    },
+    'w,z,d': {
+      name: 'Neteř (manželčina neteř)',
+      archaic: 'Sešvagřená neteř',
+      description: 'Dcera sestry tvé manželky (sešvagření, biologicky nepříbuzná)',
+      lineType: 'affinity'
+    },
+
+    // Prasynovci a praneteře z partnerovy strany (Sešvagření prasynovci - 0% DNA)
+    'h,b,s,s': {
+      name: 'Prasynovec (manželův prasynovec)',
+      archaic: 'Sešvagřený prasynovec',
+      description: 'Vnuk bratra tvého manžela (sešvagření, biologicky nepříbuzný)',
+      lineType: 'affinity'
+    },
+    'h,b,s,d': {
+      name: 'Praneteř (manželova praneteř)',
+      archaic: 'Sešvagřená praneteř',
+      description: 'Vnučka bratra tvého manžela (sešvagření, biologicky nepříbuzná)',
+      lineType: 'affinity'
+    },
+    'h,z,s,s': {
+      name: 'Prasynovec (manželův prasynovec)',
+      archaic: 'Sešvagřený prasynovec',
+      description: 'Vnuk sestry tvého manžela (sešvagření, biologicky nepříbuzný)',
+      lineType: 'affinity'
+    },
+    'h,z,s,d': {
+      name: 'Praneteř (manželova praneteř)',
+      archaic: 'Sešvagřená praneteř',
+      description: 'Vnučka sestry tvého manžela (sešvagření, biologicky nepříbuzná)',
+      lineType: 'affinity'
+    },
+    'w,b,s,s': {
+      name: 'Prasynovec (manželčin prasynovec)',
+      archaic: 'Sešvagřený prasynovec',
+      description: 'Vnuk bratra tvé manželky (sešvagření, biologicky nepříbuzný)',
+      lineType: 'affinity'
+    },
+    'w,b,s,d': {
+      name: 'Praneteř (manželčina praneteř)',
+      archaic: 'Sešvagřená praneteř',
+      description: 'Vnučka bratra tvé manželky (sešvagření, biologicky nepříbuzná)',
+      lineType: 'affinity'
+    },
+    'w,z,s,s': {
+      name: 'Prasynovec (manželčin prasynovec)',
+      archaic: 'Sešvagřený prasynovec',
+      description: 'Vnuk sestry tvé manželky (sešvagření, biologicky nepříbuzný)',
+      lineType: 'affinity'
+    },
+    'w,z,s,d': {
+      name: 'Praneteř (manželčina praneteř)',
+      archaic: 'Sešvagřená praneteř',
+      description: 'Vnučka sestry tvé manželky (sešvagření, biologicky nepříbuzná)',
+      lineType: 'affinity'
+    },
+
+    // Doplňkové a stejnopohlavní afinitní inverze
+    'f,b,h': {
+      name: 'Strýc (manžel otcova bratra)',
+      archaic: 'Přiženěný strýc',
+      description: 'Manžel bratra tvého otce',
+      lineType: 'affinity'
+    },
+    'm,b,h': {
+      name: 'Strýc (manžel matčina bratra)',
+      archaic: 'Posel / přiženěný strýc',
+      description: 'Manžel bratra tvé matky',
+      lineType: 'affinity'
+    },
+    'f,z,w': {
+      name: 'Teta (manželka otcovy sestry)',
+      archaic: 'Přivdaná teta',
+      description: 'Manželka sestry tvého otce',
+      lineType: 'affinity'
+    },
+    'm,z,w': {
+      name: 'Teta (manželka matčiny sestry)',
+      archaic: 'Přivdaná teta',
+      description: 'Manželka sestry tvé matky',
+      lineType: 'affinity'
+    },
+
+    // Sešvagření prastrýcové a pratety (inverze prasynovců a praneteří)
+    'f,f,b,w': {
+      name: 'Prateta (manželka prastrýce)',
+      archaic: 'Přivdaná prateta',
+      description: 'Manželka prastrýce z otcovy strany',
+      lineType: 'affinity'
+    },
+    'f,f,b,h': {
+      name: 'Prastrýc (manžel prastrýce)',
+      archaic: 'Přiženěný prastrýc',
+      description: 'Manžel prastrýce z otcovy strany',
+      lineType: 'affinity'
+    },
+    'f,m,b,w': {
+      name: 'Prateta (manželka prastrýce)',
+      archaic: 'Přivdaná prateta',
+      description: 'Manželka prastrýce z matčiny strany',
+      lineType: 'affinity'
+    },
+    'f,m,b,h': {
+      name: 'Prastrýc (manžel prastrýce)',
+      archaic: 'Přiženěný prastrýc',
+      description: 'Manžel prastrýce z matčiny strany',
+      lineType: 'affinity'
+    },
+    'f,f,z,h': {
+      name: 'Prastrýc (manžel pratety)',
+      archaic: 'Přiženěný prastrýc',
+      description: 'Manžel pratety z otcovy strany',
+      lineType: 'affinity'
+    },
+    'f,f,z,w': {
+      name: 'Prateta (manželka pratety)',
+      archaic: 'Přivdaná prateta',
+      description: 'Manželka pratety z otcovy strany',
+      lineType: 'affinity'
+    },
+    'f,m,z,h': {
+      name: 'Prastrýc (manžel pratety)',
+      archaic: 'Přiženěný prastrýc',
+      description: 'Manžel pratety z matčiny strany',
+      lineType: 'affinity'
+    },
+    'f,m,z,w': {
+      name: 'Prateta (manželka pratety)',
+      archaic: 'Přivdaná prateta',
+      description: 'Manželka pratety z matčiny strany',
+      lineType: 'affinity'
+    },
+
     // Partneři dětí (Snacha a zeť)
     's,w': {
       name: 'Snacha',
