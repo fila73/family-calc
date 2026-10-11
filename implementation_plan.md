@@ -80,4 +80,6 @@ Vytvoření webové kalkulačky rodinných vztahů inspirované čínskou kalkul
 27. Zavedení oficiální nové ikony aplikace ze souboru `google-play/assets/icon-512.png` do Android `mipmap-*` hustot (klasická i kulatá ikona, adaptivní popředí a pozadí `#09090b`) a generování PWA ikon.
 28. Sestavení nové verze aplikace (`scripts/build.js`, `cap sync`, Gradle `assembleDebug` a `bundleRelease`): `build-android/Rodinna-Kalkulacka-debug.apk` (4,76 MB) a `build-android/Rodinna-Kalkulacka-release.aab` (3,41 MB).
 29. Nahrání rodokmenových GEDCOM souborů do úložiště telefonu (`/sdcard/Download/`) a instalace aktualizovaného APK balíčku do připojeného mobilu Xiaomi Redmi Note 11 Pro 5G přes ADB s ověřením spuštění.
+30. Implementace nativního Immersive Sticky Fullscreenu v Androidu (`MainActivity.java`, `styles.xml`, `css/style.css`, `manifest.json`) a trvalého uzamčení orientace do portrait režimu (`android:screenOrientation="portrait"` v `AndroidManifest.xml` a `screen.orientation.lock('portrait')` v JS) s ověřením na reálném zařízení.
+
 

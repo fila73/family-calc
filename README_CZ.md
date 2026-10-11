@@ -43,6 +43,7 @@ Interaktivní webová aplikace inspirovaná čínskou kalkulačkou příbuzenstv
 - **Webová prezentace a zásady soukromí na GitHub Pages**:
   - `https://fila73.github.io/family-calc/`
   - `https://fila73.github.io/family-calc/privacy.html`
+- **Celoobrazovkový režim (Fullscreen) & Portrait Lock**: nativní Immersive Sticky režim skrývající stavovou i navigační lištu na Androidu pro nerušený zážitek a pevné uzamčení orientace na výšku (portrait), zabraňující nežádoucímu přetáčení displeje.
 - **Čistá etická monetizace (Zero-ads & Zero-tracking)**: žádné reklamy, žádné analytické ani sledovací skripty. Aplikace funguje 100% offline. Možnost dobrovolného příspěvku v menu (dialog `#donateModal`) přes českou QR platbu SPAYD (0 % poplatků), Ko-fi / Buy Me a Coffee nebo 5hvězdičkové hodnocení na Google Play.
 
 

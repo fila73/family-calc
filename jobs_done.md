@@ -242,6 +242,18 @@
 - [x] Instalace a ověření na reálném zařízení přes ADB:
   - Nová debug verze s novou ikonou nainstalována přímo do připojeného telefonu Xiaomi Redmi Note 11 Pro 5G (`adb install -r`).
   - Spuštění aplikace na zařízení otestováno a ověřeno příkazem `adb shell monkey -p cz.fila73.familycalc -c android.intent.category.LAUNCHER 1`.
+- [x] Nativní Immersive Fullscreen a trvalé uzamčení orientace na výšku (Portrait Lock):
+  - **Portrait lock**: do `android/app/src/main/AndroidManifest.xml` přidáno `android:screenOrientation="portrait"` a do `js/app.js` doplněn `screen.orientation.lock('portrait')`. Aplikace se nyní nikdy neotáčí do landscape.
+  - **Skrytí status baru a systémových lišt**:
+    - V `android/app/src/main/res/values/styles.xml` nastaveno `android:windowFullscreen = true`.
+    - V `MainActivity.java` implementován `applyFullscreen()` s využitím `WindowInsetsControllerCompat` (skrytí `WindowInsetsCompat.Type.systemBars()` a režim `BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE`) s fallbackem pro starší verze Androidu.
+  - **PWA a responzivní CSS**:
+    - V `manifest.json` nastaveno `"display": "fullscreen"`.
+    - V `css/style.css` odstraněno omezování na `92vh` u mobilních dotykových obrazovek a přidána třída `.is-mobile-fullscreen` pro plných 100 % šířky i výšky (`100dvh`) bez rámečků.
+  - **Build a ověření**:
+    - Sestaven nový balíček `Rodinna-Kalkulacka-debug.apk` (4,76 MB) a `Rodinna-Kalkulacka-release.aab` (3,41 MB).
+    - Aktualizace nainstalována přes ADB na telefon a ověřena reálným screenshotem (`google-play/assets/fullscreen_check.png`): status bar i navigační lišta jsou skryté, aplikace zabírá 100 % AMOLED displeje.
+
 
 
 

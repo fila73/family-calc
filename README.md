@@ -40,6 +40,7 @@ An interactive web application inspired by the Chinese kinship calculator (äº²æˆ
 - **GitHub Pages Web Presentation & Privacy Policy**:
   - `https://fila73.github.io/family-calc/`
   - `https://fila73.github.io/family-calc/privacy.html`
+- **Immersive Fullscreen & Portrait Lock**: Native Android Immersive Sticky mode hiding system status and navigation bars for an uninterrupted AMOLED experience, paired with rigid portrait orientation locking.
 - **Ethical Zero-Ad & Zero-Tracking Monetization**: Strictly no ads, no trackers, and no third-party telemetry. 100% offline functionality. Voluntary donation tip jar modal (`#donateModal`) supporting Czech QR SPAYD payments, Ko-fi, Buy Me a Coffee, and Google Play ratings.
 
 

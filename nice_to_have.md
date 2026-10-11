@@ -64,6 +64,9 @@
   - Vygenerovány ikony z `google-play/assets/icon-512.png` do všech rozlišení `mipmap-*` (mdpi, hdpi, xhdpi, xxhdpi, xxxhdpi) pro standardní i adaptivní ikonu s tmavým AMOLED pozadím `#09090b` a PWA `icons/icon-512.png` a `icons/icon-192.png`.
 - [x] 28. **Aktualizované sestavení (APK/AAB), instalace na mobil a nahrání GEDCOM souborů**:
   - Sestaven nový debug APK (4,76 MB) a release AAB (3,41 MB). Debug balíček nainstalován do připojeného mobilu Xiaomi Redmi Note 11 Pro 5G přes ADB a do `/sdcard/Download/` nahrány GEDCOM stromy `9i7efa_248548bkfd5396b740a9bl_A.ged` i `bb2769_70868886mn5a77f2196bb9_A.ged`.
+- [x] 29. **Nativní Immersive Fullscreen a uzamčení Portrait orientace**:
+  - Odstraněn status bar a navigation bar přes `WindowInsetsControllerCompat` v `MainActivity.java` a `styles.xml`.
+  - Pevně uzamčena orientace na výšku přes `android:screenOrientation="portrait"` v `AndroidManifest.xml` a `screen.orientation.lock('portrait')` v JS.
 
 
 ## Nové nápady a budoucí rozšíření

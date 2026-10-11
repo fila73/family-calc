@@ -12,10 +12,11 @@ Nativní Android projekt je plně inicializován v adresáři `android/` (`cz.fi
 1. `npm run build` – sestaví webové runtime soubory do složky `www/`.
 2. `npx cap sync android` – synchronizuje webové assety a pluginy do `android/`.
 3. Správa ikon: zdrojová grafika `google-play/assets/icon-512.png` se exportuje do všech hustot `android/app/src/main/res/mipmap-*/` a do webových `icons/icon-512.png` a `icons/icon-192.png`. Barva pozadí adaptivní ikony je definována v `res/values/ic_launcher_background.xml` (`#09090b`).
-4. Sestavení APK / AAB přes Gradle:
+4. Celoobrazovkový režim a orientace: `AndroidManifest.xml` uzamyká orientaci na výšku (`android:screenOrientation="portrait"`) a `MainActivity.java` s `styles.xml` aktivují Immersive Sticky Fullscreen (skrytí stavové i navigační lišty pro nerušené ovládání kalkulačky).
+5. Sestavení APK / AAB přes Gradle:
    - `cd android && .\gradlew.bat assembleDebug` – vytvoří testovací balíček `build-android/Rodinna-Kalkulacka-debug.apk` (4,76 MB).
    - `cd android && .\gradlew.bat bundleRelease` – vytvoří produkční balíček pro Google Play `build-android/Rodinna-Kalkulacka-release.aab` (3,41 MB).
-5. Pro iOS (na macOS s Xcode):
+6. Pro iOS (na macOS s Xcode):
    - `npx cap add ios`
    - `npx cap sync ios`
    - `npx cap open ios`
