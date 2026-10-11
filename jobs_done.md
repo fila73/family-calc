@@ -169,4 +169,11 @@
     - **Bezplatná podpora**: tlačítko pro udělení 5hvězdičkového hodnocení na Google Play Store (`#openPlayReviewBtn`).
   - Plná integrace v `js/app.js`: obsluha událostí, kopírování do schránky s haptickou a vizuální odezvou (toast), zavírání klávesou Escape a kliknutím na pozadí.
   - Otestováno a ověřeno v headless testech (75/75 testů) i živě v prohlížeči pomocí `browser_subagent`.
-- [x] Aktualizace Service Workeru (`sw.js`) na verzi `family-calc-v12`.
+- [x] Aktualizace Service Workeru (`sw.js`) na verzi `family-calc-v13`.
+- [x] Generování a integrace oficiálního českého QR kódu platby (standard SPAYD):
+  - Číslo účtu: `3649682601 / 6363` (Partners Banka a.s.).
+  - Matematický dopočet a ověření IBANu dle standardu ČNB: `CZ5863630000003649682601`.
+  - Vygenerován ostrý skenovatelný SPAYD platební řetězec: `SPD*1.0*ACC:CZ5863630000003649682601*CC:CZK*MSG:Podpora Rodinna kalkulacka*`.
+  - Vygenerován ostrý vektorový formát `img/qr-platba.svg` i rastrový PNG formát `img/qr-platba.png`.
+  - Přepracováno vizuální rozvržení platby: vycentrovaný QR kód s jemným stínem, elegantní boxy údajů bez lámání textu, okamžité kopírování účtu do schránky.
+  - Vše otestováno a ověřeno v headless testech (75/75 testů) i živě v prohlížeči.

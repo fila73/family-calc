@@ -539,53 +539,23 @@
           </div>
           <div class="donate-qr-wrapper">
             <div class="donate-qr-box">
-              <svg width="150" height="150" viewBox="0 0 160 160" fill="none" class="donate-qr-svg" aria-label="QR kód pro platbu">
-                <rect width="160" height="160" rx="10" fill="#ffffff"/>
-                <rect x="14" y="14" width="38" height="38" rx="4" fill="#09090b"/>
-                <rect x="22" y="22" width="22" height="22" rx="2" fill="#ffffff"/>
-                <rect x="26" y="26" width="14" height="14" rx="1" fill="#09090b"/>
-                
-                <rect x="108" y="14" width="38" height="38" rx="4" fill="#09090b"/>
-                <rect x="116" y="22" width="22" height="22" rx="2" fill="#ffffff"/>
-                <rect x="120" y="26" width="14" height="14" rx="1" fill="#09090b"/>
-
-                <rect x="14" y="108" width="38" height="38" rx="4" fill="#09090b"/>
-                <rect x="22" y="116" width="22" height="22" rx="2" fill="#ffffff"/>
-                <rect x="26" y="120" width="14" height="14" rx="1" fill="#09090b"/>
-
-                <rect x="60" y="20" width="10" height="10" fill="#09090b"/>
-                <rect x="76" y="20" width="18" height="10" fill="#09090b"/>
-                <rect x="60" y="36" width="16" height="16" fill="#09090b"/>
-                <rect x="82" y="36" width="12" height="12" fill="#09090b"/>
-
-                <rect x="20" y="60" width="26" height="12" fill="#09090b"/>
-                <rect x="20" y="78" width="14" height="16" fill="#09090b"/>
-                <rect x="40" y="78" width="20" height="10" fill="#09090b"/>
-
-                <rect x="60" y="60" width="40" height="40" rx="6" fill="#f59e0b"/>
-                <text x="80" y="86" font-size="22" text-anchor="middle" fill="#000000">☕</text>
-
-                <rect x="106" y="60" width="18" height="12" fill="#09090b"/>
-                <rect x="130" y="60" width="16" height="26" fill="#09090b"/>
-                <rect x="110" y="78" width="14" height="16" fill="#09090b"/>
-
-                <rect x="60" y="106" width="14" height="20" fill="#09090b"/>
-                <rect x="80" y="112" width="14" height="14" fill="#09090b"/>
-                <rect x="60" y="132" width="28" height="14" fill="#09090b"/>
-                <rect x="100" y="106" width="16" height="16" fill="#09090b"/>
-                <rect x="122" y="106" width="24" height="10" fill="#09090b"/>
-                <rect x="100" y="128" width="46" height="18" fill="#09090b"/>
-              </svg>
+              <img src="img/qr-platba.svg" width="150" height="150" alt="QR kód pro platbu (Partners Banka)" class="donate-qr-img" />
             </div>
             <div class="donate-bank-details">
               <div class="donate-bank-row">
-                <span class="donate-bank-lbl">Číslo účtu:</span>
-                <span class="donate-bank-val" id="donateAccNumber">2401234567 / 2010</span>
-                <button class="donate-copy-btn" id="copyAccBtn" type="button" title="Zkopírovat číslo účtu">📋 Kopírovat</button>
+                <span class="donate-bank-lbl">Číslo účtu (Partners Banka):</span>
+                <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px;">
+                  <span class="donate-bank-val" id="donateAccNumber" style="font-weight: 700; color: #38bdf8;">3649682601 / 6363</span>
+                  <button class="donate-copy-btn" id="copyAccBtn" type="button" title="Zkopírovat číslo účtu">📋 Kopírovat</button>
+                </div>
+              </div>
+              <div class="donate-bank-row">
+                <span class="donate-bank-lbl">IBAN:</span>
+                <span class="donate-bank-val" style="font-size: 0.82rem; color: #a1a1aa;">CZ5863630000003649682601</span>
               </div>
               <div class="donate-bank-row">
                 <span class="donate-bank-lbl">Zpráva pro příjemce:</span>
-                <span class="donate-bank-val">Podpora Rodinná kalkulačka</span>
+                <span class="donate-bank-val" style="color: #cbd5e1;">Podpora Rodinná kalkulačka</span>
               </div>
               <div class="donate-bank-row">
                 <span class="donate-bank-lbl">Doporučený příspěvek:</span>
