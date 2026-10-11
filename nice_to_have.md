@@ -40,6 +40,12 @@
   - Zpřesněna redukce sešvagřených synovců a neteří (`w/h ➔ b/z ➔ s/d = b ➔ s/d`).
   - Opravena reciproční perspektiva ve vzájemném vztahu, přidán vizuální neonový indikátor aktivního tlačítka, odznak a breadcrumbs.
   - Headless testovací suite (`npm test`) s nulovým dopadem na browser kredity a 100% úspěšností (75 testů).
+- [x] 18. **Příprava pro Google Play Store a mobilní sestavení**:
+  - Kompletní balíček v `google-play/` obsahující zásady ochrany soukromí (`privacy.html`), texty zápisu (`STORE_LISTING.md`) a příručku pro Keystore a release (`RELEASE_GUIDE.md`).
+- [x] 19. **Čistá etická monetizace (Zero-ads, Zero-tracking Tip Jar)**:
+  - Modální okno `#donateModal` s českou QR platbou (SPAYD standard) a přímým číslem účtu (0 % poplatků), mezinárodními odkazy (Ko-fi, Buy Me a Coffee) a tlačítkem pro hodnocení na Google Play.
+- [x] 20. **Oprava kontrastu rozbalovacích comboboxů v GEDCOM porovnávači**:
+  - Doplnění `color-scheme: dark;` a explicitního tmavého pozadí pro `option` prvky v dialogu výběru osob pro zabránění bílého písma na bílém podkladu.
 
 ## Nové nápady a budoucí rozšíření
 1. **Export rodokmenu do vektorového SVG / PDF**:

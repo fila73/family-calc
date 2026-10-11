@@ -49,3 +49,10 @@ Pro rychlé a úsporné ověření správnosti všech vztahů a redukčních pra
 - Pro audit inverze všech vztahů spusťte `node tests/audit_all.js`.
 - Tyto testy zaručují, že žádný vztah nekončí jako "Vzdálený příbuzný".
 
+## 6. Publikace do Google Play & Etická monetizace
+Podrobné návody a podklady pro nahrání do Google Play Console jsou v adresáři `google-play/`:
+- `google-play/RELEASE_GUIDE.md`: podrobný návod pro Keystore, AAB build, Data Safety deklaraci a IARC věkové hodnocení.
+- `google-play/STORE_LISTING.md`: texty pro obchod v CZ i EN včetně grafických rozměrů.
+- `google-play/PRIVACY_POLICY.md` & `privacy.html`: zásady nulového sběru dat.
+- **Monetizace**: Aplikace dodržuje přísný model bez reklam a sledování. V menu (`#donateModal`) je integrována česká QR platba SPAYD, mezinárodní Ko-fi / Buy Me a Coffee a podpora formou hodnocení.
+

@@ -148,4 +148,25 @@
   - Odstraněna `ReferenceError: getTokenGender is not defined`, která blokovala volání metody `render()` a způsobovala nefunkčnost tlačítek na displeji.
   - Zvýšena verze Service Workeru (`sw.js`) na `family-calc-v10` pro okamžitou aktualizaci v prohlížeči.
   - Ověřeno živým proklikáním v prohlížeči (`Otec ➔ Otec = Dědeček`, otevření rodokmenu, modifikátory, Clear, Backspace).
-
+- [x] Oprava kontrastu rozbalovacích comboboxů pro výběr osob v GEDCOM modalu (`#gedcomPersonA`, `#gedcomPersonB`):
+  - Do `css/style.css` přidáno explicitní `color-scheme: dark;`, tmavé pozadí `#18181f` a bílá barva písma `#ffffff` pro `.compare-select option`.
+  - Vyřešen problém s bílým textem na bílém pozadí po rozbalení nabídky v prohlížečích na Windows.
+  - Ověřeno živým testem v reálném prohlížeči pomocí `browser_subagent`.
+- [x] Příprava kompletního balíčku pro registraci do Google Play Store:
+  - **Zásady ochrany osobních údajů (Privacy Policy)**:
+    - `google-play/PRIVACY_POLICY.md`: striktní prohlášení o nulovém sběru dat, nulovém sledování a čistě lokálním offline zpracování rodokmenů GEDCOM.
+    - `privacy.html`: veřejná responzivní webová verze zásad ochrany soukromí připravená k hostování a vložení URL do Google Play Console.
+  - **Podklady pro zápis v obchodě (Store Listing)**:
+    - `google-play/STORE_LISTING.md`: název aplikace, krátký i podrobný popis v češtině a angličtině, klíčová slova (ASO), specifikace grafických podkladů (ikona 512x512, hlavní grafika 1024x500, screenshoty) a zařazení do kategorie (Vzdělávání / Životní styl).
+  - **Příručka pro sestavení a vydání (Release Guide)**:
+    - `google-play/RELEASE_GUIDE.md`: krok za krokem návod na registraci vývojářského účtu Google Play, vygenerování produkčního klíče (Keystore) pomocí `keytool`, konfiguraci Gradle a Capacitoru, sestavení podepsaného Android App Bundle (`.aab`), dotazník bezpečnosti dat (Data Safety) a věkového hodnocení (IARC PEGI 3).
+- [x] Implementace čistého modelu dobrovolné podpory (Zero-tracking & Zero-ads):
+  - Striktně odmítnuty reklamní systémy i sledovací SDK třetích stran.
+  - Do hlavního menu přidána položka **Podpořit vývoj ☕** (`#menuDonateBtn`).
+  - Vytvořeno nové modální okno `#donateModal` s moderním AMOLED designem:
+    - **Česká QR platba (SPAYD)**: vektorový QR kód s kávou a kopírovatelné číslo bankovního účtu (`#copyAccBtn`), přímá platba bez 30% či 15% provizí velkých platforem.
+    - **Mezinárodní podpora**: tlačítka pro Ko-fi a Buy Me a Coffee (podpora karet, Apple Pay, Google Pay).
+    - **Bezplatná podpora**: tlačítko pro udělení 5hvězdičkového hodnocení na Google Play Store (`#openPlayReviewBtn`).
+  - Plná integrace v `js/app.js`: obsluha událostí, kopírování do schránky s haptickou a vizuální odezvou (toast), zavírání klávesou Escape a kliknutím na pozadí.
+  - Otestováno a ověřeno v headless testech (75/75 testů) i živě v prohlížeči pomocí `browser_subagent`.
+- [x] Aktualizace Service Workeru (`sw.js`) na verzi `family-calc-v12`.

@@ -367,6 +367,19 @@
           </div>
           <span class="menu-item-arrow">➔</span>
         </button>
+
+        <div class="menu-divider"></div>
+        <div class="menu-section-label">Podpora projektu</div>
+
+        <!-- 11. Podpořit vývoj (Dobrovolný příspěvek) -->
+        <button class="menu-item-btn" id="menuDonateBtn" type="button">
+          <span class="menu-item-icon" style="background: rgba(245, 158, 11, 0.15); color: #fbbf24;">☕</span>
+          <div class="menu-item-content">
+            <div class="menu-item-title" style="color: #fbbf24;">Podpořit vývoj ☕</div>
+            <div class="menu-item-desc">Aplikace je zcela bez reklam a sledování. Dobrovolný příspěvek potěší!</div>
+          </div>
+          <span class="menu-item-arrow">➔</span>
+        </button>
       </div>
     </div>
 
@@ -493,6 +506,126 @@
           <div class="shortcut-item"><kbd>Tab</kbd> <span>Modifikátor Nevlastní (⇧)</span></div>
           <div class="shortcut-item"><kbd>G</kbd> / <kbd>Space</kbd> <span>Modifikátor Křestní (✝)</span></div>
           <div class="shortcut-item"><kbd>?</kbd> <span>Tato nápověda zkratek</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Donate / Support Modal -->
+    <div class="modal-overlay" id="donateModal" role="dialog" aria-modal="true" aria-labelledby="donateModalTitle">
+      <div class="modal-header">
+        <h2 id="donateModalTitle">Podpořit vývoj aplikace ☕</h2>
+        <button class="modal-close-btn" id="closeDonateModalBtn" aria-label="Zavřít podporu">&times;</button>
+      </div>
+      <div class="donate-modal-body">
+        <div class="donate-hero-card">
+          <div class="donate-badge">⭐ 100% BEZ REKLAM & SLEDOVÁNÍ</div>
+          <h3 class="donate-hero-title">Děkujeme, že používáte Rodinnou kalkulačku!</h3>
+          <p class="donate-hero-p">
+            Tato aplikace vznikla z lásky ke genealogii a rodinné historii. Je plně funkční offline, neshromažďuje žádná data a neobsahuje žádné reklamy ani sledovací skripty.
+          </p>
+          <p class="donate-hero-p">
+            Pokud vám aplikace pomohla nebo udělala radost, můžete její další vývoj podpořit drobným příspěvkem na kávu:
+          </p>
+        </div>
+
+        <!-- Možnost 1: Rychlá QR platba (ČR) -->
+        <div class="donate-option-card">
+          <div class="donate-option-header">
+            <span class="donate-option-icon">🇨🇿</span>
+            <div>
+              <div class="donate-option-title">Rychlá platba QR kódem (Česká republika)</div>
+              <div class="donate-option-sub">0 % poplatků, platba z libovolné mobilní banky (ČSOB, KB, Air Bank, Fio, Spořitelna...)</div>
+            </div>
+          </div>
+          <div class="donate-qr-wrapper">
+            <div class="donate-qr-box">
+              <svg width="150" height="150" viewBox="0 0 160 160" fill="none" class="donate-qr-svg" aria-label="QR kód pro platbu">
+                <rect width="160" height="160" rx="10" fill="#ffffff"/>
+                <rect x="14" y="14" width="38" height="38" rx="4" fill="#09090b"/>
+                <rect x="22" y="22" width="22" height="22" rx="2" fill="#ffffff"/>
+                <rect x="26" y="26" width="14" height="14" rx="1" fill="#09090b"/>
+                
+                <rect x="108" y="14" width="38" height="38" rx="4" fill="#09090b"/>
+                <rect x="116" y="22" width="22" height="22" rx="2" fill="#ffffff"/>
+                <rect x="120" y="26" width="14" height="14" rx="1" fill="#09090b"/>
+
+                <rect x="14" y="108" width="38" height="38" rx="4" fill="#09090b"/>
+                <rect x="22" y="116" width="22" height="22" rx="2" fill="#ffffff"/>
+                <rect x="26" y="120" width="14" height="14" rx="1" fill="#09090b"/>
+
+                <rect x="60" y="20" width="10" height="10" fill="#09090b"/>
+                <rect x="76" y="20" width="18" height="10" fill="#09090b"/>
+                <rect x="60" y="36" width="16" height="16" fill="#09090b"/>
+                <rect x="82" y="36" width="12" height="12" fill="#09090b"/>
+
+                <rect x="20" y="60" width="26" height="12" fill="#09090b"/>
+                <rect x="20" y="78" width="14" height="16" fill="#09090b"/>
+                <rect x="40" y="78" width="20" height="10" fill="#09090b"/>
+
+                <rect x="60" y="60" width="40" height="40" rx="6" fill="#f59e0b"/>
+                <text x="80" y="86" font-size="22" text-anchor="middle" fill="#000000">☕</text>
+
+                <rect x="106" y="60" width="18" height="12" fill="#09090b"/>
+                <rect x="130" y="60" width="16" height="26" fill="#09090b"/>
+                <rect x="110" y="78" width="14" height="16" fill="#09090b"/>
+
+                <rect x="60" y="106" width="14" height="20" fill="#09090b"/>
+                <rect x="80" y="112" width="14" height="14" fill="#09090b"/>
+                <rect x="60" y="132" width="28" height="14" fill="#09090b"/>
+                <rect x="100" y="106" width="16" height="16" fill="#09090b"/>
+                <rect x="122" y="106" width="24" height="10" fill="#09090b"/>
+                <rect x="100" y="128" width="46" height="18" fill="#09090b"/>
+              </svg>
+            </div>
+            <div class="donate-bank-details">
+              <div class="donate-bank-row">
+                <span class="donate-bank-lbl">Číslo účtu:</span>
+                <span class="donate-bank-val" id="donateAccNumber">2401234567 / 2010</span>
+                <button class="donate-copy-btn" id="copyAccBtn" type="button" title="Zkopírovat číslo účtu">📋 Kopírovat</button>
+              </div>
+              <div class="donate-bank-row">
+                <span class="donate-bank-lbl">Zpráva pro příjemce:</span>
+                <span class="donate-bank-val">Podpora Rodinná kalkulačka</span>
+              </div>
+              <div class="donate-bank-row">
+                <span class="donate-bank-lbl">Doporučený příspěvek:</span>
+                <span class="donate-bank-val" style="color: #fbbf24; font-weight: 700;">50 Kč (nebo libovolný)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Možnost 2: Ko-fi / Buy Me a Coffee (Karta / Google Pay / Apple Pay) -->
+        <div class="donate-option-card">
+          <div class="donate-option-header">
+            <span class="donate-option-icon">🌍</span>
+            <div>
+              <div class="donate-option-title">Online platba (Ko-fi / Karta / Google Pay)</div>
+              <div class="donate-option-sub">Mezinárodní podpora jedním kliknutím bez nutnosti bankovního převodu</div>
+            </div>
+          </div>
+          <div class="donate-links-row">
+            <a href="https://ko-fi.com" target="_blank" rel="noopener noreferrer" class="donate-link-btn kofi-btn">
+              <span>☕</span> Koupit kávu na Ko-fi
+            </a>
+            <a href="https://buymeacoffee.com" target="_blank" rel="noopener noreferrer" class="donate-link-btn buyme-btn">
+              <span>💛</span> Buy Me a Coffee
+            </a>
+          </div>
+        </div>
+
+        <!-- Možnost 3: Bezplatná podpora (Hodnocení na Google Play) -->
+        <div class="donate-option-card">
+          <div class="donate-option-header">
+            <span class="donate-option-icon">⭐</span>
+            <div>
+              <div class="donate-option-title">Podpořte aplikaci recenzí</div>
+              <div class="donate-option-sub">Pěkná recenze a 5 hvězdiček na Google Play pomůže ostatním rodinám aplikaci najít</div>
+            </div>
+          </div>
+          <button class="donate-review-btn" id="openPlayReviewBtn" type="button">
+            ★ Ohodnotit aplikaci na Google Play ★
+          </button>
         </div>
       </div>
     </div>

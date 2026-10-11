@@ -34,4 +34,6 @@ Interaktivní webová aplikace inspirovaná čínskou kalkulačkou příbuzenstv
   - Čeština 🇨🇿, Slovenčina 🇸🇰, Polski 🇵🇱, Deutsch 🇩🇪, English 🇬🇧, Français 🇫🇷, Italiano 🇮🇹, Español 🇪🇸, Русский 🇷🇺, 中文 🇨🇳, 日本語 🇯🇵, 한국어 🇰🇷, Tiếng Việt 🇻🇳,
   - Українська 🇺🇦, Português 🇵🇹, Nederlands 🇳🇱, Magyar 🇭🇺, Türkçe 🇹🇷, Ελληνικά 🇬🇷, Svenska 🇸🇪, हिन्दी 🇮🇳, Bahasa Indonesia 🇮🇩, العربية 🇸🇦, Hrvatski 🇭🇷, Română 🇷🇴.
 - **Připraveno pro mobilní aplikace**: čistý kód bez zbytečných závislostí, podpora PWA a připravenost pro zabalení do Android (APK/AAB) a iOS pomocí Capacitoru.
+- **Registrace do Google Play Store**: kompletní podklady v adresáři `google-play/` (Zásady ochrany soukromí `privacy.html`, texty zápisu `STORE_LISTING.md`, příručka pro podpis a vydání `RELEASE_GUIDE.md`).
+- **Čistá etická monetizace (Zero-ads & Zero-tracking)**: žádné reklamy, žádné analytické ani sledovací skripty. Aplikace funguje 100% offline. Možnost dobrovolného příspěvku v menu (dialog `#donateModal`) přes českou QR platbu SPAYD (0 % poplatků), Ko-fi / Buy Me a Coffee nebo 5hvězdičkové hodnocení na Google Play.
 

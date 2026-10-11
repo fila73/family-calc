@@ -65,5 +65,8 @@ Vytvoření webové kalkulačky rodinných vztahů inspirované čínskou kalkul
 12. Oprava inverze `step_h` a `step_w` v `invertChain` a korekce mluvčího z pohledu cílové osoby při vzájemném vztahu.
 13. Zdokonalení UI vzájemného vztahu (aktivní stav tlačítka `#keyMutual`, indikátor v breadcrumbs a odznak).
 14. Vytvoření headless testovací sady (`tests/reductions_mutual.test.js`) s rychlým ověřením bez nutnosti browseru (celkem 75 testů).
-15. Průběžné commitování do lokálního gitu a aktualizace stavu.
+15. Oprava kontrastu rozbalovacích comboboxů v GEDCOM dialogu (`color-scheme: dark;` a explicitní tmavé pozadí `option`).
+16. Příprava kompletního balíčku pro registraci do Google Play Store (`google-play/PRIVACY_POLICY.md`, `privacy.html`, `google-play/STORE_LISTING.md`, `google-play/RELEASE_GUIDE.md`).
+17. Implementace etické monetizace bez sledování a reklam (dialog `#donateModal` s českou QR platbou SPAYD, Ko-fi, Buy Me a Coffee a hodnocením na Google Play).
+18. Průběžné commitování do lokálního gitu a aktualizace stavu.
 

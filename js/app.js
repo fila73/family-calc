@@ -86,6 +86,7 @@ class FamilyCalcApp {
     this.menuCompareBtn = document.getElementById('menuCompareBtn');
     this.menuGedcomBtn = document.getElementById('menuGedcomBtn');
     this.menuShortcutsBtn = document.getElementById('menuShortcutsBtn');
+    this.menuDonateBtn = document.getElementById('menuDonateBtn');
 
     // Keypad keys
     this.keypad = document.getElementById('keypad');
@@ -183,6 +184,13 @@ class FamilyCalcApp {
     // Keyboard Shortcuts Modal elements
     this.shortcutsModal = document.getElementById('shortcutsModal');
     this.closeShortcutsModalBtn = document.getElementById('closeShortcutsModalBtn');
+
+    // Donate / Support Modal elements
+    this.donateModal = document.getElementById('donateModal');
+    this.closeDonateModalBtn = document.getElementById('closeDonateModalBtn');
+    this.copyAccBtn = document.getElementById('copyAccBtn');
+    this.donateAccNumber = document.getElementById('donateAccNumber');
+    this.openPlayReviewBtn = document.getElementById('openPlayReviewBtn');
   }
 
   initEventListeners() {
@@ -276,6 +284,42 @@ class FamilyCalcApp {
       this.menuShortcutsBtn.addEventListener('click', () => {
         this.closeMenu();
         this.openShortcutsModal();
+      });
+    }
+    if (this.menuDonateBtn) {
+      this.menuDonateBtn.addEventListener('click', () => {
+        this.closeMenu();
+        this.openDonateModal();
+      });
+    }
+    if (this.closeDonateModalBtn) {
+      this.closeDonateModalBtn.addEventListener('click', () => this.closeDonateModal());
+    }
+    if (this.donateModal) {
+      this.donateModal.addEventListener('click', (e) => {
+        if (e.target === this.donateModal) this.closeDonateModal();
+      });
+    }
+    if (this.copyAccBtn && this.donateAccNumber) {
+      this.copyAccBtn.addEventListener('click', () => {
+        this.triggerHaptic();
+        const accText = this.donateAccNumber.textContent.trim();
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(accText).then(() => {
+            this.showToast('Číslo účtu zkopírováno do schránky 📋');
+          }).catch(() => {
+            this.showToast(accText);
+          });
+        } else {
+          this.showToast(accText);
+        }
+      });
+    }
+    if (this.openPlayReviewBtn) {
+      this.openPlayReviewBtn.addEventListener('click', () => {
+        this.triggerHaptic();
+        window.open('https://play.google.com/store/apps/details?id=cz.storytold.familycalc', '_blank');
+        this.showToast('Děkujeme za recenzi a podporu! ⭐');
       });
     }
 
@@ -473,7 +517,8 @@ class FamilyCalcApp {
         this.voiceModal,
         this.compareModal,
         this.gedcomModal,
-        this.shortcutsModal
+        this.shortcutsModal,
+        this.donateModal
       ].some((m) => m && m.classList.contains('open'));
 
       if (e.key === 'Escape') {
@@ -493,6 +538,7 @@ class FamilyCalcApp {
           if (this.compareModal && this.compareModal.classList.contains('open')) this.closeCompareModal();
           if (this.gedcomModal && this.gedcomModal.classList.contains('open')) this.closeGedcomModal();
           if (this.shortcutsModal && this.shortcutsModal.classList.contains('open')) this.closeShortcutsModal();
+          if (this.donateModal && this.donateModal.classList.contains('open')) this.closeDonateModal();
         } else {
           this.clearAll();
         }
@@ -2112,6 +2158,16 @@ class FamilyCalcApp {
       <div style="margin-top: 8px; font-size: 13px; color: #a78bfa;">🔗 Propojení přes rodokmen: ${invA.map((t) => dict.labels.tokens[t] || t).join(' ➔ ')} ➔ ${chainB.map((t) => dict.labels.tokens[t] || t).join(' ➔ ')}</div>
     `;
     this.compareResultCard.style.display = 'block';
+  }
+
+  // === Support / Donate Modal ===
+  openDonateModal() {
+    this.triggerHaptic();
+    if (this.donateModal) this.donateModal.classList.add('open');
+  }
+
+  closeDonateModal() {
+    if (this.donateModal) this.donateModal.classList.remove('open');
   }
 
   // === Shortcuts Modal ===
