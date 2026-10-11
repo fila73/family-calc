@@ -217,5 +217,7 @@
   - Řetězec *Já ➔ manžel ➔ sestra ➔ syn ➔ syn* (`h, z, s, s`) nyní striktně zachovává afinitu se správnou hodnotou **0 % sdílené DNA** (`💍 Sešvagření (afinitní vztah)`), statutem mimo zákonné dědické třídy a potvrzením přípustnosti sňatku dle § 675 NOZ.
   - Slovník `cs.js` a generátor hlubokých generací rozšířen o kompletní sadu sešvagřených synovců, neteří, prasynovců, praneteří a jejich doplňkových recipročních protějšků (celkem 160 vztahů / 320 invertních auditních běhů se 100% úspěšností).
   - Rozšířena testovací sada na **82 / 82 úspěšně procházejících testů** (`npm test`).
+- [x] Spuštění a ověření lokálního vývojového serveru na portu **30099** (`http://localhost:30099/`):
+  - Spuštěn proces `server.js` na pozadí, HTTP dotaz ověřil úspěšné servírování aplikace.
 
 
