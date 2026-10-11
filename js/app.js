@@ -208,82 +208,97 @@ class FamilyCalcApp {
     this.reciprocalLabel.textContent = dict.labels.reciprocal + ':';
 
     const t = dict.labels.tokens;
+    const cap = (str) => (!str ? '' : str.charAt(0).toUpperCase() + str.slice(1));
+
+    // Base sibling labels per language
+    let broOldMain = 'Bratr', broOldSub = 'starší';
+    let broYoungMain = 'Bratr', broYoungSub = 'mladší';
+    let sisOldMain = 'Sestra', sisOldSub = 'starší';
+    let sisYoungMain = 'Sestra', sisYoungSub = 'mladší';
+
+    if (this.currentLang === 'zh') {
+      broOldMain = '兄'; broOldSub = '长';
+      broYoungMain = '弟'; broYoungSub = '幼';
+      sisOldMain = '姐'; sisOldSub = '长';
+      sisYoungMain = '妹'; sisYoungSub = '幼';
+    } else if (this.currentLang === 'ko') {
+      broOldMain = '형/오빠'; broOldSub = '연상';
+      broYoungMain = '남동생'; broYoungSub = '연하';
+      sisOldMain = '누나/언니'; sisOldSub = '연상';
+      sisYoungMain = '여동생'; sisYoungSub = '연하';
+    } else if (this.currentLang === 'ru') {
+      broOldMain = 'Брат'; broOldSub = 'старший';
+      broYoungMain = 'Брат'; broYoungSub = 'младший';
+      sisOldMain = 'Сестра'; sisOldSub = 'старшая';
+      sisYoungMain = 'Сестра'; sisYoungSub = 'младшая';
+    } else if (this.currentLang === 'pl') {
+      broOldMain = 'Brat'; broOldSub = 'starszy';
+      broYoungMain = 'Brat'; broYoungSub = 'młodszy';
+      sisOldMain = 'Siostra'; sisOldSub = 'starsza';
+      sisYoungMain = 'Siostra'; sisYoungSub = 'młodsza';
+    } else if (this.currentLang === 'de') {
+      broOldMain = 'Bruder'; broOldSub = 'älterer';
+      broYoungMain = 'Bruder'; broYoungSub = 'jüngerer';
+      sisOldMain = 'Schwester'; sisOldSub = 'ältere';
+      sisYoungMain = 'Schwester'; sisYoungSub = 'jüngere';
+    } else if (this.currentLang === 'sk') {
+      broOldMain = 'Brat'; broOldSub = 'starší';
+      broYoungMain = 'Brat'; broYoungSub = 'mladší';
+      sisOldMain = 'Sestra'; sisOldSub = 'staršia';
+      sisYoungMain = 'Sestra'; sisYoungSub = 'mladšia';
+    } else if (this.currentLang === 'cs') {
+      broOldMain = 'Bratr'; broOldSub = 'starší';
+      broYoungMain = 'Bratr'; broYoungSub = 'mladší';
+      sisOldMain = 'Sestra'; sisOldSub = 'starší';
+      sisYoungMain = 'Sestra'; sisYoungSub = 'mladší';
+    } else {
+      broOldMain = 'Bro'; broOldSub = 'elder';
+      broYoungMain = 'Bro'; broYoungSub = 'younger';
+      sisOldMain = 'Sis'; sisOldSub = 'elder';
+      sisYoungMain = 'Sis'; sisYoungSub = 'younger';
+    }
 
     if (this.modifier === 'step') {
-      // Shifted / Step labels
-      this.setKeyContent(this.keyHusband, t.step_h || 'nový manžel', 'nevlastní');
-      this.setKeyContent(this.keyWife, t.step_w || 'nová manželka', 'nevlastní');
-      this.setKeyContent(this.keyFather, t.step_f || 'otčím', 'nevlastní');
-      this.setKeyContent(this.keyMother, t.step_m || 'macecha', 'nevlastní');
-      this.setKeyContent(this.keySon, t.step_s || 'pastorek', 'nevlastní');
-      this.setKeyContent(this.keyDaughter, t.step_d || 'pastorkyně', 'nevlastní');
-      this.setKeyContent(this.keyBrotherOld, t.step_b || 'nevl. bratr', 'nevlastní');
-      this.setKeyContent(this.keyBrotherYoung, t.step_b || 'nevl. bratr', 'nevlastní');
-      this.setKeyContent(this.keySisterOld, t.step_z || 'nevl. sestra', 'nevlastní');
-      this.setKeyContent(this.keySisterYoung, t.step_z || 'nevl. sestra', 'nevlastní');
+      // Shifted / Step labels:
+      // Main text: modified term (Macecha, Otčím, Pastorek...)
+      // Sub text: original base label (Matka, Otec, Syn...)
+      this.setKeyContent(this.keyFather, cap(t.step_f || 'Otčím'), t.f, true);
+      this.setKeyContent(this.keyMother, cap(t.step_m || 'Macecha'), t.m, true);
+      this.setKeyContent(this.keySon, cap(t.step_s || 'Pastorek'), t.s, true);
+      this.setKeyContent(this.keyDaughter, cap(t.step_d || 'Pastorkyně'), t.d, true);
+      this.setKeyContent(this.keyHusband, cap(t.step_h || 'Nový manžel'), t.h, true);
+      this.setKeyContent(this.keyWife, cap(t.step_w || 'Nová manželka'), t.w, true);
+      this.setKeyContent(this.keyBrotherOld, cap(t.step_b || 'Nevlastní bratr'), broOldMain, true);
+      this.setKeyContent(this.keyBrotherYoung, cap(t.step_b || 'Nevlastní bratr'), broYoungMain, true);
+      this.setKeyContent(this.keySisterOld, cap(t.step_z || 'Nevlastní sestra'), sisOldMain, true);
+      this.setKeyContent(this.keySisterYoung, cap(t.step_z || 'Nevlastní sestra'), sisYoungMain, true);
     } else if (this.modifier === 'god') {
-      // Godparent labels
-      this.setKeyContent(this.keyHusband, t.god_f || 'kmotr', 'křestní');
-      this.setKeyContent(this.keyWife, t.god_m || 'kmotra', 'křestní');
-      this.setKeyContent(this.keyFather, t.god_f || 'kmotr', 'křestní');
-      this.setKeyContent(this.keyMother, t.god_m || 'kmotra', 'křestní');
-      this.setKeyContent(this.keySon, t.god_s || 'kmotřenec', 'křestní');
-      this.setKeyContent(this.keyDaughter, t.god_d || 'kmotřenka', 'křestní');
-      this.setKeyContent(this.keyBrotherOld, t.god_s || 'kmotřenec', 'křestní');
-      this.setKeyContent(this.keyBrotherYoung, t.god_s || 'kmotřenec', 'křestní');
-      this.setKeyContent(this.keySisterOld, t.god_d || 'kmotřenka', 'křestní');
-      this.setKeyContent(this.keySisterYoung, t.god_d || 'kmotřenka', 'křestní');
-    } else {
-      // Standard key labels
-      this.setKeyContent(this.keyHusband, t.h, '');
-      this.setKeyContent(this.keyWife, t.w, '');
-      this.setKeyContent(this.keyFather, t.f, '');
-      this.setKeyContent(this.keyMother, t.m, '');
-      this.setKeyContent(this.keySon, t.s, '');
-      this.setKeyContent(this.keyDaughter, t.d, '');
+      // Godparent labels: only parents & children are meaningful.
+      // Invalid relations (křestní manžel, křestní bratr...) are disabled.
+      this.setKeyContent(this.keyFather, cap(t.god_f || 'Kmotr'), t.f, true);
+      this.setKeyContent(this.keyMother, cap(t.god_m || 'Kmotra'), t.m, true);
+      this.setKeyContent(this.keySon, cap(t.god_s || 'Kmotřenec'), t.s, true);
+      this.setKeyContent(this.keyDaughter, cap(t.god_d || 'Kmotřenka'), t.d, true);
 
-      // Siblings
-      if (this.currentLang === 'zh') {
-        this.setKeyContent(this.keyBrotherOld, '兄', '长');
-        this.setKeyContent(this.keyBrotherYoung, '弟', '幼');
-        this.setKeyContent(this.keySisterOld, '姐', '长');
-        this.setKeyContent(this.keySisterYoung, '妹', '幼');
-      } else if (this.currentLang === 'ko') {
-        this.setKeyContent(this.keyBrotherOld, '형/오빠', '연상');
-        this.setKeyContent(this.keyBrotherYoung, '남동생', '연하');
-        this.setKeyContent(this.keySisterOld, '누나/언니', '연상');
-        this.setKeyContent(this.keySisterYoung, '여동생', '연하');
-      } else if (this.currentLang === 'ru') {
-        this.setKeyContent(this.keyBrotherOld, 'Брат', 'старший');
-        this.setKeyContent(this.keyBrotherYoung, 'Брат', 'младший');
-        this.setKeyContent(this.keySisterOld, 'Сестра', 'старшая');
-        this.setKeyContent(this.keySisterYoung, 'Сестра', 'младшая');
-      } else if (this.currentLang === 'pl') {
-        this.setKeyContent(this.keyBrotherOld, 'Brat', 'starszy');
-        this.setKeyContent(this.keyBrotherYoung, 'Brat', 'młodszy');
-        this.setKeyContent(this.keySisterOld, 'Siostra', 'starsza');
-        this.setKeyContent(this.keySisterYoung, 'Siostra', 'młodsza');
-      } else if (this.currentLang === 'de') {
-        this.setKeyContent(this.keyBrotherOld, 'Bruder', 'älterer');
-        this.setKeyContent(this.keyBrotherYoung, 'Bruder', 'jüngerer');
-        this.setKeyContent(this.keySisterOld, 'Schwester', 'ältere');
-        this.setKeyContent(this.keySisterYoung, 'Schwester', 'jüngere');
-      } else if (this.currentLang === 'cs') {
-        this.setKeyContent(this.keyBrotherOld, 'Bratr', 'starší');
-        this.setKeyContent(this.keyBrotherYoung, 'Bratr', 'mladší');
-        this.setKeyContent(this.keySisterOld, 'Sestra', 'starší');
-        this.setKeyContent(this.keySisterYoung, 'Sestra', 'mladší');
-      } else if (this.currentLang === 'sk') {
-        this.setKeyContent(this.keyBrotherOld, 'Brat', 'starší');
-        this.setKeyContent(this.keyBrotherYoung, 'Brat', 'mladší');
-        this.setKeyContent(this.keySisterOld, 'Sestra', 'staršia');
-        this.setKeyContent(this.keySisterYoung, 'Sestra', 'mladšia');
-      } else {
-        this.setKeyContent(this.keyBrotherOld, 'Bro', 'elder');
-        this.setKeyContent(this.keyBrotherYoung, 'Bro', 'younger');
-        this.setKeyContent(this.keySisterOld, 'Sis', 'elder');
-        this.setKeyContent(this.keySisterYoung, 'Sis', 'younger');
-      }
+      this.setKeyContent(this.keyHusband, t.h, '', false);
+      this.setKeyContent(this.keyWife, t.w, '', false);
+      this.setKeyContent(this.keyBrotherOld, broOldMain, '', false);
+      this.setKeyContent(this.keyBrotherYoung, broYoungMain, '', false);
+      this.setKeyContent(this.keySisterOld, sisOldMain, '', false);
+      this.setKeyContent(this.keySisterYoung, sisYoungMain, '', false);
+    } else {
+      // Standard key labels (all enabled)
+      this.setKeyContent(this.keyHusband, t.h, '', true);
+      this.setKeyContent(this.keyWife, t.w, '', true);
+      this.setKeyContent(this.keyFather, t.f, '', true);
+      this.setKeyContent(this.keyMother, t.m, '', true);
+      this.setKeyContent(this.keySon, t.s, '', true);
+      this.setKeyContent(this.keyDaughter, t.d, '', true);
+
+      this.setKeyContent(this.keyBrotherOld, broOldMain, broOldSub, true);
+      this.setKeyContent(this.keyBrotherYoung, broYoungMain, broYoungSub, true);
+      this.setKeyContent(this.keySisterOld, sisOldMain, sisOldSub, true);
+      this.setKeyContent(this.keySisterYoung, sisYoungMain, sisYoungSub, true);
     }
 
     this.keyMutual.textContent = dict.labels.mutual;
@@ -291,7 +306,8 @@ class FamilyCalcApp {
     this.updateModifierUI();
   }
 
-  setKeyContent(keyEl, mainText, subText) {
+  setKeyContent(keyEl, mainText, subText, enabled = true) {
+    keyEl.disabled = !enabled;
     if (!subText) {
       keyEl.textContent = mainText;
     } else {
@@ -317,12 +333,14 @@ class FamilyCalcApp {
       this.updateModifierUI();
       this.updateLanguage();
     } else if (this.modifier === 'god') {
+      // Only father, mother, son, daughter are permitted in godparent mode
       if (token === TOKENS.FATHER) finalToken = TOKENS.GOD_FATHER;
       else if (token === TOKENS.MOTHER) finalToken = TOKENS.GOD_MOTHER;
       else if (token === TOKENS.SON) finalToken = TOKENS.GOD_SON;
       else if (token === TOKENS.DAUGHTER) finalToken = TOKENS.GOD_DAUGHTER;
-      else if (token === TOKENS.OLDER_BROTHER || token === TOKENS.YOUNGER_BROTHER || token === TOKENS.BROTHER) finalToken = TOKENS.GOD_SON;
-      else if (token === TOKENS.OLDER_SISTER || token === TOKENS.YOUNGER_SISTER || token === TOKENS.SISTER) finalToken = TOKENS.GOD_DAUGHTER;
+      else {
+        return; // Ignore invalid relations in god mode
+      }
       this.modifier = null;
       this.updateModifierUI();
       this.updateLanguage();
@@ -345,6 +363,11 @@ class FamilyCalcApp {
     this.triggerHaptic();
     this.chain = [];
     this.isMutualView = false;
+    if (this.modifier) {
+      this.modifier = null;
+      this.updateModifierUI();
+      this.updateLanguage();
+    }
     this.render();
   }
 

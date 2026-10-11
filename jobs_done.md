@@ -47,5 +47,8 @@
     - Plná podpora vzájemného vztahu / inverze perspektivy (např. pro mého kmotra jsem já **Kmotřenec** / **Kmotřenka**).
 - [x] Aktualizace a sjednocení všech 8 jazykových balíčků (`cs`, `sk`, `en`, `de`, `pl`, `ru`, `ko`, `zh`) s novými tokeny a kategoriemi vztahů.
 - [x] Rozšíření jednotkových testů na 26 / 26 úspěšně procházejících testů.
-- [x] Aktualizace Service Workeru (`sw.js`) na verzi `family-calc-v2` se strategií Network-First.
-- [x] End-to-end ověření v reálném prohlížeči pomocí `browser_subagent`.
+- [x] Úprava klávesnice při aktivním modifikátoru:
+  - Odstraněn duplicitní nápis modifikátoru ve spodním štítku kláves.
+  - Spodní label (`key-subtext`) nyní zobrazuje **původní název tlačítka** (např. na tlačítku **Macecha** je spodní label **matka**, na **Otčím** je **otec**, na **Pastorek** je **syn** atd.).
+  - U irelevantních vazeb v křestním režimu (✝ Křestní) jsou tlačítka (*Manžel*, *Manželka*, *Bratr*, *Sestra*) automaticky **deaktivována (disabled)**, zešedlá a neklikací.
+- [x] Ověřeno v reálném prohlížeči pomocí `browser_subagent` s pořízením screenshotů.

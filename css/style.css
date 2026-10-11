@@ -478,14 +478,37 @@ body::before {
 }
 
 /* Dynamic highlighting of keys when modifier is active */
-.keypad.shift-step-active .key:not(.key-clear):not(.key-backspace):not(.key-mutual):not(.key-equals) {
+.keypad.shift-step-active .key:not(:disabled):not(.key-clear):not(.key-backspace):not(.key-mutual):not(.key-equals) {
   border-color: rgba(245, 158, 11, 0.4);
   color: #fbbf24;
 }
 
-.keypad.shift-god-active .key:not(.key-clear):not(.key-backspace):not(.key-mutual):not(.key-equals) {
+.keypad.shift-god-active .key:not(:disabled):not(.key-clear):not(.key-backspace):not(.key-mutual):not(.key-equals) {
   border-color: rgba(139, 92, 246, 0.4);
   color: #c4b5fd;
+}
+
+.keypad.shift-step-active .key:not(:disabled) .key-subtext {
+  color: rgba(251, 191, 36, 0.82);
+  font-weight: 500;
+}
+
+.keypad.shift-god-active .key:not(:disabled) .key-subtext {
+  color: rgba(196, 181, 253, 0.82);
+  font-weight: 500;
+}
+
+/* Disabled Key Styling */
+.key:disabled {
+  opacity: 0.18;
+  cursor: not-allowed;
+  pointer-events: none;
+  filter: grayscale(100%);
+  transform: none !important;
+  box-shadow: none !important;
+  border-color: rgba(255, 255, 255, 0.03) !important;
+  background: rgba(255, 255, 255, 0.02) !important;
+  color: var(--text-muted) !important;
 }
 
 /* Keypad Grid (4 columns, rounded tactile keys) */
