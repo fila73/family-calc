@@ -68,5 +68,7 @@ Vytvoření webové kalkulačky rodinných vztahů inspirované čínskou kalkul
 15. Oprava kontrastu rozbalovacích comboboxů v GEDCOM dialogu (`color-scheme: dark;` a explicitní tmavé pozadí `option`).
 16. Příprava kompletního balíčku pro registraci do Google Play Store (`google-play/PRIVACY_POLICY.md`, `privacy.html`, `google-play/STORE_LISTING.md`, `google-play/RELEASE_GUIDE.md`).
 17. Implementace etické monetizace bez sledování a reklam (dialog `#donateModal` s českou QR platbou SPAYD, Ko-fi, Buy Me a Coffee a hodnocením na Google Play).
-18. Průběžné commitování do lokálního gitu a aktualizace stavu.
+18. Inicializace a plná konfigurace nativního Android projektu přes Capacitor (`cz.storytold.familycalc`).
+19. Úspěšné sestavení testovacího instalačního balíčku `Rodinna-Kalkulacka-debug.apk` (4,25 MB) a produkčního `Rodinna-Kalkulacka-release.aab` (3,11 MB) v Gradle s Java 17 a Android SDK 36.
+20. Průběžné commitování do lokálního gitu a aktualizace stavu.
 

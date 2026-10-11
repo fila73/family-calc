@@ -8,17 +8,16 @@ Tento dokument popisuje architekturu a postup rozšíření a převodu webové a
 - Podpora offline režimu přes Service Worker a Web App Manifest.
 
 ## 2. Příprava pro mobilní platformy (Capacitor)
-Pro export do mobilních aplikací:
-1. `npm install @capacitor/core @capacitor/cli @capacitor/android @capacitor/ios`
-2. `npx cap init "FamilyCalc" "cz.familycalc.app" --web-dir "."`
-3. Pro Android:
-   - `npx cap add android`
-   - `npx cap sync android`
-   - `npx cap open android` (nebo sestavení přes Gradle v Android Studio či CLI)
-4. Pro iOS:
+Nativní Android projekt je plně inicializován v adresáři `android/` (`cz.storytold.familycalc`):
+1. `npm run build` – sestaví webové runtime soubory do složky `www/`.
+2. `npx cap sync android` – synchronizuje webové assety a pluginy do `android/`.
+3. Sestavení APK / AAB přes Gradle:
+   - `cd android && .\gradlew.bat assembleDebug` – vytvoří testovací balíček `build-android/Rodinna-Kalkulacka-debug.apk`.
+   - `cd android && .\gradlew.bat bundleRelease` – vytvoří produkční balíček pro Google Play `build-android/Rodinna-Kalkulacka-release.aab`.
+4. Pro iOS (na macOS s Xcode):
    - `npx cap add ios`
    - `npx cap sync ios`
-   - `npx cap open ios` (vyžaduje macOS a Xcode)
+   - `npx cap open ios`
 
 ## 3. Vývoj jazykových pluginů / balíčků
 Každý jazykový balíček implementuje standardní rozhraní v adresáři `js/i18n/`:

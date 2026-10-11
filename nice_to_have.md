@@ -46,6 +46,9 @@
   - Modální okno `#donateModal` s českou QR platbou (SPAYD standard) a přímým číslem účtu (0 % poplatků), mezinárodními odkazy (Ko-fi, Buy Me a Coffee) a tlačítkem pro hodnocení na Google Play.
 - [x] 20. **Oprava kontrastu rozbalovacích comboboxů v GEDCOM porovnávači**:
   - Doplnění `color-scheme: dark;` a explicitního tmavého pozadí pro `option` prvky v dialogu výběru osob pro zabránění bílého písma na bílém podkladu.
+- [x] 21. **Sestavení nativní Android aplikace (APK a AAB)**:
+  - Úspěšné sestavení instalačního debug APK balíčku `Rodinna-Kalkulacka-debug.apk` (4,25 MB) pro okamžité otestování v mobilu.
+  - Úspěšné sestavení produkčního bundle balíčku `Rodinna-Kalkulacka-release.aab` (3,11 MB) připraveného pro nahrání do Google Play Console.
 
 ## Nové nápady a budoucí rozšíření
 1. **Export rodokmenu do vektorového SVG / PDF**:
