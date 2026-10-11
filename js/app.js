@@ -318,7 +318,7 @@ class FamilyCalcApp {
     if (this.openPlayReviewBtn) {
       this.openPlayReviewBtn.addEventListener('click', () => {
         this.triggerHaptic();
-        window.open('https://play.google.com/store/apps/details?id=cz.storytold.familycalc', '_blank');
+        window.open('https://play.google.com/store/apps/details?id=cz.fila73.familycalc', '_blank');
         this.showToast('Děkujeme za recenzi a podporu! ⭐');
       });
     }

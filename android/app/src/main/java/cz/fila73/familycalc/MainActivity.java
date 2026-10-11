@@ -1,4 +1,4 @@
-package cz.storytold.familycalc;
+package cz.fila73.familycalc;
 
 import com.getcapacitor.BridgeActivity;
 

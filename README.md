@@ -30,7 +30,7 @@ An interactive web application inspired by the Chinese kinship calculator (亲�
 - **25 Fully Localized Languages**:
   - Czech 🇨🇿, Slovak 🇸🇰, Polish 🇵🇱, German 🇩🇪, English 🇬🇧, French 🇫🇷, Italian 🇮🇹, Spanish 🇪🇸, Russian 🇷🇺, Chinese 🇨🇳, Japanese 🇯🇵, Korean 🇰🇷, Vietnamese 🇻🇳,
   - Ukrainian 🇺🇦, Portuguese 🇵🇹, Dutch 🇳🇱, Hungarian 🇭🇺, Turkish 🇹🇷, Greek 🇬🇷, Swedish 🇸🇪, Hindi 🇮🇳, Indonesian 🇮🇩, Arabic 🇸🇦, Croatian 🇭🇷, Romanian 🇷🇴.
-- **Mobile Native Ready**: PWA compliant with Network-First Service Worker, full Capacitor native Android project (`cz.storytold.familycalc`).
+- **Mobile Native Ready**: PWA compliant with Network-First Service Worker, full Capacitor native Android project (`cz.fila73.familycalc`).
 - **Pre-Built Android Packages**: Ready-to-use binaries in `build-android/` — `Rodinna-Kalkulacka-debug.apk` (4.25 MB) for instant phone sideloading and `Rodinna-Kalkulacka-release.aab` (3.11 MB) for Google Play Console.
 - **Google Play Store Assets & Guide**: Complete store registration package in `google-play/` (Privacy Policy `privacy.html`, Store listing texts `STORE_LISTING.md`, Keystore and release instructions `RELEASE_GUIDE.md`).
 - **Ethical Zero-Ad & Zero-Tracking Monetization**: Strictly no ads, no trackers, and no third-party telemetry. 100% offline functionality. Voluntary donation tip jar modal (`#donateModal`) supporting Czech QR SPAYD payments, Ko-fi, Buy Me a Coffee, and Google Play ratings.

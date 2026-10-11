@@ -5,7 +5,7 @@ Tento soubor obsahuje připravené texty, popisy a metadata pro registraci a zal
 ---
 
 ## 1. Základní identifikace
-* **Název balíčku (Package Name / Application ID)**: `cz.storytold.familycalc` (nebo `cz.familycalc.app`)
+* **Název balíčku (Package Name / Application ID)**: `cz.fila73.familycalc`
 * **Kategorie aplikace**: Nástroje (Tools) / Vzdělávání (Education)
 * **Štítky (Tags)**: Genealogie, Rodokmen, Kalkulačka, Vzdělávání, Rodina, Slovník
 * **Cena**: Zdarma (Bez reklam, bez in-app sledování)

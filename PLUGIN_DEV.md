@@ -8,7 +8,7 @@ Tento dokument popisuje architekturu a postup rozšíření a převodu webové a
 - Podpora offline režimu přes Service Worker a Web App Manifest.
 
 ## 2. Příprava pro mobilní platformy (Capacitor)
-Nativní Android projekt je plně inicializován v adresáři `android/` (`cz.storytold.familycalc`):
+Nativní Android projekt je plně inicializován v adresáři `android/` (`cz.fila73.familycalc`):
 1. `npm run build` – sestaví webové runtime soubory do složky `www/`.
 2. `npx cap sync android` – synchronizuje webové assety a pluginy do `android/`.
 3. Sestavení APK / AAB přes Gradle:

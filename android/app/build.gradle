@@ -1,10 +1,10 @@
 apply plugin: 'com.android.application'
 
 android {
-    namespace = "cz.storytold.familycalc"
+    namespace = "cz.fila73.familycalc"
     compileSdk = rootProject.ext.compileSdkVersion
     defaultConfig {
-        applicationId "cz.storytold.familycalc"
+        applicationId "cz.fila73.familycalc"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

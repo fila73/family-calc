@@ -1,6 +1,6 @@
 # Android Build Výstupy
 
-V této složce jsou připraveny sestavené instalační balíčky aplikace **Rodinná kalkulačka** (`cz.storytold.familycalc`):
+V této složce jsou připraveny sestavené instalační balíčky aplikace **Rodinná kalkulačka** (`cz.fila73.familycalc`):
 
 1. **`Rodinna-Kalkulacka-debug.apk`** (~4 MB)
    - Instalační balíček pro přímé testování na Android telefonu nebo emulátoru bez nutnosti publikace na Google Play.

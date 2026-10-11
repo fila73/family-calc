@@ -33,7 +33,7 @@ Interaktivní webová aplikace inspirovaná čínskou kalkulačkou příbuzenstv
 - **25 plně lokalizovaných světových jazyků**:
   - Čeština 🇨🇿, Slovenčina 🇸🇰, Polski 🇵🇱, Deutsch 🇩🇪, English 🇬🇧, Français 🇫🇷, Italiano 🇮🇹, Español 🇪🇸, Русский 🇷🇺, 中文 🇨🇳, 日本語 🇯🇵, 한국어 🇰🇷, Tiếng Việt 🇻🇳,
   - Українська 🇺🇦, Português 🇵🇹, Nederlands 🇳🇱, Magyar 🇭🇺, Türkçe 🇹🇷, Ελληνικά 🇬🇷, Svenska 🇸🇪, हिन्दी 🇮🇳, Bahasa Indonesia 🇮🇩, العربية 🇸🇦, Hrvatski 🇭🇷, Română 🇷🇴.
-- **Připraveno pro mobilní aplikace**: čistý kód bez zbytečných závislostí, podpora PWA a plná integrace s nativním Android projektem přes Capacitor (`cz.storytold.familycalc`).
+- **Připraveno pro mobilní aplikace**: čistý kód bez zbytečných závislostí, podpora PWA a plná integrace s nativním Android projektem přes Capacitor (`cz.fila73.familycalc`).
 - **Sestavené Android balíčky**: v adresáři `build-android/` jsou k dispozici sestavené balíčky `Rodinna-Kalkulacka-debug.apk` (4,25 MB pro přímou instalaci do mobilu) a `Rodinna-Kalkulacka-release.aab` (3,11 MB pro Google Play Console).
 - **Registrace do Google Play Store**: kompletní podklady v adresáři `google-play/` (Zásady ochrany soukromí `privacy.html`, texty zápisu `STORE_LISTING.md`, příručka pro podpis a vydání `RELEASE_GUIDE.md`).
 - **Čistá etická monetizace (Zero-ads & Zero-tracking)**: žádné reklamy, žádné analytické ani sledovací skripty. Aplikace funguje 100% offline. Možnost dobrovolného příspěvku v menu (dialog `#donateModal`) přes českou QR platbu SPAYD (0 % poplatků), Ko-fi / Buy Me a Coffee nebo 5hvězdičkové hodnocení na Google Play.

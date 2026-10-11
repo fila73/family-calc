@@ -183,7 +183,7 @@
 - [x] Příprava a úspěšné sestavení Android aplikace pomocí Capacitoru a Gradle:
   - Instalace `@capacitor/core`, `@capacitor/cli`, `@capacitor/android`.
   - Vytvoření skriptu `scripts/build.js` a čistého distribučního adresáře `www/` pro izolaci runtime souborů aplikace od `node_modules` a testů.
-  - Inicializace nativního Android projektu v adresáři `android/` s package ID `cz.storytold.familycalc`.
+  - Inicializace nativního Android projektu v adresáři `android/` s package ID `cz.fila73.familycalc`.
   - Konfigurace `android/local.properties` a automatické stažení Android SDK Platform 36 i Build-Tools 35.0.0.
   - Nastavení Java 17 kompatibility v `android/build.gradle`, `variables.gradle` a Capacitor knihovně.
   - **Úspěšné sestavení testovacího APK**: `build-android/Rodinna-Kalkulacka-debug.apk` (4,25 MB) připraveno pro okamžitou instalaci na libovolný Android telefon (přes `adb install` nebo stažením do mobilu).

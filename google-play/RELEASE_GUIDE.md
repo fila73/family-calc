@@ -41,7 +41,7 @@ Pro vytvoření nativního Android projektu s Capacitorem:
 
 2. **Inicializace konfigurace**:
    ```bash
-   npx cap init "Rodinná kalkulačka" "cz.storytold.familycalc" --web-dir "."
+   npx cap init "Rodinná kalkulačka" "cz.fila73.familycalc" --web-dir "www"
    ```
 
 3. **Vytvoření nativní Android složky**:
