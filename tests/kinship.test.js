@@ -303,6 +303,35 @@ it('Vietnamský překlad (Ông nội, Bác/Chú, Con dâu, Mẹ kế, Cha đỡ 
   assert.strictEqual(rVI5.name, 'Cha đỡ đầu');
 });
 
+console.log('\n11. Výpočet stupně příbuzenství a genetické shody:');
+it('Pokrevní přímá linie a sourozenci', () => {
+  const rF = resolveKinship(['f'], 'm', cs);
+  assert.strictEqual(rF.consanguinity.degree, 1);
+  assert.strictEqual(rF.consanguinity.dnaPercent, 50);
+
+  const rFF = resolveKinship(['f', 'f'], 'm', cs);
+  assert.strictEqual(rFF.consanguinity.degree, 2);
+  assert.strictEqual(rFF.consanguinity.dnaPercent, 25);
+
+  const rB = resolveKinship(['b'], 'm', cs);
+  assert.strictEqual(rB.consanguinity.degree, 2);
+  assert.strictEqual(rB.consanguinity.dnaPercent, 50);
+
+  const rCousin = resolveKinship(['f', 'b', 's'], 'm', cs);
+  assert.strictEqual(rCousin.consanguinity.degree, 4);
+  assert.strictEqual(rCousin.consanguinity.dnaPercent, 12.5);
+});
+
+it('Afinitní a duchovní vztahy (0% biologická DNA)', () => {
+  const rWife = resolveKinship(['w'], 'm', cs);
+  assert.strictEqual(rWife.consanguinity.type, 'affinity');
+  assert.strictEqual(rWife.consanguinity.dnaPercent, 0);
+
+  const rGod = resolveKinship(['god_f'], 'm', cs);
+  assert.strictEqual(rGod.consanguinity.type, 'spiritual');
+  assert.strictEqual(rGod.consanguinity.dnaPercent, 0);
+});
+
 console.log(`\n========================================`);
 console.log(`Výsledky testů: ${passed} / ${total} prošlo.`);
 if (passed !== total) {

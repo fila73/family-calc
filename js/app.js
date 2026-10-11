@@ -12,8 +12,10 @@ class FamilyCalcApp {
     this.currentLang = localStorage.getItem('lang_code') || 'cs';
     this.isMutualView = false;
     this.modifier = null; // null | 'step' | 'god'
-    this.history = [];
+    this.history = this.loadHistory();
     this.recentLangs = this.loadRecentLangs();
+    this.quizState = { score: 0, total: 0, streak: 0, currentQuestion: null };
+    this.synth = typeof window !== 'undefined' && 'speechSynthesis' in window ? window.speechSynthesis : null;
 
     this.initElements();
     this.initEventListeners();
@@ -55,6 +57,15 @@ class FamilyCalcApp {
     this.explanationLabel = document.getElementById('explanationLabel');
     this.reciprocalLabel = document.getElementById('reciprocalLabel');
 
+    // Action buttons (TTS, Share, Tree)
+    this.ttsBtn = document.getElementById('ttsBtn');
+    this.shareBtn = document.getElementById('shareBtn');
+    this.openTreeBtn = document.getElementById('openTreeBtn');
+
+    // Header buttons (Quiz, History)
+    this.openQuizBtn = document.getElementById('openQuizBtn');
+    this.openHistoryBtn = document.getElementById('openHistoryBtn');
+
     // Keypad keys
     this.keypad = document.getElementById('keypad');
     this.keyHusband = document.getElementById('keyHusband');
@@ -81,6 +92,29 @@ class FamilyCalcApp {
     this.dictModalTitle = document.getElementById('dictModalTitle');
     this.toast = document.getElementById('toast');
     this.resetBtn = document.getElementById('resetBtn');
+
+    // Visual Tree Modal
+    this.treeModal = document.getElementById('treeModal');
+    this.closeTreeModalBtn = document.getElementById('closeTreeModalBtn');
+    this.treeCanvasContainer = document.getElementById('treeCanvasContainer');
+
+    // Quiz Modal
+    this.quizModal = document.getElementById('quizModal');
+    this.closeQuizModalBtn = document.getElementById('closeQuizModalBtn');
+    this.quizScoreBadge = document.getElementById('quizScoreBadge');
+    this.quizStreakBadge = document.getElementById('quizStreakBadge');
+    this.quizBadge = document.getElementById('quizBadge');
+    this.quizQuestion = document.getElementById('quizQuestion');
+    this.quizOptionsGrid = document.getElementById('quizOptionsGrid');
+    this.quizFeedback = document.getElementById('quizFeedback');
+    this.quizNextBtn = document.getElementById('quizNextBtn');
+
+    // History Modal
+    this.historyModal = document.getElementById('historyModal');
+    this.closeHistoryModalBtn = document.getElementById('closeHistoryModalBtn');
+    this.historyCount = document.getElementById('historyCount');
+    this.clearHistoryBtn = document.getElementById('clearHistoryBtn');
+    this.historyList = document.getElementById('historyList');
   }
 
   initEventListeners() {
@@ -102,6 +136,59 @@ class FamilyCalcApp {
     }
     if (this.langSearchInput) {
       this.langSearchInput.addEventListener('input', () => this.filterLanguages());
+    }
+
+    // Action buttons (TTS, Share, Tree)
+    if (this.ttsBtn) {
+      this.ttsBtn.addEventListener('click', () => this.speakResult());
+    }
+    if (this.shareBtn) {
+      this.shareBtn.addEventListener('click', () => this.shareResult());
+    }
+    if (this.openTreeBtn) {
+      this.openTreeBtn.addEventListener('click', () => this.openTreeModal());
+    }
+
+    // Tree Modal close
+    if (this.closeTreeModalBtn) {
+      this.closeTreeModalBtn.addEventListener('click', () => this.closeTreeModal());
+    }
+    if (this.treeModal) {
+      this.treeModal.addEventListener('click', (e) => {
+        if (e.target === this.treeModal) this.closeTreeModal();
+      });
+    }
+
+    // Quiz Modal open/close
+    if (this.openQuizBtn) {
+      this.openQuizBtn.addEventListener('click', () => this.openQuizModal());
+    }
+    if (this.closeQuizModalBtn) {
+      this.closeQuizModalBtn.addEventListener('click', () => this.closeQuizModal());
+    }
+    if (this.quizModal) {
+      this.quizModal.addEventListener('click', (e) => {
+        if (e.target === this.quizModal) this.closeQuizModal();
+      });
+    }
+    if (this.quizNextBtn) {
+      this.quizNextBtn.addEventListener('click', () => this.nextQuizQuestion());
+    }
+
+    // History Modal open/close
+    if (this.openHistoryBtn) {
+      this.openHistoryBtn.addEventListener('click', () => this.openHistoryModal());
+    }
+    if (this.closeHistoryModalBtn) {
+      this.closeHistoryModalBtn.addEventListener('click', () => this.closeHistoryModal());
+    }
+    if (this.historyModal) {
+      this.historyModal.addEventListener('click', (e) => {
+        if (e.target === this.historyModal) this.closeHistoryModal();
+      });
+    }
+    if (this.clearHistoryBtn) {
+      this.clearHistoryBtn.addEventListener('click', () => this.clearHistory());
     }
 
     // Reset button
@@ -146,10 +233,16 @@ class FamilyCalcApp {
 
     // Keyboard shortcuts for convenience
     window.addEventListener('keydown', (e) => {
-      if (this.dictModal.classList.contains('open') || (this.langModal && this.langModal.classList.contains('open'))) {
+      const anyModalOpen = [this.dictModal, this.langModal, this.treeModal, this.quizModal, this.historyModal]
+        .some((m) => m && m.classList.contains('open'));
+
+      if (anyModalOpen) {
         if (e.key === 'Escape') {
-          if (this.dictModal.classList.contains('open')) this.closeDictionary();
+          if (this.dictModal && this.dictModal.classList.contains('open')) this.closeDictionary();
           if (this.langModal && this.langModal.classList.contains('open')) this.closeLanguageModal();
+          if (this.treeModal && this.treeModal.classList.contains('open')) this.closeTreeModal();
+          if (this.quizModal && this.quizModal.classList.contains('open')) this.closeQuizModal();
+          if (this.historyModal && this.historyModal.classList.contains('open')) this.closeHistoryModal();
         }
         return;
       }
@@ -653,6 +746,13 @@ class FamilyCalcApp {
       this.metaBadges.appendChild(bLine);
     }
 
+    if (resolved.consanguinity && resolved.consanguinity.badge) {
+      const bDna = document.createElement('span');
+      bDna.className = 'meta-badge badge-consanguinity';
+      bDna.textContent = resolved.consanguinity.badge;
+      this.metaBadges.appendChild(bDna);
+    }
+
     // 4. Render Details Box
     if (this.chain.length === 0) {
       this.detailExplanation.textContent = resolved.description;
@@ -666,6 +766,9 @@ class FamilyCalcApp {
       const reciprocalResolved = resolveKinship(invertedChain, this.egoGender, dict);
       this.detailReciprocal.textContent = `${reciprocalResolved.name} (klikni pro přepnutí)`;
       this.detailReciprocal.classList.add('reciprocal-clickable');
+
+      // Auto-save to calculation history
+      this.saveHistoryItem(this.chain, resolved.name);
     }
   }
 
@@ -780,7 +883,415 @@ class FamilyCalcApp {
 
   formatKeyPath(key, dict) {
     const tokens = key.split(',').filter(Boolean);
-    return tokens.map(t => dict.labels.tokens[t] || t).join(' ➔ ');
+    return tokens.map((t) => dict.labels.tokens[t] || t).join(' ➔ ');
+  }
+
+  // === 1. Text-to-Speech (Předčítání výsledku) ===
+  speakResult() {
+    this.triggerHaptic();
+    if (!this.synth) {
+      this.showToast('Hlasová syntéza není tímto prohlížečem podporována');
+      return;
+    }
+
+    this.synth.cancel(); // Stop any ongoing speech
+
+    const dict = getDictionary(this.currentLang);
+    const activeChain = this.isMutualView ? invertChain(this.chain, this.egoGender) : this.chain;
+    const resolved = resolveKinship(activeChain, this.egoGender, dict);
+
+    const textToSpeak = `${resolved.name}. ${resolved.description || ''}`;
+    const utterance = new SpeechSynthesisUtterance(textToSpeak);
+
+    const langMap = {
+      cs: 'cs-CZ',
+      sk: 'sk-SK',
+      en: 'en-US',
+      de: 'de-DE',
+      pl: 'pl-PL',
+      fr: 'fr-FR',
+      it: 'it-IT',
+      es: 'es-ES',
+      ru: 'ru-RU',
+      zh: 'zh-CN',
+      ja: 'ja-JP',
+      ko: 'ko-KR',
+      vi: 'vi-VN'
+    };
+
+    utterance.lang = langMap[this.currentLang] || 'cs-CZ';
+    utterance.rate = 0.95;
+
+    if (this.ttsBtn) {
+      this.ttsBtn.classList.add('speaking');
+      utterance.onend = () => this.ttsBtn.classList.remove('speaking');
+      utterance.onerror = () => this.ttsBtn.classList.remove('speaking');
+    }
+
+    this.synth.speak(utterance);
+    this.showToast(`🔊 Čtu: ${resolved.name}`);
+  }
+
+  // === 2. Share Result (Sdílení kartičky) ===
+  async shareResult() {
+    this.triggerHaptic();
+    const dict = getDictionary(this.currentLang);
+    const activeChain = this.isMutualView ? invertChain(this.chain, this.egoGender) : this.chain;
+    const resolved = resolveKinship(activeChain, this.egoGender, dict);
+
+    const pathText = this.chain.length > 0
+      ? this.formatKeyPath(this.chain.join(','), dict)
+      : (dict.labels.self || 'Já');
+
+    const text = [
+      '👨‍👩‍👧‍👦 Rodinná kalkulačka (Terms of Kinship)',
+      '━━━━━━━━━━━━━━━━━━━',
+      `🔹 Vztah: Já ➔ ${pathText}`,
+      `🏷️ Výsledek: ${resolved.name}${resolved.archaic ? ` (stč. ${resolved.archaic})` : ''}`,
+      `📖 Popis: ${resolved.description || '—'}`,
+      resolved.consanguinity && resolved.consanguinity.badge ? `🧬 ${resolved.consanguinity.badge}` : null,
+      '━━━━━━━━━━━━━━━━━━━',
+      'Vypočteno na Rodinné kalkulačce'
+    ].filter(Boolean).join('\n');
+
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: `Rodinná kalkulačka: ${resolved.name}`,
+          text
+        });
+        this.showToast('✅ Sdíleno');
+        return;
+      } catch (err) {
+        // Fallback to clipboard if share was cancelled or failed
+      }
+    }
+
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      try {
+        await navigator.clipboard.writeText(text);
+        this.showToast('📋 Výsledek zkopírován do schránky!');
+      } catch (e) {
+        this.showToast('Chyba při kopírování do schránky');
+      }
+    } else {
+      this.showToast(resolved.name);
+    }
+  }
+
+  // === 3. Visual Family Tree Modal (Vizuální minirodokmen) ===
+  openTreeModal() {
+    this.triggerHaptic();
+    this.renderTree();
+    if (this.treeModal) this.treeModal.classList.add('open');
+  }
+
+  closeTreeModal() {
+    if (this.treeModal) this.treeModal.classList.remove('open');
+  }
+
+  renderTree() {
+    if (!this.treeCanvasContainer) return;
+    this.treeCanvasContainer.innerHTML = '';
+
+    const dict = getDictionary(this.currentLang);
+    const effectiveChain = this.isMutualView ? invertChain(this.chain, this.egoGender) : this.chain;
+    const resolved = resolveKinship(effectiveChain, this.egoGender, dict);
+
+    // Node 0: EGO (Já)
+    const egoCard = document.createElement('div');
+    egoCard.className = 'tree-node-card self-node';
+    const egoAvatar = this.egoGender === 'm' ? '👨' : '👩';
+    egoCard.innerHTML = `
+      <div class="tree-avatar">${egoAvatar}</div>
+      <div class="tree-node-info">
+        <div class="tree-node-title">${dict.labels.self || 'Já (proband)'}</div>
+        <div class="tree-node-sub">Výchozí bod výzkumu (Gen 0)</div>
+      </div>
+    `;
+    this.treeCanvasContainer.appendChild(egoCard);
+
+    if (this.chain.length === 0) return;
+
+    // Walk through each step in chain
+    this.chain.forEach((token, idx) => {
+      const isLast = idx === this.chain.length - 1;
+      const stepName = dict.labels.tokens[token] || token;
+
+      // Connector
+      const connector = document.createElement('div');
+      connector.className = 'tree-step-connector';
+      connector.innerHTML = `
+        <div class="tree-step-line"></div>
+        <div class="tree-step-badge">➔ ${stepName}</div>
+        <div class="tree-step-line"></div>
+      `;
+      this.treeCanvasContainer.appendChild(connector);
+
+      // Intermediate or Target Node
+      let avatar = '🧑';
+      if (token.includes('f') || token === 'step_f' || token === 'god_f') avatar = '👨';
+      else if (token.includes('m') || token === 'step_m' || token === 'god_m') avatar = '👩';
+      else if (token === 's' || token === 'step_s' || token === 'god_s') avatar = '👦';
+      else if (token === 'd' || token === 'step_d' || token === 'god_d') avatar = '👧';
+      else if (token === 'h') avatar = '👨';
+      else if (token === 'w') avatar = '👩';
+      else if (token.includes('b')) avatar = '👦';
+      else if (token.includes('z')) avatar = '👧';
+
+      const nodeCard = document.createElement('div');
+      nodeCard.className = `tree-node-card ${isLast ? 'target-node' : ''}`;
+
+      const title = isLast ? resolved.name : stepName;
+      const subtitle = isLast ? (resolved.description || '') : `Krok ${idx + 1} v řetězci`;
+
+      nodeCard.innerHTML = `
+        <div class="tree-avatar">${avatar}</div>
+        <div class="tree-node-info">
+          <div class="tree-node-title">${title}</div>
+          <div class="tree-node-sub">${subtitle}</div>
+          ${isLast ? `<span class="tree-target-tag">🌟 Cíl výpočtu</span>` : ''}
+        </div>
+      `;
+
+      this.treeCanvasContainer.appendChild(nodeCard);
+    });
+  }
+
+  // === 4. Kinship Quiz Game (Kvíz rodinných vztahů) ===
+  openQuizModal() {
+    this.triggerHaptic();
+    this.generateQuizQuestion();
+    if (this.quizModal) this.quizModal.classList.add('open');
+  }
+
+  closeQuizModal() {
+    if (this.quizModal) this.quizModal.classList.remove('open');
+  }
+
+  generateQuizQuestion() {
+    const dict = getDictionary(this.currentLang);
+    const entries = Object.entries(dict.relations);
+    if (entries.length < 4) return;
+
+    // Pick 1 random correct relation
+    const correctIdx = Math.floor(Math.random() * entries.length);
+    const [correctKey, correctItem] = entries[correctIdx];
+
+    // Pick 3 random wrong distractors
+    const distractors = [];
+    const usedIndices = new Set([correctIdx]);
+    while (distractors.length < 3 && usedIndices.size < entries.length) {
+      const idx = Math.floor(Math.random() * entries.length);
+      if (!usedIndices.has(idx)) {
+        usedIndices.add(idx);
+        distractors.push(entries[idx][1]);
+      }
+    }
+
+    const questionTypes = ['whatIs', 'whoIs'];
+    const qType = questionTypes[Math.floor(Math.random() * questionTypes.length)];
+
+    let questionText = '';
+    let options = [];
+
+    if (qType === 'whatIs' && correctItem.description) {
+      questionText = `Jak se nazývá: "${correctItem.description}"?`;
+      options = [
+        { text: correctItem.name, correct: true },
+        ...distractors.map((d) => ({ text: d.name, correct: false }))
+      ];
+    } else {
+      questionText = `Kdo je to "${correctItem.name}"?`;
+      options = [
+        { text: correctItem.description || correctItem.name, correct: true },
+        ...distractors.map((d) => ({ text: d.description || d.name, correct: false }))
+      ];
+    }
+
+    // Shuffle options
+    options.sort(() => Math.random() - 0.5);
+
+    this.quizState.currentQuestion = {
+      correctItem,
+      answered: false
+    };
+
+    if (this.quizBadge) this.quizBadge.textContent = correctItem.archaic ? '📜 Historický výraz' : 'Otázka';
+    if (this.quizQuestion) this.quizQuestion.textContent = questionText;
+    if (this.quizFeedback) {
+      this.quizFeedback.classList.remove('show');
+      this.quizFeedback.textContent = '';
+    }
+    if (this.quizNextBtn) this.quizNextBtn.classList.remove('show');
+
+    if (this.quizOptionsGrid) {
+      this.quizOptionsGrid.innerHTML = '';
+      const letters = ['A', 'B', 'C', 'D'];
+
+      options.forEach((opt, idx) => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'quiz-opt-btn';
+        btn.innerHTML = `<span class="quiz-opt-letter">${letters[idx]}</span><span class="quiz-opt-text">${opt.text}</span>`;
+        btn.addEventListener('click', () => this.handleQuizAnswer(btn, opt.correct, correctItem));
+        this.quizOptionsGrid.appendChild(btn);
+      });
+    }
+
+    this.updateQuizScoreUI();
+  }
+
+  handleQuizAnswer(btnEl, isCorrect, correctItem) {
+    if (this.quizState.currentQuestion.answered) return;
+    this.quizState.currentQuestion.answered = true;
+    this.triggerHaptic();
+
+    this.quizState.total++;
+    if (isCorrect) {
+      this.quizState.score++;
+      this.quizState.streak++;
+      btnEl.classList.add('correct');
+      if (this.quizFeedback) {
+        this.quizFeedback.textContent = `🎉 Správně! ${correctItem.name} — ${correctItem.description || ''}`;
+        this.quizFeedback.classList.add('show');
+      }
+    } else {
+      this.quizState.streak = 0;
+      btnEl.classList.add('wrong');
+      // Highlight the correct one
+      const allBtns = this.quizOptionsGrid.querySelectorAll('.quiz-opt-btn');
+      allBtns.forEach((b) => {
+        if (b.textContent.includes(correctItem.name) || b.textContent.includes(correctItem.description)) {
+          b.classList.add('correct');
+        }
+      });
+      if (this.quizFeedback) {
+        this.quizFeedback.textContent = `❌ Chyba. Správná odpověď: ${correctItem.name} (${correctItem.description || ''})`;
+        this.quizFeedback.classList.add('show');
+      }
+    }
+
+    // Disable all options
+    const allBtns = this.quizOptionsGrid.querySelectorAll('.quiz-opt-btn');
+    allBtns.forEach((b) => {
+      b.disabled = true;
+    });
+
+    if (this.quizNextBtn) this.quizNextBtn.classList.add('show');
+    this.updateQuizScoreUI();
+  }
+
+  nextQuizQuestion() {
+    this.triggerHaptic();
+    this.generateQuizQuestion();
+  }
+
+  updateQuizScoreUI() {
+    if (this.quizScoreBadge) {
+      this.quizScoreBadge.textContent = `Skóre: ${this.quizState.score} / ${this.quizState.total}`;
+    }
+    if (this.quizStreakBadge) {
+      this.quizStreakBadge.textContent = `🔥 Série: ${this.quizState.streak}`;
+    }
+  }
+
+  // === 5. History Modal (Historie výpočtů) ===
+  loadHistory() {
+    try {
+      const saved = JSON.parse(localStorage.getItem('family_calc_history'));
+      if (Array.isArray(saved)) return saved;
+    } catch (e) {}
+    return [];
+  }
+
+  saveHistoryItem(chain, resultName) {
+    if (!chain || chain.length === 0) return;
+    const chainKey = chain.join(',');
+
+    // Don't duplicate consecutive identical items
+    if (this.history.length > 0 && this.history[0].chainKey === chainKey) return;
+
+    const item = {
+      chainKey,
+      chain: [...chain],
+      resultName,
+      time: Date.now()
+    };
+
+    this.history.unshift(item);
+    if (this.history.length > 30) this.history = this.history.slice(0, 30);
+
+    try {
+      localStorage.setItem('family_calc_history', JSON.stringify(this.history));
+    } catch (e) {}
+  }
+
+  openHistoryModal() {
+    this.triggerHaptic();
+    this.renderHistory();
+    if (this.historyModal) this.historyModal.classList.add('open');
+  }
+
+  closeHistoryModal() {
+    if (this.historyModal) this.historyModal.classList.remove('open');
+  }
+
+  renderHistory() {
+    if (!this.historyList) return;
+    this.historyList.innerHTML = '';
+    const dict = getDictionary(this.currentLang);
+
+    if (this.historyCount) {
+      this.historyCount.textContent = `${this.history.length} výpočtů`;
+    }
+
+    if (this.history.length === 0) {
+      const empty = document.createElement('div');
+      empty.style.padding = '24px';
+      empty.style.textAlign = 'center';
+      empty.style.color = '#71717a';
+      empty.textContent = 'Historie výpočtů je zatím prázdná.';
+      this.historyList.appendChild(empty);
+      return;
+    }
+
+    this.history.forEach((h) => {
+      const card = document.createElement('div');
+      card.className = 'history-item';
+
+      const pathText = this.formatKeyPath(h.chainKey, dict);
+      const timeStr = new Date(h.time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+      card.innerHTML = `
+        <div class="history-item-top">
+          <span class="history-item-result">${h.resultName}</span>
+          <span class="history-item-time">${timeStr}</span>
+        </div>
+        <div class="history-item-chain">Já ➔ ${pathText}</div>
+      `;
+
+      card.addEventListener('click', () => {
+        this.triggerHaptic();
+        this.chain = [...h.chain];
+        this.isMutualView = false;
+        this.render();
+        this.closeHistoryModal();
+        this.showToast(`Obnoveno: ${h.resultName}`);
+      });
+
+      this.historyList.appendChild(card);
+    });
+  }
+
+  clearHistory() {
+    this.triggerHaptic();
+    this.history = [];
+    try {
+      localStorage.removeItem('family_calc_history');
+    } catch (e) {}
+    this.renderHistory();
+    this.showToast('Historie vymazána');
   }
 }
 

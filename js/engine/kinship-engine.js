@@ -407,6 +407,155 @@ export function calculateGeneration(chain) {
 }
 
 /**
+ * Vypočte biologický / právní stupeň příbuzenství a odhad sdílené DNA
+ */
+export function calculateConsanguinity(chain) {
+  if (!chain || chain.length === 0) {
+    return {
+      degree: 0,
+      dnaPercent: 100,
+      type: 'self',
+      badge: '🧬 100% DNA (shodná osoba)'
+    };
+  }
+
+  const norm = chain.map(normalizeToken);
+
+  // Křestní / duchovní svazek
+  if (norm.some((t) => t.startsWith('god_'))) {
+    return {
+      degree: null,
+      dnaPercent: 0,
+      type: 'spiritual',
+      badge: '✝ Kmotrovství (duchovní svazek)'
+    };
+  }
+
+  // Afinitní / sešvagření / nevlastní
+  if (norm.some((t) => t === 'h' || t === 'w' || t.startsWith('step_'))) {
+    const key = chainToKey(chain);
+    if (key === 'm,step_h,s' || key === 'm,step_h,d' || key === 'f,step_w,s' || key === 'f,step_w,d') {
+      return {
+        degree: 2,
+        dnaPercent: 25,
+        type: 'half_blood',
+        badge: '🧬 ~25% DNA · 2. stupeň (polorodý sourozenec)'
+      };
+    }
+    return {
+      degree: null,
+      dnaPercent: 0,
+      type: 'affinity',
+      badge: '💍 Sešvagření (afinitní vztah)'
+    };
+  }
+
+  // Přímá linie předků nebo potomků
+  const allAncestors = norm.every((t) => t === 'f' || t === 'm');
+  const allDescendants = norm.every((t) => t === 's' || t === 'd');
+
+  if (allAncestors || allDescendants) {
+    const degree = norm.length;
+    const dna = Math.round(Math.pow(0.5, degree) * 100 * 1000) / 1000;
+    return {
+      degree,
+      dnaPercent: dna,
+      type: 'direct',
+      badge: `🧬 ~${dna}% DNA · ${degree}. stupeň (přímá linie)`
+    };
+  }
+
+  // Vlastní sourozenci
+  if (norm.length === 1 && (norm[0] === 'b' || norm[0] === 'z')) {
+    return {
+      degree: 2,
+      dnaPercent: 50,
+      type: 'sibling',
+      badge: '🧬 ~50% DNA · 2. stupeň (plnorodý sourozenec)'
+    };
+  }
+
+  // Strýc / teta: f,b / m,z
+  if (norm.length === 2 && (norm[0] === 'f' || norm[0] === 'm') && (norm[1] === 'b' || norm[1] === 'z')) {
+    return {
+      degree: 3,
+      dnaPercent: 25,
+      type: 'collateral',
+      badge: '🧬 ~25% DNA · 3. stupeň (strýc / teta)'
+    };
+  }
+
+  // Synovec / neteř: b,s / z,d
+  if (norm.length === 2 && (norm[0] === 'b' || norm[0] === 'z') && (norm[1] === 's' || norm[1] === 'd')) {
+    return {
+      degree: 3,
+      dnaPercent: 25,
+      type: 'collateral',
+      badge: '🧬 ~25% DNA · 3. stupeň (synovec / neteř)'
+    };
+  }
+
+  // Bratranec / sestřenice: f,b,s apod.
+  if (
+    norm.length === 3 &&
+    (norm[0] === 'f' || norm[0] === 'm') &&
+    (norm[1] === 'b' || norm[1] === 'z') &&
+    (norm[2] === 's' || norm[2] === 'd')
+  ) {
+    return {
+      degree: 4,
+      dnaPercent: 12.5,
+      type: 'collateral',
+      badge: '🧬 ~12.5% DNA · 4. stupeň (bratranec / sestřenice)'
+    };
+  }
+
+  // Prastrýc / prateta: f,f,b apod.
+  if (
+    norm.length === 3 &&
+    (norm[0] === 'f' || norm[0] === 'm') &&
+    (norm[1] === 'f' || norm[1] === 'm') &&
+    (norm[2] === 'b' || norm[2] === 'z')
+  ) {
+    return {
+      degree: 4,
+      dnaPercent: 12.5,
+      type: 'collateral',
+      badge: '🧬 ~12.5% DNA · 4. stupeň (prastrýc / prateta)'
+    };
+  }
+
+  // Prasynovec / praneteř: b,s,s apod.
+  if (
+    norm.length === 3 &&
+    (norm[0] === 'b' || norm[0] === 'z') &&
+    (norm[1] === 's' || norm[1] === 'd') &&
+    (norm[2] === 's' || norm[2] === 'd')
+  ) {
+    return {
+      degree: 4,
+      dnaPercent: 12.5,
+      type: 'collateral',
+      badge: '🧬 ~12.5% DNA · 4. stupeň (prasynovec / praneteř)'
+    };
+  }
+
+  // Obecná pobočná linie
+  const births = norm.reduce((acc, t) => {
+    if (t === 'b' || t === 'z') return acc + 2;
+    return acc + 1;
+  }, 0);
+  const approxDna = Math.max(0.1, Math.round(Math.pow(0.5, births) * 100 * 100) / 100);
+
+  return {
+    degree: births,
+    dnaPercent: approxDna,
+    type: 'collateral',
+    badge: `🧬 ~${approxDna}% DNA · ${births}. stupeň`
+  };
+}
+
+/**
  * Převede řetězec na normalizovaný klíč (např. ['f', 'b'] -> "f,b")
  */
 export function chainToKey(chain) {
@@ -424,6 +573,7 @@ export function resolveKinship(chain, egoGender = 'm', dictionary) {
       archaic: dictionary.labels.selfArchaic || 'EGO / střen',
       description: dictionary.labels.selfDesc || 'Výchozí osoba genealogického výzkumu',
       generation: 0,
+      consanguinity: calculateConsanguinity([]),
       chain: [],
       rawChain: [],
       key: ''
@@ -448,6 +598,7 @@ export function resolveKinship(chain, egoGender = 'm', dictionary) {
       archaic: null,
       description: dictionary.labels.unknownDesc || 'Složený vztah přesahuje běžné jednoslovné pojmenování',
       generation: calculateGeneration(simplified),
+      consanguinity: calculateConsanguinity(simplified),
       chain: simplified,
       rawChain: chain,
       key
@@ -457,6 +608,7 @@ export function resolveKinship(chain, egoGender = 'm', dictionary) {
   return {
     ...entry,
     generation: calculateGeneration(simplified),
+    consanguinity: calculateConsanguinity(simplified),
     chain: simplified,
     rawChain: chain,
     key

@@ -48,6 +48,16 @@
           <span class="lang-trigger-arrow">▾</span>
         </button>
 
+        <!-- Quiz Game Button -->
+        <button class="icon-action-btn" id="openQuizBtn" title="Kvíz rodinných vztahů" aria-label="Kvíz rodinných vztahů">
+          <span class="btn-emoji">🎓</span>
+        </button>
+
+        <!-- History Button -->
+        <button class="icon-action-btn" id="openHistoryBtn" title="Historie výpočtů" aria-label="Historie výpočtů">
+          <span class="btn-emoji">🕒</span>
+        </button>
+
         <!-- Dictionary Explorer Button -->
         <button class="icon-action-btn" id="openDictBtn" title="Otevřít slovník pojmů" aria-label="Slovník příbuzenských vztahů">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -80,7 +90,20 @@
 
       <!-- Main Result -->
       <div class="result-container" id="resultContainer">
-        <div class="result-main" id="resultMain">Já (proband)</div>
+        <div class="result-header-row">
+          <div class="result-main" id="resultMain">Já (proband)</div>
+          <div class="result-actions" id="resultActions">
+            <button class="result-action-btn" id="ttsBtn" type="button" title="Přečíst nahlas (TTS)" aria-label="Přečíst nahlas">
+              <span class="action-icon">🔊</span>
+            </button>
+            <button class="result-action-btn" id="shareBtn" type="button" title="Sdílet výsledek" aria-label="Sdílet výsledek">
+              <span class="action-icon">↗</span>
+            </button>
+            <button class="result-action-btn" id="openTreeBtn" type="button" title="Vizuální minirodokmen" aria-label="Vizuální minirodokmen">
+              <span class="action-icon">🌳</span>
+            </button>
+          </div>
+        </div>
         <div class="result-meta-badges" id="metaBadges"></div>
       </div>
 
@@ -192,6 +215,51 @@
         <input type="search" class="modal-search-input" id="dictSearchInput" placeholder="Hledat výraz (např. ujec, deveř, tchán, švagr...)" autocomplete="off">
       </div>
       <div class="modal-list" id="dictList"></div>
+    </div>
+
+    <!-- Visual Tree Modal -->
+    <div class="modal-overlay" id="treeModal" role="dialog" aria-modal="true" aria-labelledby="treeModalTitle">
+      <div class="modal-header">
+        <h2 id="treeModalTitle">Vizuální minirodokmen 🌳</h2>
+        <button class="modal-close-btn" id="closeTreeModalBtn" aria-label="Zavřít minirodokmen">&times;</button>
+      </div>
+      <div class="tree-modal-body">
+        <div class="tree-canvas-container" id="treeCanvasContainer"></div>
+      </div>
+    </div>
+
+    <!-- Quiz Modal -->
+    <div class="modal-overlay" id="quizModal" role="dialog" aria-modal="true" aria-labelledby="quizModalTitle">
+      <div class="modal-header">
+        <h2 id="quizModalTitle">Kvíz rodinných vztahů 🎓</h2>
+        <button class="modal-close-btn" id="closeQuizModalBtn" aria-label="Zavřít kvíz">&times;</button>
+      </div>
+      <div class="quiz-container" id="quizContainer">
+        <div class="quiz-score-bar">
+          <span class="quiz-score-badge" id="quizScoreBadge">Skóre: 0 / 0</span>
+          <span class="quiz-streak-badge" id="quizStreakBadge">🔥 Série: 0</span>
+        </div>
+        <div class="quiz-card" id="quizCard">
+          <div class="quiz-badge" id="quizBadge">Otázka</div>
+          <div class="quiz-question" id="quizQuestion">Načítám otázku...</div>
+          <div class="quiz-options-grid" id="quizOptionsGrid"></div>
+          <div class="quiz-feedback" id="quizFeedback"></div>
+        </div>
+        <button class="quiz-next-btn" id="quizNextBtn" type="button">Další otázka ➔</button>
+      </div>
+    </div>
+
+    <!-- History Modal -->
+    <div class="modal-overlay" id="historyModal" role="dialog" aria-modal="true" aria-labelledby="historyModalTitle">
+      <div class="modal-header">
+        <h2 id="historyModalTitle">Historie výpočtů 🕒</h2>
+        <button class="modal-close-btn" id="closeHistoryModalBtn" aria-label="Zavřít historii">&times;</button>
+      </div>
+      <div class="history-controls-bar">
+        <span class="history-count" id="historyCount">0 výpočtů</span>
+        <button class="history-clear-btn" id="clearHistoryBtn" type="button">Vymazat historii</button>
+      </div>
+      <div class="modal-list history-list" id="historyList"></div>
     </div>
 
     <!-- Feedback Toast -->

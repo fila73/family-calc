@@ -76,6 +76,14 @@
   - Rychlé přepínání pomocí čipů "Nedávno použité" (Recent languages) s automatickou perzistencí v `localStorage`.
   - Přehledná kategorizace jazyků do skupin (Slovanské, Germánské, Románské, Východoasijské, Jihovýchodní Asie) s ikonami kontinentů.
   - Vytvoření registru jazyků `js/i18n/languages.js` pro snadné a škálovatelné přidávání desítek dalších jazyků.
-  - Aktualizace Service Workeru (`sw.js`) na verzi `family-calc-v6` s offline cachováním nového modulu.
-  - 100% průchod všech 31 jednotkových testů v `tests/kinship.test.js`.
-  - Kompletní ověření v reálném prohlížeči pomocí `browser_subagent` (vyhledávání, volba japonštiny, ověření recent čipu, návrat k češtině).
+- [x] Implementace zbývajících "Nice to have" funkcí a rozšíření:
+  - **🔊 Hlasové předčítání (Text-to-Speech)**: Tlačítko u výsledku předčítající název a popis v aktivním jazyce (`cs-CZ`, `en-US`, `de-DE`, `ja-JP`, `vi-VN` atd.) s animací zvukových vln.
+  - **↗ Sdílení výsledku (Share & Copy)**: Formátování textové vizitky s emoji a přímé sdílení přes Web Share API / schránku.
+  - **🧬 Stupeň příbuzenství a genetická shoda**: Výpočet kanonického stupně příbuzenství dle počtu porodů v rodokmenu a odhadu procenta sdílené DNA (např. *~12.5% DNA · 4. stupeň* pro bratrance, *0% DNA* pro švagrovství a kmotry).
+  - **🌳 Vizuální minirodokmen (`#treeModal`)**: Grafický rodokmenový modal zobrazující cestu od EGO k cíli s personálními avatary, vztahovými štítky na spojnicích a zářícím cílovým uzlem.
+  - **🎓 Kvíz rodinných vztahů (`#quizModal`)**: Výukový herní mód v AMOLED stylu s náhodnými otázkami ze slovníku, 4 volbami, vizuální odezvou správně/špatně, počítadlem skóre i sérií a vysvětlením.
+  - **🕒 Historie výpočtů (`#historyModal`)**: Automatické zaznamenávání posledních výpočtů s možností okamžitého obnovení libovolného kroku zpět do kalkulačky.
+  - Rozšíření testovací sady v `tests/kinship.test.js` na **33 / 33 úspěšně procházejících testů**.
+  - Aktualizace Service Workeru (`sw.js`) na verzi `family-calc-v7`.
+  - Kompletní ověření všech funkcí v reálném prohlížeči pomocí `browser_subagent`.
+
