@@ -9,5 +9,5 @@ An interactive web application inspired by the Chinese kinship calculator (亲�
   - **`⇧ Step` (Nevlastní)**: Step-parents (*Otčím*, *Macecha*), step-children (*Pastorek*), half-siblings (*jednobřišní* / *jednokrevní*), and step-siblings.
   - **`✝ Godparent` (Křestní)**: Spiritual kinship (*Kmotr*, *Kmotra*, *Kmotřenec*, *Kmotřenka*).
 - **Mutual Relationship Mode (互查)**: Determine reciprocal terms ("What does this relative call me?").
-- **Multilingual Support**: Extensible dictionary supporting Czech 🇨🇿, Slovak 🇸🇰, Polish 🇵🇱, German 🇩🇪, English 🇬🇧, French 🇫🇷, Italian 🇮🇹, Spanish 🇪🇸, Russian 🇷🇺, Chinese 🇨🇳, and Korean 🇰🇷.
+- **Multilingual Support**: Extensible dictionary supporting Czech 🇨🇿, Slovak 🇸🇰, Polish 🇵🇱, German 🇩🇪, English 🇬🇧, French 🇫🇷, Italian 🇮🇹, Spanish 🇪🇸, Russian 🇷🇺, Chinese 🇨🇳, Japanese 🇯🇵, Korean 🇰🇷, and Vietnamese 🇻🇳.
 - **Mobile Native Ready**: PWA compliant with Network-First Service Worker, ready for Android/iOS packaging via Capacitor.

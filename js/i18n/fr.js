@@ -16,7 +16,7 @@ export const fr = {
     self: 'Moi-même',
     selfArchaic: 'Proposant / Égo',
     selfDesc: 'Point de départ de la recherche généalogique',
-    mutual: 'Relation réciproque (qui suis-je pour lui/elle ?)',
+    mutual: 'Relation réciproque',
     modStep: 'Par alliance / Demi',
     modGod: 'Parrainage',
     explanationLabel: 'Chemin de parenté',

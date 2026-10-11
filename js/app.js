@@ -256,6 +256,16 @@ class FamilyCalcApp {
       broYoungMain = 'Hermano'; broYoungSub = 'menor';
       sisOldMain = 'Hermana'; sisOldSub = 'mayor';
       sisYoungMain = 'Hermana'; sisYoungSub = 'menor';
+    } else if (this.currentLang === 'ja') {
+      broOldMain = '兄'; broOldSub = '年上';
+      broYoungMain = '弟'; broYoungSub = '年下';
+      sisOldMain = '姉'; sisOldSub = '年上';
+      sisYoungMain = '妹'; sisYoungSub = '年下';
+    } else if (this.currentLang === 'vi') {
+      broOldMain = 'Anh'; broOldSub = 'trai';
+      broYoungMain = 'Em'; broYoungSub = 'trai';
+      sisOldMain = 'Chị'; sisOldSub = 'gái';
+      sisYoungMain = 'Em'; sisYoungSub = 'gái';
     } else if (this.currentLang === 'sk') {
       broOldMain = 'Brat'; broOldSub = 'starší';
       broYoungMain = 'Brat'; broYoungSub = 'mladší';
@@ -399,6 +409,8 @@ class FamilyCalcApp {
                       this.currentLang === 'fr' ? 'Passé en mode réciproque' :
                       this.currentLang === 'it' ? 'Passato alla modalità reciproca' :
                       this.currentLang === 'es' ? 'Cambiado a modo recíproco' :
+                      this.currentLang === 'ja' ? '相互呼称モードに切り替えました' :
+                      this.currentLang === 'vi' ? 'Chuyển sang chế độ xưng hô ngược lại' :
                       this.currentLang === 'sk' ? 'Prepnuté na: Kto som ja pre neho' :
                       this.currentLang === 'en' ? 'Switched to reciprocal view' :
                       'Přepnuto na: Kdo jsem já pro něj';
@@ -410,6 +422,8 @@ class FamilyCalcApp {
                     this.currentLang === 'fr' ? 'Mode standard' :
                     this.currentLang === 'it' ? 'Modalità standard' :
                     this.currentLang === 'es' ? 'Modo estándar' :
+                    this.currentLang === 'ja' ? '通常モード' :
+                    this.currentLang === 'vi' ? 'Chế độ tiêu chuẩn' :
                     this.currentLang === 'sk' ? 'Základný pohľad' :
                     this.currentLang === 'en' ? 'Standard view' :
                     'Základní pohled';

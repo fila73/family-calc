@@ -59,3 +59,13 @@
 - [x] Rozšíření testovací sady v `tests/kinship.test.js` na **29 / 29 úspěšně procházejících testů**.
 - [x] Aktualizace Service Workeru (`sw.js`) na verzi `family-calc-v4`.
 - [x] Úspěšné ověření v reálném prohlížeči pomocí `browser_subagent`.
+- [x] Zjednodušení popisku tlačítka vzájemného vztahu pro románské jazyky (odstraněna závorka s otázkou, ponechán pouze čistý název):
+  - Français: **Relation réciproque**
+  - Italiano: **Relazione reciproca**
+  - Español: **Relación recíproca**
+- [x] Přidání **japonštiny** a **vietnamštiny** (celkem **13 plně podporovaných jazyků**):
+  - **日本語 (Japanese 🇯🇵)**: kompletní slovník `ja.js` (*父, 母, 祖父, 祖母, 息子, 娘, 伯父/叔父, 従兄弟, 甥, 姪, 夫, 妻, 義父, 義母, 嫁, 婿, 継父, 継母, 代父...*).
+  - **Tiếng Việt (Vietnamese 🇻🇳)**: kompletní slovník `vi.js` (*Bố, Mẹ, Ông nội, Bà nội, Ông ngoại, Bà ngoại, Bác, Chú, Cậu, Cô, Dì, Anh em họ, Cháu, Chồng, Vợ, Bố chồng/vợ, Mẹ chồng/vợ, Con dâu, Con rể, Bố dượng, Mẹ kế, Cha đỡ đầu...*).
+- [x] Rozšíření testovací sady v `tests/kinship.test.js` na **31 / 31 úspěšně procházejících testů**.
+- [x] Aktualizace Service Workeru (`sw.js`) na verzi `family-calc-v5`.
+- [x] Kompletní ověření v reálném prohlížeči pomocí `browser_subagent`.

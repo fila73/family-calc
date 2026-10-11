@@ -9,6 +9,8 @@ import { es } from './es.js';
 import { ru } from './ru.js';
 import { zh } from './zh.js';
 import { ko } from './ko.js';
+import { ja } from './ja.js';
+import { vi } from './vi.js';
 
 export const dictionaries = {
   cs,
@@ -21,7 +23,9 @@ export const dictionaries = {
   es,
   ru,
   zh,
-  ko
+  ko,
+  ja,
+  vi
 };
 
 export const availableLanguages = [
@@ -35,7 +39,9 @@ export const availableLanguages = [
   { code: 'es', label: 'Español 🇪🇸' },
   { code: 'ru', label: 'Русский 🇷🇺' },
   { code: 'zh', label: '中文 🇨🇳' },
-  { code: 'ko', label: '한국어 🇰🇷' }
+  { code: 'ko', label: '한국어 🇰🇷' },
+  { code: 'ja', label: '日本語 🇯🇵' },
+  { code: 'vi', label: 'Tiếng Việt 🇻🇳' }
 ];
 
 export function getDictionary(langCode = 'cs') {

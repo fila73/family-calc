@@ -14,6 +14,8 @@ import { de } from '../js/i18n/de.js';
 import { fr } from '../js/i18n/fr.js';
 import { it as itLang } from '../js/i18n/it.js';
 import { es } from '../js/i18n/es.js';
+import { ja } from '../js/i18n/ja.js';
+import { vi } from '../js/i18n/vi.js';
 
 let passed = 0;
 let total = 0;
@@ -274,10 +276,38 @@ it('Španělský překlad (Abuelo, Tío, Nuera, Madrastra, Padrino)', () => {
   assert.strictEqual(rES5.name, 'Padrino');
 });
 
+console.log('\n10. Asijské jazyky - Japonština a Vietnamština:');
+it('Japonský překlad (祖父, 伯父/叔父, 嫁, 継母, 代父)', () => {
+  const rJA1 = resolveKinship(['f', 'f'], 'm', ja);
+  assert.ok(rJA1.name.includes('祖父'), `Expected 祖父 but got ${rJA1.name}`);
+  const rJA2 = resolveKinship(['f', 'b'], 'm', ja);
+  assert.ok(rJA2.name.includes('伯父') || rJA2.name.includes('叔父'), `Expected 伯父/叔父 but got ${rJA2.name}`);
+  const rJA3 = resolveKinship(['s', 'w'], 'm', ja);
+  assert.ok(rJA3.name.includes('嫁'), `Expected 嫁 but got ${rJA3.name}`);
+  const rJA4 = resolveKinship(['step_m'], 'm', ja);
+  assert.ok(rJA4.name.includes('継母'), `Expected 継母 but got ${rJA4.name}`);
+  const rJA5 = resolveKinship(['god_f'], 'm', ja);
+  assert.ok(rJA5.name.includes('代父'), `Expected 代父 but got ${rJA5.name}`);
+});
+
+it('Vietnamský překlad (Ông nội, Bác/Chú, Con dâu, Mẹ kế, Cha đỡ đầu)', () => {
+  const rVI1 = resolveKinship(['f', 'f'], 'm', vi);
+  assert.strictEqual(rVI1.name, 'Ông nội');
+  const rVI2 = resolveKinship(['f', 'b'], 'm', vi);
+  assert.ok(rVI2.name.includes('Bác') || rVI2.name.includes('Chú'), `Expected Bác/Chú but got ${rVI2.name}`);
+  const rVI3 = resolveKinship(['s', 'w'], 'm', vi);
+  assert.strictEqual(rVI3.name, 'Con dâu');
+  const rVI4 = resolveKinship(['step_m'], 'm', vi);
+  assert.ok(rVI4.name.includes('Mẹ kế'), `Expected Mẹ kế but got ${rVI4.name}`);
+  const rVI5 = resolveKinship(['god_f'], 'm', vi);
+  assert.strictEqual(rVI5.name, 'Cha đỡ đầu');
+});
+
 console.log(`\n========================================`);
 console.log(`Výsledky testů: ${passed} / ${total} prošlo.`);
 if (passed !== total) {
   process.exit(1);
 }
+
 
 

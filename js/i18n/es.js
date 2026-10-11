@@ -16,7 +16,7 @@ export const es = {
     self: 'Yo mismo/a',
     selfArchaic: 'Probandus / Ego',
     selfDesc: 'Punto de partida de la investigación genealógica',
-    mutual: 'Relación recíproca (¿qué soy yo para él/ella?)',
+    mutual: 'Relación recíproca',
     modStep: 'Político / Medio',
     modGod: 'Padrinazgo',
     explanationLabel: 'Línea de parentesco',

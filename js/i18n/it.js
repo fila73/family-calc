@@ -16,7 +16,7 @@ export const it = {
     self: 'Me stesso/a',
     selfArchaic: 'Probandus / Ego',
     selfDesc: 'Punto di partenza della ricerca genealogica',
-    mutual: 'Relazione reciproca (chi sono io per lui/lei?)',
+    mutual: 'Relazione reciproca',
     modStep: 'Acquisiti / Fratellastri',
     modGod: 'Padrinato',
     explanationLabel: 'Percorso di parentela',

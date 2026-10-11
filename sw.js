@@ -2,7 +2,7 @@
  * Service Worker pro offline běh rodinné kalkulačky
  */
 
-const CACHE_NAME = 'family-calc-v4';
+const CACHE_NAME = 'family-calc-v5';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
@@ -21,6 +21,8 @@ const ASSETS_TO_CACHE = [
   './js/i18n/fr.js',
   './js/i18n/it.js',
   './js/i18n/es.js',
+  './js/i18n/ja.js',
+  './js/i18n/vi.js',
   './manifest.json'
 ];
 
