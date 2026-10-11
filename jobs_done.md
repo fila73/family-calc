@@ -34,3 +34,18 @@
   - **Polski (Polish 🇵🇱)**: kompletní slovník (stryj, wuj, ciotka, bratanek, siostrzeniec, szwagier, bratowa...).
   - **Deutsch (German 🇩🇪)**: kompletní slovník (Großvater, Onkel, Tante, Cousin, Neffe, Schwager, Schwägerin...).
 - [x] Rozšíření testovací sady v `tests/kinship.test.js` (20 / 20 testů úspěšně prošlo) a ověření všech nových jazyků v reálném prohlížeči.
+- [x] Implementace pokročilých redukčních pravidel v `js/engine/kinship-engine.js`:
+  - Řetězce tvaru `[muž] ➔ syn/dcera ➔ matka` se redukují na `[muž] ➔ manželka` (např. *Bratr ➔ Syn ➔ Matka* = **Švagrová** / *bratřina*).
+  - Řetězce tvaru `[žena] ➔ syn/dcera ➔ otec` se redukují na `[žena] ➔ manžel` (např. *Sestra ➔ Syn ➔ Otec* = **Švagr** / *svokr*).
+- [x] Implementace dvou modifikátorů klávesnice v UI i enginu:
+  - **`⇧ Nevlastní` (Shift mode)**:
+    - Přepíná klávesy na nevlastní relace: *Otčím*, *Macecha*, *Pastorek*, *Pastorkyně*, *Nevlastní bratr*, *Nevlastní sestra*.
+    - Podpora jednokrevních i jednobřišních polorodých sourozenců (*Matka ➔ Shift+Manžel ➔ Syn* = **Polobratr jednobřišní**, *Otec ➔ Shift+Manželka ➔ Syn* = **Polobratr jednokrevní**).
+    - Podpora nepokrevních nevlastních sourozenců ze svazků rodičů (*Matka ➔ Shift+Manžel ➔ Shift+Syn* = **Nevlastní bratr**).
+  - **`✝ Křestní` (Spiritual mode)**:
+    - Umožňuje zadávat kmotry a kmotřence: *Kmotr*, *Kmotra*, *Kmotřenec*, *Kmotřenka*.
+    - Plná podpora vzájemného vztahu / inverze perspektivy (např. pro mého kmotra jsem já **Kmotřenec** / **Kmotřenka**).
+- [x] Aktualizace a sjednocení všech 8 jazykových balíčků (`cs`, `sk`, `en`, `de`, `pl`, `ru`, `ko`, `zh`) s novými tokeny a kategoriemi vztahů.
+- [x] Rozšíření jednotkových testů na 26 / 26 úspěšně procházejících testů.
+- [x] Aktualizace Service Workeru (`sw.js`) na verzi `family-calc-v2` se strategií Network-First.
+- [x] End-to-end ověření v reálném prohlížeči pomocí `browser_subagent`.

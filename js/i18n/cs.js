@@ -29,6 +29,8 @@ export const cs = {
     backspace: 'Zpět',
     calculate: 'Spočítat',
     mutual: 'Vzájemný vztah',
+    modStep: 'Nevlastní',
+    modGod: 'Křestní',
     tokens: {
       f: 'otec',
       m: 'matka',
@@ -41,17 +43,143 @@ export const cs = {
       oz: 'starší sestra',
       lz: 'mladší sestra',
       h: 'manžel',
-      w: 'manželka'
+      w: 'manželka',
+      step_f: 'otčím',
+      step_m: 'macecha',
+      step_s: 'pastorek',
+      step_d: 'pastorkyně',
+      step_b: 'nevl. bratr',
+      step_z: 'nevl. sestra',
+      step_h: 'nový manžel',
+      step_w: 'nová manželka',
+      god_f: 'kmotr',
+      god_m: 'kmotra',
+      god_s: 'kmotřenec',
+      god_d: 'kmotřenka'
     },
     lineTypes: {
       direct_ascendant: 'Přímá vzestupná linie (předkové)',
       direct_descendant: 'Přímá sestupná linie (potomci)',
       sibling: 'Sourozenecká linie',
       collateral: 'Pobočná linie (strýcové, bratranci, synovci)',
-      affinity: 'Sešvagření (příbuzenství sňatkem)'
+      affinity: 'Sešvagření (příbuzenství sňatkem)',
+      step: 'Nevlastní a polorodí příbuzní',
+      spiritual: 'Příbuzní křtem (duchovní)'
     }
   },
   relations: {
+    // === Nevlastní a polorodí příbuzní (Macecha, otčím, pastorek...) ===
+    'step_m': {
+      name: 'Macecha',
+      archaic: 'Nevlastní matka (žena otce, která není matkou)',
+      description: 'Nová manželka tvého otce, biologicky nepříbuzná',
+      lineType: 'step'
+    },
+    'step_f': {
+      name: 'Otčím',
+      archaic: 'Nevlastní otec (muž matky, který není otcem)',
+      description: 'Nový manžel tvé matky, biologicky nepříbuzný',
+      lineType: 'step'
+    },
+    'step_s': {
+      name: 'Pastorek',
+      archaic: 'Nevlastní syn (syn manžela/manželky z dřívějška)',
+      description: 'Syn tvého partnera z předchozího svazku',
+      lineType: 'step'
+    },
+    'step_d': {
+      name: 'Pastorkyně',
+      archaic: 'Nevlastní dcera (dcera manžela/manželky z dřívějška)',
+      description: 'Dcera tvého partnera z předchozího svazku',
+      lineType: 'step'
+    },
+    'step_b': {
+      name: 'Nevlastní bratr',
+      archaic: 'Syn macechy nebo otčíma z jiného svazku',
+      description: 'Syn tvého nevlastního rodiče z jeho dřívějšího vztahu (žádná biologická příbuznost)',
+      lineType: 'step'
+    },
+    'step_z': {
+      name: 'Nevlastní sestra',
+      archaic: 'Dcera macechy nebo otčíma z jiného svazku',
+      description: 'Dcera tvého nevlastního rodiče z jeho dřívějšího vztahu (žádná biologická příbuznost)',
+      lineType: 'step'
+    },
+    'm,step_h,s': {
+      name: 'Polobratr (jednobřišní)',
+      archaic: 'Staročesky/latinsky frater uterinus',
+      description: 'Syn tvé matky s jiným mužem (máte společnou matku, ale jiného otce)',
+      lineType: 'step'
+    },
+    'm,step_h,d': {
+      name: 'Polosestra (jednobřišní)',
+      archaic: 'Staročesky/latinsky soror uterina',
+      description: 'Dcera tvé matky s jiným mužem (máte společnou matku, ale jiného otce)',
+      lineType: 'step'
+    },
+    'f,step_w,s': {
+      name: 'Polobratr (jednokrevní)',
+      archaic: 'Staročesky/latinsky frater consanguineus',
+      description: 'Syn tvého otce s jinou ženou/macechou (máte společného otce, ale jinou matku)',
+      lineType: 'step'
+    },
+    'f,step_w,d': {
+      name: 'Polosestra (jednokrevní)',
+      archaic: 'Staročesky/latinsky soror consanguinea',
+      description: 'Dcera tvého otce s jinou ženou/macechou (máte společného otce, ale jinou matku)',
+      lineType: 'step'
+    },
+    'step_m,s': {
+      name: 'Polobratr (jednokrevní)',
+      archaic: 'Syn otce a macechy (jednokrevní polobratr)',
+      description: 'Syn tvého otce a macechy',
+      lineType: 'step'
+    },
+    'step_m,d': {
+      name: 'Polosestra (jednokrevní)',
+      archaic: 'Dcera otce a macechy (jednokrevní polosestra)',
+      description: 'Dcera tvého otce a macechy',
+      lineType: 'step'
+    },
+    'step_f,s': {
+      name: 'Polobratr (jednobřišní)',
+      archaic: 'Syn matky a otčíma (jednobřišní polobratr)',
+      description: 'Syn tvé matky a otčíma',
+      lineType: 'step'
+    },
+    'step_f,d': {
+      name: 'Polosestra (jednobřišní)',
+      archaic: 'Dcera matky a otčíma (jednobřišní polosestra)',
+      description: 'Dcera tvé matky a otčíma',
+      lineType: 'step'
+    },
+
+    // === Příbuzní křtem (Duchovní příbuzenství) ===
+    'god_f': {
+      name: 'Kmotr',
+      archaic: 'Kmoch (duchovní otec při křtu)',
+      description: 'Muž, který se při křtu zavazuje pečovat o dítě',
+      lineType: 'spiritual'
+    },
+    'god_m': {
+      name: 'Kmotra',
+      archaic: 'Kmotřička (duchovní matka při křtu)',
+      description: 'Žena, která se při křtu zavazuje pečovat o dítě',
+      lineType: 'spiritual'
+    },
+    'god_s': {
+      name: 'Kmotřenec',
+      archaic: 'Duchovní syn vůči kmotrovi/kmotře',
+      description: 'Chlapec vůči svému kmotrovi nebo kmotře',
+      lineType: 'spiritual'
+    },
+    'god_d': {
+      name: 'Kmotřenka',
+      archaic: 'Duchovní dcera vůči kmotrovi/kmotře',
+      description: 'Dívka vůči svému kmotrovi nebo kmotře',
+      lineType: 'spiritual'
+    },
+
     // === 1. generace předků (Rodiče) ===
     'f': {
       name: 'Otec',

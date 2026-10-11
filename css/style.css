@@ -422,6 +422,72 @@ body::before {
   color: #ff9d47;
 }
 
+/* Modifiers Bar (Shift / Nevlastní & Křestní) */
+.modifiers-bar {
+  padding: 8px 18px;
+  background: #0d0d11;
+  border-top: 1px solid var(--border-subtle);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.mod-btn {
+  flex: 1;
+  height: 38px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  color: var(--text-secondary);
+  font-family: inherit;
+  font-size: 0.82rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  outline: none;
+}
+
+.mod-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text-primary);
+}
+
+.mod-icon {
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+/* Active State for Step Modifier (Amber) */
+.mod-btn.active-step {
+  background: rgba(245, 158, 11, 0.18);
+  border-color: #f59e0b;
+  color: #fbbf24;
+  box-shadow: 0 0 14px rgba(245, 158, 11, 0.35);
+}
+
+/* Active State for Godparent Modifier (Purple) */
+.mod-btn.active-god {
+  background: rgba(139, 92, 246, 0.18);
+  border-color: #8b5cf6;
+  color: #c4b5fd;
+  box-shadow: 0 0 14px rgba(139, 92, 246, 0.35);
+}
+
+/* Dynamic highlighting of keys when modifier is active */
+.keypad.shift-step-active .key:not(.key-clear):not(.key-backspace):not(.key-mutual):not(.key-equals) {
+  border-color: rgba(245, 158, 11, 0.4);
+  color: #fbbf24;
+}
+
+.keypad.shift-god-active .key:not(.key-clear):not(.key-backspace):not(.key-mutual):not(.key-equals) {
+  border-color: rgba(139, 92, 246, 0.4);
+  color: #c4b5fd;
+}
+
 /* Keypad Grid (4 columns, rounded tactile keys) */
 .keypad {
   padding: 14px 18px 20px;

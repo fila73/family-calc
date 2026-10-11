@@ -16,7 +16,21 @@ export const TOKENS = {
   OLDER_SISTER: 'oz',
   YOUNGER_SISTER: 'lz',
   HUSBAND: 'h',
-  WIFE: 'w'
+  WIFE: 'w',
+  // Step modifiers
+  STEP_FATHER: 'step_f',
+  STEP_MOTHER: 'step_m',
+  STEP_SON: 'step_s',
+  STEP_DAUGHTER: 'step_d',
+  STEP_BROTHER: 'step_b',
+  STEP_SISTER: 'step_z',
+  STEP_HUSBAND: 'step_h',
+  STEP_WIFE: 'step_w',
+  // Godparent modifiers
+  GOD_FATHER: 'god_f',
+  GOD_MOTHER: 'god_m',
+  GOD_SON: 'god_s',
+  GOD_DAUGHTER: 'god_d'
 };
 
 /**
@@ -30,6 +44,12 @@ export function getTokenGender(token) {
     case 'ob':
     case 'lb':
     case 'h':
+    case 'step_f':
+    case 'step_s':
+    case 'step_b':
+    case 'step_h':
+    case 'god_f':
+    case 'god_s':
       return 'm'; // male
     case 'm':
     case 'd':
@@ -37,6 +57,12 @@ export function getTokenGender(token) {
     case 'oz':
     case 'lz':
     case 'w':
+    case 'step_m':
+    case 'step_d':
+    case 'step_z':
+    case 'step_w':
+    case 'god_m':
+    case 'god_d':
       return 'f'; // female
     default:
       return null;
@@ -70,19 +96,119 @@ export function simplifyChain(rawChain, egoGender = 'm') {
     while (i < chain.length) {
       const cur = chain[i];
       const next = chain[i + 1];
+      const third = chain[i + 2];
 
-      if (next) {
-        const curNorm = normalizeToken(cur);
-        const nextNorm = normalizeToken(next);
+      const curNorm = normalizeToken(cur);
+      const nextNorm = next ? normalizeToken(next) : null;
+      const thirdNorm = third ? normalizeToken(third) : null;
 
-        // Manžel manželky / manželka manžela -> Ego (prázdno / zrušení páru)
+      // 1. Tříprvkové redukce:
+      // A) [muž] ➔ syn/dcera ➔ matka = [muž] ➔ manželka (švagrová / matka / snacha...)
+      if (nextNorm && thirdNorm && (nextNorm === 's' || nextNorm === 'd') && thirdNorm === 'm') {
+        const curGender = getTokenGender(curNorm);
+        if (curGender === 'm') {
+          // např. bratr ➔ syn ➔ matka = bratr ➔ manželka
+          newChain.push(cur);
+          newChain.push('w');
+          i += 3;
+          changed = true;
+          continue;
+        }
+      }
+
+      // B) [žena] ➔ syn/dcera ➔ otec = [žena] ➔ manžel (švagr / otec / zeť...)
+      if (nextNorm && thirdNorm && (nextNorm === 's' || nextNorm === 'd') && thirdNorm === 'f') {
+        const curGender = getTokenGender(curNorm);
+        if (curGender === 'f') {
+          // např. sestra ➔ syn ➔ otec = sestra ➔ manžel
+          newChain.push(cur);
+          newChain.push('h');
+          i += 3;
+          changed = true;
+          continue;
+        }
+      }
+
+      // C) Matka ➔ [nový manžel / step_h] ➔ [nevlastní syn / step_s] = nevlastní bratr
+      if (curNorm === 'm' && nextNorm === 'step_h' && thirdNorm === 'step_s') {
+        newChain.push('step_b');
+        i += 3;
+        changed = true;
+        continue;
+      }
+      if (curNorm === 'm' && nextNorm === 'step_h' && thirdNorm === 'step_d') {
+        newChain.push('step_z');
+        i += 3;
+        changed = true;
+        continue;
+      }
+      // Otec ➔ [nová manželka / step_w] ➔ [nevlastní syn / step_s] = nevlastní bratr
+      if (curNorm === 'f' && nextNorm === 'step_w' && thirdNorm === 'step_s') {
+        newChain.push('step_b');
+        i += 3;
+        changed = true;
+        continue;
+      }
+      if (curNorm === 'f' && nextNorm === 'step_w' && thirdNorm === 'step_d') {
+        newChain.push('step_z');
+        i += 3;
+        changed = true;
+        continue;
+      }
+
+      // 2. Dvouprvkové redukce z pohledu Ega na začátku řetězce:
+      if (i === 0 && nextNorm) {
+        // JÁ (muž) ➔ syn/dcera ➔ matka = moje manželka
+        if ((curNorm === 's' || curNorm === 'd') && nextNorm === 'm' && egoGender === 'm') {
+          newChain.push('w');
+          i += 2;
+          changed = true;
+          continue;
+        }
+        // JÁ (žena) ➔ syn/dcera ➔ otec = můj manžel
+        if ((curNorm === 's' || curNorm === 'd') && nextNorm === 'f' && egoGender === 'f') {
+          newChain.push('h');
+          i += 2;
+          changed = true;
+          continue;
+        }
+        // JÁ (muž) ➔ syn/dcera ➔ otec = JÁ (zrušení)
+        if ((curNorm === 's' || curNorm === 'd') && nextNorm === 'f' && egoGender === 'm') {
+          i += 2;
+          changed = true;
+          continue;
+        }
+        // JÁ (žena) ➔ syn/dcera ➔ matka = JÁ (zrušení)
+        if ((curNorm === 's' || curNorm === 'd') && nextNorm === 'm' && egoGender === 'f') {
+          i += 2;
+          changed = true;
+          continue;
+        }
+      }
+
+      if (nextNorm) {
+        // Manžel manželky / manželka manžela -> Ego (zrušení páru)
         if ((curNorm === 'h' && nextNorm === 'w') || (curNorm === 'w' && nextNorm === 'h')) {
           i += 2;
           changed = true;
           continue;
         }
 
-        // Rodič -> Choť = druhý rodič (pokud otec + manželka = matka, matka + manžel = otec)
+        // Řetězení sourozenců (bratr bratra = bratr)
+        if ((curNorm === 'b' || curNorm === 'z') && nextNorm === 'b') {
+          newChain.push('b');
+          i += 2;
+          changed = true;
+          continue;
+        }
+        if ((curNorm === 'b' || curNorm === 'z') && nextNorm === 'z') {
+          newChain.push('z');
+          i += 2;
+          changed = true;
+          continue;
+        }
+
+        // Rodič -> Choť (vlastní rodina)
         if (curNorm === 'f' && nextNorm === 'w') {
           newChain.push('m');
           i += 2;
@@ -91,6 +217,48 @@ export function simplifyChain(rawChain, egoGender = 'm') {
         }
         if (curNorm === 'm' && nextNorm === 'h') {
           newChain.push('f');
+          i += 2;
+          changed = true;
+          continue;
+        }
+
+        // Rodič -> [Nevlastní partner] = Macecha / Otčím
+        if (curNorm === 'f' && nextNorm === 'step_w') {
+          newChain.push('step_m');
+          i += 2;
+          changed = true;
+          continue;
+        }
+        if (curNorm === 'm' && nextNorm === 'step_h') {
+          newChain.push('step_f');
+          i += 2;
+          changed = true;
+          continue;
+        }
+
+        // Macecha / Otčím ➔ jejich nevlastní dítě z dřívějška = nevlastní bratr / sestra
+        if ((curNorm === 'step_m' || curNorm === 'step_f') && nextNorm === 'step_s') {
+          newChain.push('step_b');
+          i += 2;
+          changed = true;
+          continue;
+        }
+        if ((curNorm === 'step_m' || curNorm === 'step_f') && nextNorm === 'step_d') {
+          newChain.push('step_z');
+          i += 2;
+          changed = true;
+          continue;
+        }
+
+        // Manžel / Manželka ➔ nevlastní dítě z předchozího svazku = pastorek / pastorkyně
+        if ((curNorm === 'w' || curNorm === 'h') && nextNorm === 'step_s') {
+          newChain.push('step_s');
+          i += 2;
+          changed = true;
+          continue;
+        }
+        if ((curNorm === 'w' || curNorm === 'h') && nextNorm === 'step_d') {
+          newChain.push('step_d');
           i += 2;
           changed = true;
           continue;
@@ -112,13 +280,13 @@ export function simplifyChain(rawChain, egoGender = 'm') {
 
         // Dítě -> Otec/Matka
         // Syn/dcera mého otce/matky = bratr/sestra (pokud ne já)
-        if ((curNorm === 'f' || curNorm === 'm') && (nextNorm === 's')) {
+        if ((curNorm === 'f' || curNorm === 'm') && nextNorm === 's') {
           newChain.push('b');
           i += 2;
           changed = true;
           continue;
         }
-        if ((curNorm === 'f' || curNorm === 'm') && (nextNorm === 'd')) {
+        if ((curNorm === 'f' || curNorm === 'm') && nextNorm === 'd') {
           newChain.push('z');
           i += 2;
           changed = true;
@@ -183,6 +351,38 @@ export function invertChain(chain, egoGender = 'm') {
       case 'w':
         // Předchozí osoba byla partnerem cíle
         inverted.push(prevPersonGender === 'm' ? 'h' : 'w');
+        break;
+
+      // === Step relace ===
+      case 'step_f':
+      case 'step_m':
+        // Pro otčíma / macechu jsem pastorek / pastorkyně
+        inverted.push(prevPersonGender === 'm' ? 'step_s' : 'step_d');
+        break;
+
+      case 'step_s':
+      case 'step_d':
+        // Pro pastorka / pastorkyni jsem otčím / macecha
+        inverted.push(prevPersonGender === 'm' ? 'step_f' : 'step_m');
+        break;
+
+      case 'step_b':
+      case 'step_z':
+        // Pro nevlastního bratra / sestru jsem nevlastní bratr / sestra
+        inverted.push(prevPersonGender === 'm' ? 'step_b' : 'step_z');
+        break;
+
+      // === Křestní relace ===
+      case 'god_f':
+      case 'god_m':
+        // Pro kmotra / kmotru jsem kmotřenec / kmotřenka
+        inverted.push(prevPersonGender === 'm' ? 'god_s' : 'god_d');
+        break;
+
+      case 'god_s':
+      case 'god_d':
+        // Pro kmotřence / kmotřenku jsem kmotr / kmotra
+        inverted.push(prevPersonGender === 'm' ? 'god_f' : 'god_m');
         break;
 
       default:

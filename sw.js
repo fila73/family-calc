@@ -2,7 +2,7 @@
  * Service Worker pro offline běh rodinné kalkulačky
  */
 
-const CACHE_NAME = 'family-calc-v1';
+const CACHE_NAME = 'family-calc-v2';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
@@ -14,6 +14,10 @@ const ASSETS_TO_CACHE = [
   './js/i18n/en.js',
   './js/i18n/zh.js',
   './js/i18n/sk.js',
+  './js/i18n/ko.js',
+  './js/i18n/ru.js',
+  './js/i18n/pl.js',
+  './js/i18n/de.js',
   './manifest.json'
 ];
 
@@ -41,8 +45,14 @@ self.addEventListener('activate', (e) => {
 
 self.addEventListener('fetch', (e) => {
   e.respondWith(
-    caches.match(e.request).then((res) => {
-      return res || fetch(e.request);
-    })
+    fetch(e.request)
+      .then((networkRes) => {
+        if (networkRes && networkRes.status === 200) {
+          const resClone = networkRes.clone();
+          caches.open(CACHE_NAME).then((cache) => cache.put(e.request, resClone));
+        }
+        return networkRes;
+      })
+      .catch(() => caches.match(e.request))
   );
 });

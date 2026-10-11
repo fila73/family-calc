@@ -6,6 +6,10 @@ Interaktivní webová aplikace inspirovaná čínskou kalkulačkou příbuzenstv
 - **Kalkulačkové rozhraní**: ergonomické mobilní rozložení klávesnice s AMOLED tmavým motivem.
 - **Kompletní české názvosloví**: podpora vztahů podle české Wikipedie, včetně přímých předků/potomků, pobočných linií (strýcové, tety, bratranci a sestřenice z více kolen, synovci a neteře) i sešvagření (tchán, tchyně, švagr, švagrová, zeť, snacha, svat, svatka).
 - **Historické & archaické názvy**: *ujec*, *stryna*, *tetec*, *posel*, *deveř*, *šurin*, *zelva*, *svak*, *starosvat* a další.
+- **Inteligentní redukční pravidla**: automatické zjednodušování složených řetězců (např. *Bratr ➔ Syn ➔ Matka* = **Švagrová** / *bratřina*, *Sestra ➔ Syn ➔ Otec* = **Švagr**).
+- **Modifikátory klávesnice**:
+  - **`⇧ Nevlastní`**: zadávání nevlastních rodičů (*Otčím*, *Macecha*), pastorků i polorodých a nevlastních sourozenců (*jednobřišní* i *jednokrevní* bratr/sestra).
+  - **`✝ Křestní`**: duchovní příbuzenství (*Kmotr*, *Kmotra*, *Kmotřenec*, *Kmotřenka*).
 - **Oboustranný výpočet (互查)**: přepnutí perspektivy – okamžité zjištění, jak daný příbuzný oslovuje vás ("Kdo jsem já pro něj?").
 - **Volba pohlaví EGO / probanda**: muž / žena (výrazně ovlivňuje partnerské a vzájemné vztahy).
 - **Připraveno pro vícejazyčnost**: architektura s oddělenými lokalizacemi (Čeština 🇨🇿, Slovenčina 🇸🇰, Polski 🇵🇱, Deutsch 🇩🇪, English 🇬🇧, Русский 🇷🇺, 中文 🇨🇳, 한국어 🇰🇷).

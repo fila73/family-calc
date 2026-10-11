@@ -11,6 +11,7 @@ class FamilyCalcApp {
     this.egoGender = localStorage.getItem('ego_gender') || 'm';
     this.currentLang = localStorage.getItem('lang_code') || 'cs';
     this.isMutualView = false;
+    this.modifier = null; // null | 'step' | 'god'
     this.history = [];
 
     this.initElements();
@@ -27,6 +28,12 @@ class FamilyCalcApp {
     this.genderBtnMale = document.getElementById('genderBtnMale');
     this.genderBtnFemale = document.getElementById('genderBtnFemale');
     this.probandLabelText = document.getElementById('probandLabelText');
+
+    // Modifiers
+    this.btnModStep = document.getElementById('btnModStep');
+    this.btnModGod = document.getElementById('btnModGod');
+    this.labelModStep = document.getElementById('labelModStep');
+    this.labelModGod = document.getElementById('labelModGod');
 
     this.chainContainer = document.getElementById('chainContainer');
     this.resultMain = document.getElementById('resultMain');
@@ -84,6 +91,10 @@ class FamilyCalcApp {
       this.clearAll();
     });
 
+    // Modifiers
+    this.btnModStep.addEventListener('click', () => this.toggleModifier('step'));
+    this.btnModGod.addEventListener('click', () => this.toggleModifier('god'));
+
     // Keypad key clicks
     this.keyHusband.addEventListener('click', () => this.addToken(TOKENS.HUSBAND));
     this.keyWife.addEventListener('click', () => this.addToken(TOKENS.WIFE));
@@ -117,7 +128,9 @@ class FamilyCalcApp {
     // Keyboard shortcuts for convenience
     window.addEventListener('keydown', (e) => {
       if (this.dictModal.classList.contains('open')) return;
-      if (e.key === 'Backspace') {
+      if (e.key === 'Shift') {
+        this.toggleModifier('step');
+      } else if (e.key === 'Backspace') {
         this.popToken();
       } else if (e.key === 'Escape' || e.key === 'c' || e.key === 'C') {
         this.clearAll();
@@ -125,6 +138,20 @@ class FamilyCalcApp {
         this.onEquals();
       }
     });
+  }
+
+  toggleModifier(modType) {
+    this.triggerHaptic();
+    this.modifier = (this.modifier === modType) ? null : modType;
+    this.updateModifierUI();
+    this.updateLanguage();
+  }
+
+  updateModifierUI() {
+    this.btnModStep.classList.toggle('active-step', this.modifier === 'step');
+    this.btnModGod.classList.toggle('active-god', this.modifier === 'god');
+    this.keypad.classList.toggle('shift-step-active', this.modifier === 'step');
+    this.keypad.classList.toggle('shift-god-active', this.modifier === 'god');
   }
 
   triggerHaptic() {
@@ -174,63 +201,94 @@ class FamilyCalcApp {
     this.genderBtnMale.textContent = dict.labels.male;
     this.genderBtnFemale.textContent = dict.labels.female;
 
+    this.labelModStep.textContent = dict.labels.modStep || 'Nevlastní';
+    this.labelModGod.textContent = dict.labels.modGod || 'Křestní';
+
     this.explanationLabel.textContent = dict.labels.explanationLabel + ':';
     this.reciprocalLabel.textContent = dict.labels.reciprocal + ':';
 
-    // Key labels
     const t = dict.labels.tokens;
-    this.setKeyContent(this.keyHusband, t.h, '');
-    this.setKeyContent(this.keyWife, t.w, '');
-    this.setKeyContent(this.keyFather, t.f, '');
-    this.setKeyContent(this.keyMother, t.m, '');
-    this.setKeyContent(this.keySon, t.s, '');
-    this.setKeyContent(this.keyDaughter, t.d, '');
 
-    // Siblings
-    if (this.currentLang === 'zh') {
-      this.setKeyContent(this.keyBrotherOld, '兄', '长');
-      this.setKeyContent(this.keyBrotherYoung, '弟', '幼');
-      this.setKeyContent(this.keySisterOld, '姐', '长');
-      this.setKeyContent(this.keySisterYoung, '妹', '幼');
-    } else if (this.currentLang === 'ko') {
-      this.setKeyContent(this.keyBrotherOld, '형/오빠', '연상');
-      this.setKeyContent(this.keyBrotherYoung, '남동생', '연하');
-      this.setKeyContent(this.keySisterOld, '누나/언니', '연상');
-      this.setKeyContent(this.keySisterYoung, '여동생', '연하');
-    } else if (this.currentLang === 'ru') {
-      this.setKeyContent(this.keyBrotherOld, 'Брат', 'старший');
-      this.setKeyContent(this.keyBrotherYoung, 'Брат', 'младший');
-      this.setKeyContent(this.keySisterOld, 'Сестра', 'старшая');
-      this.setKeyContent(this.keySisterYoung, 'Сестра', 'младшая');
-    } else if (this.currentLang === 'pl') {
-      this.setKeyContent(this.keyBrotherOld, 'Brat', 'starszy');
-      this.setKeyContent(this.keyBrotherYoung, 'Brat', 'młodszy');
-      this.setKeyContent(this.keySisterOld, 'Siostra', 'starsza');
-      this.setKeyContent(this.keySisterYoung, 'Siostra', 'młodsza');
-    } else if (this.currentLang === 'de') {
-      this.setKeyContent(this.keyBrotherOld, 'Bruder', 'älterer');
-      this.setKeyContent(this.keyBrotherYoung, 'Bruder', 'jüngerer');
-      this.setKeyContent(this.keySisterOld, 'Schwester', 'ältere');
-      this.setKeyContent(this.keySisterYoung, 'Schwester', 'jüngere');
-    } else if (this.currentLang === 'cs') {
-      this.setKeyContent(this.keyBrotherOld, 'Bratr', 'starší');
-      this.setKeyContent(this.keyBrotherYoung, 'Bratr', 'mladší');
-      this.setKeyContent(this.keySisterOld, 'Sestra', 'starší');
-      this.setKeyContent(this.keySisterYoung, 'Sestra', 'mladší');
-    } else if (this.currentLang === 'sk') {
-      this.setKeyContent(this.keyBrotherOld, 'Brat', 'starší');
-      this.setKeyContent(this.keyBrotherYoung, 'Brat', 'mladší');
-      this.setKeyContent(this.keySisterOld, 'Sestra', 'staršia');
-      this.setKeyContent(this.keySisterYoung, 'Sestra', 'mladšia');
+    if (this.modifier === 'step') {
+      // Shifted / Step labels
+      this.setKeyContent(this.keyHusband, t.step_h || 'nový manžel', 'nevlastní');
+      this.setKeyContent(this.keyWife, t.step_w || 'nová manželka', 'nevlastní');
+      this.setKeyContent(this.keyFather, t.step_f || 'otčím', 'nevlastní');
+      this.setKeyContent(this.keyMother, t.step_m || 'macecha', 'nevlastní');
+      this.setKeyContent(this.keySon, t.step_s || 'pastorek', 'nevlastní');
+      this.setKeyContent(this.keyDaughter, t.step_d || 'pastorkyně', 'nevlastní');
+      this.setKeyContent(this.keyBrotherOld, t.step_b || 'nevl. bratr', 'nevlastní');
+      this.setKeyContent(this.keyBrotherYoung, t.step_b || 'nevl. bratr', 'nevlastní');
+      this.setKeyContent(this.keySisterOld, t.step_z || 'nevl. sestra', 'nevlastní');
+      this.setKeyContent(this.keySisterYoung, t.step_z || 'nevl. sestra', 'nevlastní');
+    } else if (this.modifier === 'god') {
+      // Godparent labels
+      this.setKeyContent(this.keyHusband, t.god_f || 'kmotr', 'křestní');
+      this.setKeyContent(this.keyWife, t.god_m || 'kmotra', 'křestní');
+      this.setKeyContent(this.keyFather, t.god_f || 'kmotr', 'křestní');
+      this.setKeyContent(this.keyMother, t.god_m || 'kmotra', 'křestní');
+      this.setKeyContent(this.keySon, t.god_s || 'kmotřenec', 'křestní');
+      this.setKeyContent(this.keyDaughter, t.god_d || 'kmotřenka', 'křestní');
+      this.setKeyContent(this.keyBrotherOld, t.god_s || 'kmotřenec', 'křestní');
+      this.setKeyContent(this.keyBrotherYoung, t.god_s || 'kmotřenec', 'křestní');
+      this.setKeyContent(this.keySisterOld, t.god_d || 'kmotřenka', 'křestní');
+      this.setKeyContent(this.keySisterYoung, t.god_d || 'kmotřenka', 'křestní');
     } else {
-      this.setKeyContent(this.keyBrotherOld, 'Bro', 'elder');
-      this.setKeyContent(this.keyBrotherYoung, 'Bro', 'younger');
-      this.setKeyContent(this.keySisterOld, 'Sis', 'elder');
-      this.setKeyContent(this.keySisterYoung, 'Sis', 'younger');
+      // Standard key labels
+      this.setKeyContent(this.keyHusband, t.h, '');
+      this.setKeyContent(this.keyWife, t.w, '');
+      this.setKeyContent(this.keyFather, t.f, '');
+      this.setKeyContent(this.keyMother, t.m, '');
+      this.setKeyContent(this.keySon, t.s, '');
+      this.setKeyContent(this.keyDaughter, t.d, '');
+
+      // Siblings
+      if (this.currentLang === 'zh') {
+        this.setKeyContent(this.keyBrotherOld, '兄', '长');
+        this.setKeyContent(this.keyBrotherYoung, '弟', '幼');
+        this.setKeyContent(this.keySisterOld, '姐', '长');
+        this.setKeyContent(this.keySisterYoung, '妹', '幼');
+      } else if (this.currentLang === 'ko') {
+        this.setKeyContent(this.keyBrotherOld, '형/오빠', '연상');
+        this.setKeyContent(this.keyBrotherYoung, '남동생', '연하');
+        this.setKeyContent(this.keySisterOld, '누나/언니', '연상');
+        this.setKeyContent(this.keySisterYoung, '여동생', '연하');
+      } else if (this.currentLang === 'ru') {
+        this.setKeyContent(this.keyBrotherOld, 'Брат', 'старший');
+        this.setKeyContent(this.keyBrotherYoung, 'Брат', 'младший');
+        this.setKeyContent(this.keySisterOld, 'Сестра', 'старшая');
+        this.setKeyContent(this.keySisterYoung, 'Сестра', 'младшая');
+      } else if (this.currentLang === 'pl') {
+        this.setKeyContent(this.keyBrotherOld, 'Brat', 'starszy');
+        this.setKeyContent(this.keyBrotherYoung, 'Brat', 'młodszy');
+        this.setKeyContent(this.keySisterOld, 'Siostra', 'starsza');
+        this.setKeyContent(this.keySisterYoung, 'Siostra', 'młodsza');
+      } else if (this.currentLang === 'de') {
+        this.setKeyContent(this.keyBrotherOld, 'Bruder', 'älterer');
+        this.setKeyContent(this.keyBrotherYoung, 'Bruder', 'jüngerer');
+        this.setKeyContent(this.keySisterOld, 'Schwester', 'ältere');
+        this.setKeyContent(this.keySisterYoung, 'Schwester', 'jüngere');
+      } else if (this.currentLang === 'cs') {
+        this.setKeyContent(this.keyBrotherOld, 'Bratr', 'starší');
+        this.setKeyContent(this.keyBrotherYoung, 'Bratr', 'mladší');
+        this.setKeyContent(this.keySisterOld, 'Sestra', 'starší');
+        this.setKeyContent(this.keySisterYoung, 'Sestra', 'mladší');
+      } else if (this.currentLang === 'sk') {
+        this.setKeyContent(this.keyBrotherOld, 'Brat', 'starší');
+        this.setKeyContent(this.keyBrotherYoung, 'Brat', 'mladší');
+        this.setKeyContent(this.keySisterOld, 'Sestra', 'staršia');
+        this.setKeyContent(this.keySisterYoung, 'Sestra', 'mladšia');
+      } else {
+        this.setKeyContent(this.keyBrotherOld, 'Bro', 'elder');
+        this.setKeyContent(this.keyBrotherYoung, 'Bro', 'younger');
+        this.setKeyContent(this.keySisterOld, 'Sis', 'elder');
+        this.setKeyContent(this.keySisterYoung, 'Sis', 'younger');
+      }
     }
 
     this.keyMutual.textContent = dict.labels.mutual;
     this.updateGenderUI();
+    this.updateModifierUI();
   }
 
   setKeyContent(keyEl, mainText, subText) {
@@ -244,7 +302,33 @@ class FamilyCalcApp {
   addToken(token) {
     this.triggerHaptic();
     this.isMutualView = false;
-    this.chain.push(token);
+    let finalToken = token;
+
+    if (this.modifier === 'step') {
+      if (token === TOKENS.FATHER) finalToken = TOKENS.STEP_FATHER;
+      else if (token === TOKENS.MOTHER) finalToken = TOKENS.STEP_MOTHER;
+      else if (token === TOKENS.SON) finalToken = TOKENS.STEP_SON;
+      else if (token === TOKENS.DAUGHTER) finalToken = TOKENS.STEP_DAUGHTER;
+      else if (token === TOKENS.OLDER_BROTHER || token === TOKENS.YOUNGER_BROTHER || token === TOKENS.BROTHER) finalToken = TOKENS.STEP_BROTHER;
+      else if (token === TOKENS.OLDER_SISTER || token === TOKENS.YOUNGER_SISTER || token === TOKENS.SISTER) finalToken = TOKENS.STEP_SISTER;
+      else if (token === TOKENS.HUSBAND) finalToken = TOKENS.STEP_HUSBAND;
+      else if (token === TOKENS.WIFE) finalToken = TOKENS.STEP_WIFE;
+      this.modifier = null;
+      this.updateModifierUI();
+      this.updateLanguage();
+    } else if (this.modifier === 'god') {
+      if (token === TOKENS.FATHER) finalToken = TOKENS.GOD_FATHER;
+      else if (token === TOKENS.MOTHER) finalToken = TOKENS.GOD_MOTHER;
+      else if (token === TOKENS.SON) finalToken = TOKENS.GOD_SON;
+      else if (token === TOKENS.DAUGHTER) finalToken = TOKENS.GOD_DAUGHTER;
+      else if (token === TOKENS.OLDER_BROTHER || token === TOKENS.YOUNGER_BROTHER || token === TOKENS.BROTHER) finalToken = TOKENS.GOD_SON;
+      else if (token === TOKENS.OLDER_SISTER || token === TOKENS.YOUNGER_SISTER || token === TOKENS.SISTER) finalToken = TOKENS.GOD_DAUGHTER;
+      this.modifier = null;
+      this.updateModifierUI();
+      this.updateLanguage();
+    }
+
+    this.chain.push(finalToken);
     this.render();
   }
 

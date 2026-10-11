@@ -172,8 +172,68 @@ it('Německý překlad (Großvater, Onkel, Schwiegervater)', () => {
   assert.strictEqual(rDE2.name, 'Schwiegervater');
 });
 
+console.log('\n8. Redukční pravidla a modifikátory (Shift / Nevlastní, Křestní):');
+it('Redukce bratr -> syn -> matka = švagrová', () => {
+  const rBSM = resolveKinship(['b', 's', 'm'], 'm', cs);
+  assert.ok(rBSM.name.includes('Švagrová'), `Expected Švagrová but got ${rBSM.name}`);
+});
+
+it('Redukce sestra -> syn -> otec = švagr', () => {
+  const rZSF = resolveKinship(['z', 's', 'f'], 'm', cs);
+  assert.ok(rZSF.name.includes('Švagr'), `Expected Švagr but got ${rZSF.name}`);
+});
+
+it('Shift modifikátor: Macecha (step_m) a Otčím (step_f)', () => {
+  const rStepM = resolveKinship(['step_m'], 'm', cs);
+  assert.strictEqual(rStepM.name, 'Macecha');
+  const rStepF = resolveKinship(['step_f'], 'm', cs);
+  assert.strictEqual(rStepF.name, 'Otčím');
+  
+  // otec -> nevlastní manželka = macecha
+  const rFW = resolveKinship(['f', 'step_w'], 'm', cs);
+  assert.strictEqual(rFW.name, 'Macecha');
+});
+
+it('Polobratři (jednobřišní a jednokrevní)', () => {
+  // matka -> nevlastní manžel -> syn = polobratr jednobřišní
+  const rUterine = resolveKinship(['m', 'step_h', 's'], 'm', cs);
+  assert.ok(rUterine.name.includes('Polobratr (jednobřišní)'), `Expected Polobratr (jednobřišní) but got ${rUterine.name}`);
+
+  // otec -> nevlastní manželka -> syn = polobratr jednokrevní
+  const rConsanguine = resolveKinship(['f', 'step_w', 's'], 'm', cs);
+  assert.ok(rConsanguine.name.includes('Polobratr (jednokrevní)'), `Expected Polobratr (jednokrevní) but got ${rConsanguine.name}`);
+});
+
+it('Nevlastní sourozenci (nepokrevní svazek rodičů)', () => {
+  // matka -> nevlastní manžel -> nevlastní syn = nevlastní bratr
+  const rStepB = resolveKinship(['m', 'step_h', 'step_s'], 'm', cs);
+  assert.strictEqual(rStepB.name, 'Nevlastní bratr');
+
+  // přímý Shift + bratr
+  const rDirectStepB = resolveKinship(['step_b'], 'm', cs);
+  assert.strictEqual(rDirectStepB.name, 'Nevlastní bratr');
+});
+
+it('Křestní modifikátor a vzájemný vztah (kmotr / kmotřenec)', () => {
+  const rGodF = resolveKinship(['god_f'], 'm', cs);
+  assert.strictEqual(rGodF.name, 'Kmotr');
+  const rGodM = resolveKinship(['god_m'], 'm', cs);
+  assert.strictEqual(rGodM.name, 'Kmotra');
+
+  // Invert perspektivy pro muže: pro mého kmotra jsem já kmotřenec
+  const invM = invertChain(['god_f'], 'm');
+  const rInvM = resolveKinship(invM, 'm', cs);
+  assert.strictEqual(rInvM.name, 'Kmotřenec');
+
+  // Invert pro ženu: kmotřenka
+  const invF = invertChain(['god_f'], 'f');
+  const rInvF = resolveKinship(invF, 'm', cs);
+  assert.strictEqual(rInvF.name, 'Kmotřenka');
+});
+
 console.log(`\n========================================`);
 console.log(`Výsledky testů: ${passed} / ${total} prošlo.`);
 if (passed !== total) {
   process.exit(1);
 }
+
