@@ -303,3 +303,8 @@
   - Do `.gitignore` doplněn referenční screenshot `1791674306641.jpg` a složka podkladů pro obchod `google-play/`.
   - Provedeno bezpečné vyřazení z verzování Gitu (`git rm --cached 1791674306641.jpg` a `git rm -r --cached google-play/`), takže soubory zůstávají lokálně zachovány pro potřeby nasazení, ale nezatěžují repozitář se zdrojovým kódem.
   - Ověřeno testovací sadou (85/85 testů prošlo bez chyb).
+- [x] Zpracování Google Play Onboarding plánu a tvorba průvodců:
+  - Vytvořen `google-play/LAUNCH_ROADMAP.md` s interaktivním TODO checklistem a postupem pro všech 3 hlavních kroků Google.
+  - Vytvořen `google-play/CLOSED_TESTING_GUIDE.md` pro povinný 14denní uzavřený test s min. 12 testery (příprava Google skupiny, vzorové pozvánky v CZ i EN a tahák s odpověďmi pro formulář žádosti o produkci).
+  - Vytvořen `google-play/DATA_SAFETY_CHEAT_SHEET.md` pro bleskové a bezchybné vyplnění formuláře Bezpečnost údajů.
+  - Aktualizován `google-play/RELEASE_GUIDE.md` (oprava URL zásad ochrany soukromí na `https://fila73.github.io/family-calc/privacy.html` a zohlednění 3-fázového testovacího workflow).
