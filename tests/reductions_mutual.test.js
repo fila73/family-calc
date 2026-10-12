@@ -113,6 +113,13 @@ console.log('\n4. In-law nephews/nieces & grand-nephews (0% DNA affinity):');
   assertEquals(res4.consanguinity.dnaPercent, 0, 'h, z, s, s má 0% DNA (žádná pokrevní příbuznost)');
   assert(res4.inheritance.classNumber === null, 'h, z, s, s je mimo zákonné dědické třídy');
   assert(res4.marriageImpediment.hasImpediment === false, 'h, z, s, s nemá překážku sňatku');
+
+  // Uživatelský dotaz: ja-manžel-sestra-syn-syn-bratr (h, z, s, s, b) -> bratr syna je také syn -> Prasynovec
+  const res5 = resolveKinship(['h', 'z', 's', 's', 'b'], 'f', cs);
+  assert(res5.name.includes('Prasynovec'), 'h, z, s, s, b redukuje na Prasynovec');
+  assertEquals(res5.consanguinity.dnaPercent, 0, 'h, z, s, s, b má 0% DNA');
+  const invRes5 = resolveKinship(invertChain(['h', 'z', 's', 's', 'b'], 'f'), 'm', cs);
+  assert(invRes5.name.includes('Prateta'), 'Vzájemný vztah k h, z, s, s, b je Prateta');
 }
 
 // 5. InvertChain tests for step relations

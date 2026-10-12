@@ -258,6 +258,20 @@ export function simplifyChain(rawChain, egoGender = 'm') {
           continue;
         }
 
+        // Dítě a jeho sourozenec (synův/dceřin bratr je syn téhož rodiče, synova/dceřina sestra je dcera téhož rodiče)
+        if ((curNorm === 's' || curNorm === 'd') && nextNorm === 'b') {
+          newChain.push('s');
+          i += 2;
+          changed = true;
+          continue;
+        }
+        if ((curNorm === 's' || curNorm === 'd') && nextNorm === 'z') {
+          newChain.push('d');
+          i += 2;
+          changed = true;
+          continue;
+        }
+
         // Rodič -> Choť (vlastní rodina)
         if (curNorm === 'f' && nextNorm === 'w') {
           newChain.push('m');

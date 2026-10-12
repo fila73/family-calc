@@ -1211,13 +1211,6 @@ class FamilyCalcApp {
   renderChainBreadcrumbs(dict, directName = '') {
     this.chainContainer.innerHTML = '';
 
-    if (this.isMutualView) {
-      const mutualInd = document.createElement('span');
-      mutualInd.className = 'chain-mutual-indicator';
-      mutualInd.textContent = `⇄ Vzájemný vztah k [${directName || 'cíl'}]:`;
-      this.chainContainer.appendChild(mutualInd);
-    }
-
     // "Self" starting node
     const selfItem = document.createElement('span');
     selfItem.className = 'chain-item chain-self';
@@ -1336,47 +1329,63 @@ class FamilyCalcApp {
   // === 1. Text-to-Speech (Předčítání výsledku) ===
   speakResult() {
     this.triggerHaptic();
-    if (!this.synth) {
-      this.showToast('Hlasová syntéza není tímto prohlížečem podporována');
-      return;
-    }
-
-    this.synth.cancel(); // Stop any ongoing speech
 
     const dict = getDictionary(this.currentLang);
     const activeChain = this.isMutualView ? invertChain(this.chain, this.egoGender) : this.chain;
     const resolved = resolveKinship(activeChain, this.egoGender, dict);
-
     const textToSpeak = `${resolved.name}. ${resolved.description || ''}`;
-    const utterance = new SpeechSynthesisUtterance(textToSpeak);
 
     const langMap = {
-      cs: 'cs-CZ',
-      sk: 'sk-SK',
-      en: 'en-US',
-      de: 'de-DE',
-      pl: 'pl-PL',
-      fr: 'fr-FR',
-      it: 'it-IT',
-      es: 'es-ES',
-      ru: 'ru-RU',
-      zh: 'zh-CN',
-      ja: 'ja-JP',
-      ko: 'ko-KR',
-      vi: 'vi-VN'
+      cs: 'cs-CZ', sk: 'sk-SK', en: 'en-US', de: 'de-DE', pl: 'pl-PL',
+      fr: 'fr-FR', it: 'it-IT', es: 'es-ES', ru: 'ru-RU', zh: 'zh-CN',
+      ja: 'ja-JP', ko: 'ko-KR', vi: 'vi-VN', uk: 'uk-UA', pt: 'pt-PT',
+      nl: 'nl-NL', hu: 'hu-HU', tr: 'tr-TR', el: 'el-GR', sv: 'sv-SE',
+      hi: 'hi-IN', id: 'id-ID', ar: 'ar-SA', hr: 'hr-HR', ro: 'ro-RO'
     };
+    const targetLang = langMap[this.currentLang] || 'cs-CZ';
 
-    utterance.lang = langMap[this.currentLang] || 'cs-CZ';
-    utterance.rate = 0.95;
-
-    if (this.ttsBtn) {
-      this.ttsBtn.classList.add('speaking');
-      utterance.onend = () => this.ttsBtn.classList.remove('speaking');
-      utterance.onerror = () => this.ttsBtn.classList.remove('speaking');
+    // 1. Native Android TTS bridge (funguje v nativní aplikaci na telefonu offline)
+    if (typeof window.AndroidTTS !== 'undefined' && window.AndroidTTS.speak) {
+      try {
+        window.AndroidTTS.speak(textToSpeak, targetLang);
+        if (this.ttsBtn) {
+          this.ttsBtn.classList.add('speaking');
+          setTimeout(() => {
+            if (this.ttsBtn) this.ttsBtn.classList.remove('speaking');
+          }, 3500);
+        }
+        this.showToast(`🔊 Čtu: ${resolved.name}`);
+        return;
+      } catch (e) {
+        console.warn('Native Android TTS error, fallback to Web Speech:', e);
+      }
     }
 
-    this.synth.speak(utterance);
-    this.showToast(`🔊 Čtu: ${resolved.name}`);
+    // 2. Web Speech API (pro standardní prohlížeče)
+    const synth = typeof window !== 'undefined' && 'speechSynthesis' in window ? window.speechSynthesis : this.synth;
+    if (!synth) {
+      this.showToast('Hlasová syntéza není tímto prohlížečem podporována');
+      return;
+    }
+
+    try {
+      synth.cancel(); // Zastavení předchozího předčítání
+      const utterance = new SpeechSynthesisUtterance(textToSpeak);
+      utterance.lang = targetLang;
+      utterance.rate = 0.95;
+
+      if (this.ttsBtn) {
+        this.ttsBtn.classList.add('speaking');
+        utterance.onend = () => this.ttsBtn && this.ttsBtn.classList.remove('speaking');
+        utterance.onerror = () => this.ttsBtn && this.ttsBtn.classList.remove('speaking');
+      }
+
+      synth.speak(utterance);
+      this.showToast(`🔊 Čtu: ${resolved.name}`);
+    } catch (e) {
+      console.error('SpeechSynthesis error:', e);
+      this.showToast('Hlasová syntéza se nezdařila');
+    }
   }
 
   // === 2. Share Result (Sdílení kartičky) ===

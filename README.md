@@ -46,6 +46,8 @@ An interactive web application inspired by the Chinese kinship calculator (亲�
   - Action buttons (🔊 TTS, ↗ Share, 🌳 Family tree) are vertically arranged as an overlay in the upper-right corner, freeing full horizontal width for title text and metadata badges.
   - Directional generation arrows (`↗` blue ancestor, `↘` green descendant, `↔` pink partner, `→` orange sibling).
   - Streamlined and natural Czech kinship terminology free of redundant brackets (e.g., pure **Dědeček**, **Strýc**, **Synovec**).
+- **Native Android Offline Text-To-Speech (🔊 TTS)**: Direct Android bridge (`android.speech.tts.TextToSpeech` via `MainActivity.java` and `window.AndroidTTS`) providing seamless native voice synthesis on Android without relying on Chromium WebView's disabled Web Speech API, with universal fallback for standard desktop and iOS browsers across all 25 languages.
+- **Advanced Child-Sibling Reduction Rules**: Intelligently reduces sibling extensions of children (e.g. *child's brother is child's sibling / son*), resolving complex chains such as *husband ➔ sister ➔ son ➔ son ➔ brother* accurately to **Grandnephew** (and mutual reciprocal **Greataunt**).
+- **Mobile Result Card Polish & Zero Dead Space**: Result card `.result-unified-card` seamlessly anchors directly beneath the gender bar (`min-height: 100%`) without empty voids, breadcrumb overflow constraints removed, and non-shrinking flex sections preventing badges from overlapping explanations.
 - **Ethical Zero-Ad & Zero-Tracking Monetization**: Strictly no ads, no trackers, and no third-party telemetry. 100% offline functionality. Voluntary donation tip jar modal (`#donateModal`) supporting Czech QR SPAYD payments, Ko-fi, Buy Me a Coffee, and Google Play ratings.
-
 

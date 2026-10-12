@@ -270,7 +270,15 @@
 - [x] Generační směrové šipky v kalkulačce:
   - Zapojena funkce `getStepDirection(token)` do vykreslování cesty breadcrumbs (`renderChainBreadcrumbs`).
   - Směry generací jsou vizuálně odlišeny jasnými barvami: `↗` (modrá, předek), `↘` (zelená, potomek), `↔` (růžová, partner), `→` (oranžová, sourozenec).
-- [x] Sestavení, nasazení a vizuální verifikace na reálném telefonu:
-  - Zkompilován nový debug balíček `Rodinna-Kalkulacka-debug.apk` (4,76 MB) a produkční `Rodinna-Kalkulacka-release.aab` (3,41 MB).
-  - Nainstalováno na Xiaomi Redmi Note 11 Pro 5G přes ADB.
-  - Otestováno stisknutím kláves *otec* ➔ *otec* a pořízen ověřovací screenshot `google-play/assets/display_perfect_verified.png`. Celá karta včetně cesty, šipek a odznaků se perfektně vejde na obrazovku.
+- [x] Implementace redukčních pravidel pro sourozence dětí (`s/d + b ➔ s`, `s/d + z ➔ d`):
+  - Vyřešen uživatelský dotaz *ja ➔ manžel ➔ sestra ➔ syn ➔ syn ➔ bratr*: bratr syna je rovněž synem téhož rodiče, řetězec se automaticky redukuje na `h, z, s, s`, což dává správně **Prasynovec** (a vzájemný vztah správně **Prateta**).
+  - V testech `tests/reductions_mutual.test.js` doplněno ověření (všech 36/36 testů a 49/49 základních testů úspěšně prošlo).
+- [x] Nativní Android TextToSpeech Bridge v `MainActivity.java`:
+  - Do nativní Android aktivity implementován `android.speech.tts.TextToSpeech` a JavaScriptInterface `window.AndroidTTS`.
+  - Vyřešena hláška *„Hlasová syntéza není tímto prohlížečem podporována“* v mobilní aplikaci: WebView nyní přednostně volá nativní offline Google TTS modul Androidu s plnou podporou češtiny i dalších 24 jazyků.
+- [x] Odstranění prázdného místa nad displejem a ořezu cesty:
+  - Z `.result-unified-card` odstraněn `margin-top: auto` a nahrazen `min-height: 100%; box-sizing: border-box;`, karta plynule vyplňuje prostor pod panelem pohlaví bez zbytečných mezer.
+  - Z `.chain-container` odstraněn limit `max-height: 64px`, breadcrumbs se zalomí a jsou plně čitelné.
+  - Z breadcrumbs odstraněn redundantní bulky čip `⇄ Vzájemný vztah k [...]`, který duplikoval odznak a vytlačoval šipky.
+  - Přidán `flex-shrink: 0;` na jednotlivé sekce karty, čímž byl 100% eliminován překryv odznaků s vysvětlením.
+- [x] Sestavení aktualizovaných APK a AAB, instalace přes ADB a ověření na Xiaomi Redmi Note 11 Pro 5G.

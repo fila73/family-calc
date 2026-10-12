@@ -77,6 +77,14 @@
   - Odstranění zbytečných závorek z primárního názvu vztahu (*Dědeček*, *Strýc*, *Synovec*...), přesný genealogický popis ponechán v detailním vysvětlení.
 - [x] 34. **Oficiální hosting na GitHub Pages**:
   - Zřízen repozitář `fila73/family-calc` s funkčními GitHub Pages na `https://fila73.github.io/family-calc/` a `https://fila73.github.io/family-calc/privacy.html`.
+- [x] 35. **Nativní offline Android TextToSpeech (TTS Bridge)**:
+  - Implementován přímý bridge `android.speech.tts.TextToSpeech` v `MainActivity.java` propojený přes `@JavascriptInterface` do `window.AndroidTTS`. Vyřešena nepodpora Web Speech API v Chromium WebView bez nutnosti externích knihoven.
+- [x] 36. **Redukční pravidlo pro sourozence dětí (`s/d + b ➔ s`, `s/d + z ➔ d`)**:
+  - Vyřešen řetězec *já ➔ manžel ➔ sestra ➔ syn ➔ syn ➔ bratr* redukcí na `h, z, s, s` (**Prasynovec** / vzájemně **Prateta**).
+- [x] 37. **Odstranění prázdného prostoru nad displejem a zalamování cesty**:
+  - Vyměněn `margin-top: auto` za `min-height: 100%`, karta plynule navazuje na panel volby pohlaví. Odstraněn výškový strop `max-height: 64px` na cesty a duplicitní čip vzájemného vztahu.
+- [x] 38. **Ochrana proti překrývání odznaků s vysvětlením (`flex-shrink: 0`)**:
+  - Nastaven flex-shrink na všech vnitřních sekcích karty výsledku pro stoprocentní čitelnost i při velkém množství odznaků a dlouhých popisech.
 
 ## Nové nápady a budoucí rozšíření
 1. **Export rodokmenu do vektorového SVG / PDF**:

@@ -87,5 +87,8 @@ Vytvoření webové kalkulačky rodinných vztahů inspirované čínskou kalkul
 34. Integrace barevných neonových generačních směrových šipek (`↗`, `↘`, `↔`, `→`) do kalkulačkové cesty (breadcrumbs).
 35. Přesun akčních tlačítek (repro, share, strom) do svislého overlay sloupce vpravo (`.result-actions-vertical`) pro maximální šířku textu a odznaků.
 36. Sestavení finálních instalačních balíčků APK i AAB a jejich ověření na reálném telefonu Xiaomi Redmi Note 11 Pro 5G.
+37. Implementace redukčních pravidel pro sourozence dětí v `simplifyChain` (`s/d + b ➔ s`, `s/d + z ➔ d`) zajišťující správné zjednodušení řetězců typu `h, z, s, s, b` na **Prasynovec** a **Prateta**.
+38. Vývoj nativního `AndroidTTS` bridge v `MainActivity.java` pro offline hlasovou syntézu v Android WebView.
+39. Doladění responzivního rozložení karty výsledku (`min-height: 100%`, `flex-shrink: 0`, odstranění ořezu cesty).
 
 
