@@ -474,9 +474,14 @@
           <div class="compare-result-card" id="gedcomResultCard" style="display: none;">
             <div class="compare-result-title" id="gedcomResultTitle"></div>
             <div class="compare-result-desc" id="gedcomResultDesc"></div>
-            <button class="compare-btn gedcom-transfer-btn" id="transferGedcomBtn" type="button" style="margin-top: 12px; background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
-              Přenést vztah do kalkulačky ➔
-            </button>
+            <div style="display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap;">
+              <button class="compare-btn gedcom-transfer-btn" id="transferGedcomBtn" type="button" style="flex: 1; min-width: 130px; margin-top: 0; background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
+                Přenést do kalkulačky ➔
+              </button>
+              <button class="compare-btn" id="viewGedcomTreeBtn" type="button" style="flex: 1; min-width: 130px; margin-top: 0; background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);">
+                Vizuální rodokmen 🌳
+              </button>
+            </div>
           </div>
         </div>
       </div>

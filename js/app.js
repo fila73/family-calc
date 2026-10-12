@@ -21,6 +21,7 @@ class FamilyCalcApp {
     this.audioCtx = null;
     this.activeGedcom = null;
     this.gedcomKinshipResult = null;
+    this.gedcomPathMeta = null;
 
     this.initElements();
     this.initEventListeners();
@@ -180,6 +181,7 @@ class FamilyCalcApp {
     this.gedcomResultTitle = document.getElementById('gedcomResultTitle');
     this.gedcomResultDesc = document.getElementById('gedcomResultDesc');
     this.transferGedcomBtn = document.getElementById('transferGedcomBtn');
+    this.viewGedcomTreeBtn = document.getElementById('viewGedcomTreeBtn');
 
     // Keyboard Shortcuts Modal elements
     this.shortcutsModal = document.getElementById('shortcutsModal');
@@ -443,6 +445,12 @@ class FamilyCalcApp {
     }
     if (this.transferGedcomBtn) {
       this.transferGedcomBtn.addEventListener('click', () => this.transferGedcomToCalculator());
+    }
+    if (this.viewGedcomTreeBtn) {
+      this.viewGedcomTreeBtn.addEventListener('click', () => {
+        this.transferGedcomToCalculator();
+        this.openTreeModal();
+      });
     }
 
     // Shortcuts Modal listeners
@@ -1018,12 +1026,14 @@ class FamilyCalcApp {
     }
 
     this.chain.push(finalToken);
+    this.gedcomPathMeta = null;
     this.render();
   }
 
   popToken() {
     this.triggerHaptic();
     this.isMutualView = false;
+    this.gedcomPathMeta = null;
     if (this.chain.length > 0) {
       this.chain.pop();
       this.render();
@@ -1034,6 +1044,7 @@ class FamilyCalcApp {
     this.triggerHaptic();
     this.chain = [];
     this.isMutualView = false;
+    this.gedcomPathMeta = null;
     if (this.modifier) {
       this.modifier = null;
       this.updateModifierUI();
@@ -1454,59 +1465,148 @@ class FamilyCalcApp {
     const effectiveChain = this.isMutualView ? invertChain(this.chain, this.egoGender) : this.chain;
     const resolved = resolveKinship(effectiveChain, this.egoGender, dict);
 
-    // Node 0: EGO (Já)
+    // Ověříme, zda aktuální kalkulace odpovídá přenesené cestě z GEDCOMu
+    const hasGedcomMatch = Boolean(
+      this.gedcomPathMeta &&
+      Array.isArray(this.gedcomPathMeta.personsInPath) &&
+      this.gedcomPathMeta.personsInPath.length === (this.chain.length + 1) &&
+      this.gedcomPathMeta.originalChain &&
+      this.gedcomPathMeta.originalChain.join(',') === this.chain.join(',')
+    );
+
+    // Pomocná funkce pro formátování genealogických let a dat
+    const formatPersonDates = (p) => {
+      if (!p) return '';
+      if (p.birthYear && p.deathYear) return `*${p.birthYear} – †${p.deathYear}`;
+      if (p.birthYear) return `*${p.birthYear}`;
+      if (p.deathYear) return `†${p.deathYear}`;
+      if (p.birthDate && p.deathDate) return `*${p.birthDate} – †${p.deathDate}`;
+      if (p.birthDate) return `*${p.birthDate}`;
+      if (p.deathDate) return `†${p.deathDate}`;
+      return '';
+    };
+
+    // Pomocná funkce pro personální avatar
+    const getPersonAvatar = (person, token, isSelf) => {
+      if (person && person.sex) {
+        if (person.sex === 'F') return '👩';
+        if (person.sex === 'M') return '👨';
+      }
+      if (isSelf) return this.egoGender === 'm' ? '👨' : '👩';
+      if (!token) return '🧑';
+      if (token.includes('f') || token === 'step_f' || token === 'god_f') return '👨';
+      if (token.includes('m') || token === 'step_m' || token === 'god_m') return '👩';
+      if (token === 's' || token === 'step_s' || token === 'god_s') return '👦';
+      if (token === 'd' || token === 'step_d' || token === 'god_d') return '👧';
+      if (token === 'h') return '👨';
+      if (token === 'w') return '👩';
+      if (token.includes('b')) return '👦';
+      if (token.includes('z')) return '👧';
+      return '🧑';
+    };
+
+    // Pokud je aktivní přenesená cesta z GEDCOMu, zobrazíme záhlavní banner
+    if (hasGedcomMatch) {
+      const startP = this.isMutualView ? this.gedcomPathMeta.personB : this.gedcomPathMeta.personA;
+      const endP = this.isMutualView ? this.gedcomPathMeta.personA : this.gedcomPathMeta.personB;
+      const stepCount = effectiveChain.length;
+      const stepWord = stepCount === 1 ? 'krok' : stepCount < 5 ? 'kroky' : 'kroků';
+
+      const banner = document.createElement('div');
+      banner.className = 'tree-source-banner';
+      banner.innerHTML = `
+        <div class="tree-source-icon">📜</div>
+        <div class="tree-source-text">
+          <div class="tree-source-title">Příbuzenská cesta z rodokmenu GEDCOM</div>
+          <div class="tree-source-sub">${startP ? startP.name : 'Osoba A'} ➔ ${endP ? endP.name : 'Osoba B'} (${stepCount} ${stepWord})</div>
+        </div>
+      `;
+      this.treeCanvasContainer.appendChild(banner);
+    }
+
+    const personsList = hasGedcomMatch
+      ? (this.isMutualView ? [...this.gedcomPathMeta.personsInPath].reverse() : this.gedcomPathMeta.personsInPath)
+      : null;
+
+    // Node 0: EGO (nebo počáteční osoba z GEDCOMu)
     const egoCard = document.createElement('div');
     egoCard.className = 'tree-node-card self-node';
-    const egoAvatar = this.egoGender === 'm' ? '👨' : '👩';
+    const person0 = personsList ? personsList[0] : null;
+    const egoAvatar = getPersonAvatar(person0, null, !this.isMutualView);
+
+    let egoTitle = dict.labels.self || 'Já (proband)';
+    let egoSub = 'Výchozí bod výzkumu (Gen 0)';
+
+    if (person0) {
+      egoTitle = person0.name || egoTitle;
+      const dates = formatPersonDates(person0);
+      const role = this.isMutualView ? 'Tázající se osoba (původní cíl)' : 'Výchozí proband (JÁ)';
+      egoSub = dates ? `<span class="tree-node-dates">${dates}</span> · ${role}` : role;
+    }
+
     egoCard.innerHTML = `
       <div class="tree-avatar">${egoAvatar}</div>
       <div class="tree-node-info">
-        <div class="tree-node-title">${dict.labels.self || 'Já (proband)'}</div>
-        <div class="tree-node-sub">Výchozí bod výzkumu (Gen 0)</div>
+        <div class="tree-node-title">${egoTitle}</div>
+        <div class="tree-node-sub">${egoSub}</div>
       </div>
     `;
     this.treeCanvasContainer.appendChild(egoCard);
 
-    if (this.chain.length === 0) return;
+    if (effectiveChain.length === 0) return;
 
-    // Walk through each step in chain
-    this.chain.forEach((token, idx) => {
-      const isLast = idx === this.chain.length - 1;
+    // Procházíme kroky v řetězci
+    effectiveChain.forEach((token, idx) => {
+      const isLast = idx === effectiveChain.length - 1;
       const stepName = dict.labels.tokens[token] || token;
+      const stepDir = getStepDirection(token);
+      const arrowClass = stepDir.genShift > 0
+        ? 'arrow-up'
+        : stepDir.genShift < 0
+        ? 'arrow-down'
+        : (token === 'h' || token === 'w' ? 'arrow-partner' : 'arrow-same');
 
-      // Connector
+      // Connector se směrovou generační šipkou
       const connector = document.createElement('div');
       connector.className = 'tree-step-connector';
       connector.innerHTML = `
         <div class="tree-step-line"></div>
-        <div class="tree-step-badge">➔ ${stepName}</div>
+        <div class="tree-step-badge ${arrowClass}">${stepDir.arrow} ${stepName}</div>
         <div class="tree-step-line"></div>
       `;
       this.treeCanvasContainer.appendChild(connector);
 
-      // Intermediate or Target Node
-      let avatar = '🧑';
-      if (token.includes('f') || token === 'step_f' || token === 'god_f') avatar = '👨';
-      else if (token.includes('m') || token === 'step_m' || token === 'god_m') avatar = '👩';
-      else if (token === 's' || token === 'step_s' || token === 'god_s') avatar = '👦';
-      else if (token === 'd' || token === 'step_d' || token === 'god_d') avatar = '👧';
-      else if (token === 'h') avatar = '👨';
-      else if (token === 'w') avatar = '👩';
-      else if (token.includes('b')) avatar = '👦';
-      else if (token.includes('z')) avatar = '👧';
+      // Uzel (Mezilehlý nebo Cílový)
+      const personNode = personsList ? personsList[idx + 1] : null;
+      const avatar = getPersonAvatar(personNode, token, isLast && this.isMutualView);
 
       const nodeCard = document.createElement('div');
       nodeCard.className = `tree-node-card ${isLast ? 'target-node' : ''}`;
 
-      const title = isLast ? resolved.name : stepName;
-      const subtitle = isLast ? (resolved.description || '') : `Krok ${idx + 1} v řetězci`;
+      let title = isLast ? resolved.name : stepName;
+      let subtitle = isLast ? (resolved.description || '') : `Krok ${idx + 1} v řetězci`;
+
+      if (personNode) {
+        title = personNode.name || title;
+        const dates = formatPersonDates(personNode);
+        if (isLast) {
+          const relationDesc = resolved.name + (resolved.description ? ` (${resolved.description})` : '');
+          subtitle = dates ? `<span class="tree-node-dates">${dates}</span> · ${relationDesc}` : relationDesc;
+        } else {
+          subtitle = dates ? `<span class="tree-node-dates">${dates}</span> · Krok ${idx + 1}: ${stepName}` : `Krok ${idx + 1}: ${stepName}`;
+        }
+      }
+
+      const targetTag = isLast
+        ? `<span class="tree-target-tag">🌟 ${this.isMutualView ? 'Říká mně' : 'Cíl výpočtu'}: ${resolved.name}</span>`
+        : '';
 
       nodeCard.innerHTML = `
         <div class="tree-avatar">${avatar}</div>
         <div class="tree-node-info">
           <div class="tree-node-title">${title}</div>
           <div class="tree-node-sub">${subtitle}</div>
-          ${isLast ? `<span class="tree-target-tag">🌟 Cíl výpočtu</span>` : ''}
+          ${targetTag}
         </div>
       `;
 
@@ -2375,15 +2475,15 @@ class FamilyCalcApp {
       this.gedcomResultTitle.textContent = `${personB.name} a ${personA.name}`;
       this.gedcomResultDesc.innerHTML = `<span style="color: #ef4444;">${pathResult.error || 'Nepropojeno'}</span>`;
       this.transferGedcomBtn.style.display = 'none';
+      if (this.viewGedcomTreeBtn) this.viewGedcomTreeBtn.style.display = 'none';
       this.gedcomResultCard.style.display = 'block';
       return;
     }
 
     const dict = getDictionary(this.currentLang);
     const resolved = resolveKinship(pathResult.chain, personA.sex === 'F' ? 'f' : 'm', dict);
-    this.gedcomKinshipResult = { chain: pathResult.chain, resolved, personA, personB };
-
     const personsInPath = pathResult.pathPersons.map((pId) => this.activeGedcom.individuals.get(pId));
+    this.gedcomKinshipResult = { chain: pathResult.chain, resolved, personA, personB, pathPersons: pathResult.pathPersons, personsInPath };
 
     // Zjistíme duplicitní jména v cestě pro rozlišení (např. Ladislav Červinka ml. vs st.)
     const nameCounts = {};
@@ -2448,6 +2548,7 @@ class FamilyCalcApp {
       </div>
     `;
     this.transferGedcomBtn.style.display = 'block';
+    if (this.viewGedcomTreeBtn) this.viewGedcomTreeBtn.style.display = 'block';
     this.gedcomResultCard.style.display = 'block';
   }
 
@@ -2458,6 +2559,15 @@ class FamilyCalcApp {
     this.chain = [...this.gedcomKinshipResult.chain];
     this.isMutualView = false;
     this.egoGender = this.gedcomKinshipResult.personA.sex === 'F' ? 'f' : 'm';
+
+    // Metadata přeneseného rodokmenu pro vizuální minirodokmen (#treeModal)
+    this.gedcomPathMeta = {
+      personA: this.gedcomKinshipResult.personA,
+      personB: this.gedcomKinshipResult.personB,
+      personsInPath: this.gedcomKinshipResult.personsInPath ? [...this.gedcomKinshipResult.personsInPath] : [],
+      originalChain: [...this.gedcomKinshipResult.chain]
+    };
+
     this.updateGenderUI();
     this.closeGedcomModal();
     this.render();

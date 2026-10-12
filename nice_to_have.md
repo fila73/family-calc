@@ -85,6 +85,8 @@
   - Vyměněn `margin-top: auto` za `min-height: 100%`, karta plynule navazuje na panel volby pohlaví. Odstraněn výškový strop `max-height: 64px` na cesty a duplicitní čip vzájemného vztahu.
 - [x] 38. **Ochrana proti překrývání odznaků s vysvětlením (`flex-shrink: 0`)**:
   - Nastaven flex-shrink na všech vnitřních sekcích karty výsledku pro stoprocentní čitelnost i při velkém množství odznaků a dlouhých popisech.
+- [x] 39. **Integrace skutečných jmen a životních dat do vizuálního rodokmenu z GEDCOMu**:
+  - `#treeModal` při přenosu cesty ze souboru `.ged` zobrazuje skutečná jména předků i potomků, data narození a úmrtí (`*1928 – †2005`), generační šipky a podporuje obousměrnou perspektivu při vzájemném vztahu.
 
 ## Nové nápady a budoucí rozšíření
 1. **Export rodokmenu do vektorového SVG / PDF**:

@@ -282,3 +282,14 @@
   - Z breadcrumbs odstraněn redundantní bulky čip `⇄ Vzájemný vztah k [...]`, který duplikoval odznak a vytlačoval šipky.
   - Přidán `flex-shrink: 0;` na jednotlivé sekce karty, čímž byl 100% eliminován překryv odznaků s vysvětlením.
 - [x] Sestavení aktualizovaných APK a AAB, instalace přes ADB a ověření na Xiaomi Redmi Note 11 Pro 5G.
+- [x] Integrace skutečných jmen a životních dat do vizuálního minirodokmenu z GEDCOM souboru:
+  - Vyřešen uživatelský dotaz *„když přenesu vztah z ged souboru, tak by vizuální rodokmen mohl obsahovat jména a data?“*:
+  - Při vyhodnocení vztahu v GEDCOM analyzátoru se ukládají detailní personální metadata celé cesty (`personsInPath` s `name`, `birthYear`, `deathYear`, `birthDate`, `deathDate`, `sex`).
+  - V modálu `#gedcomResultCard` přidáno přímé akční tlačítko **Vizuální rodokmen 🌳** (`#viewGedcomTreeBtn`), které jedním kliknutím přenese vztah a rovnou otevře vizuální schéma.
+  - Vylepšen generátor `#treeModal` (`renderTree`):
+    - **Záhlavní banner**: Zobrazuje záhlaví *📜 Příbuzenská cesta z rodokmenu GEDCOM (Osoba A ➔ Osoba B, X kroků)*.
+    - **Jména a data narození/úmrtí**: Každý uzel zobrazuje skutečné jméno předka/potomka a standardní genealogická data (např. `*1928 – †2005` nebo `*1952`) v tyrkysovém štítku `.tree-node-dates`.
+    - **Barevné generační šipky na spojnicích**: Konektory kroků obsahují směrové šipky (`↗` předek, `↘` potomek, `↔` partner, `→` sourozenec) v zářivých barevných štítcích.
+    - **Obousměrná perspektiva (Vzájemný vztah ⇄)**: Při přepnutí na vzájemný vztah se celá cesta v rodokmenu automaticky invertuje – začíná od původního cíle (s jeho jménem a daty) a směřuje k výchozímu probandovi se štítkem *🌟 Říká mně: [Vztah]*.
+    - **Plynulý fallback**: Při manuálním zadávání na klávesnici kalkulačky se rodokmen hladce vrátí k výchozímu interaktivnímu zobrazení probanda.
+  - Otestováno živě v prohlížeči (včetně recipročního běhu Eva Svobodová ➔ Tomáš Novák = Synovec a vzájemně Teta) a úspěšně přeloženo do nových balíčků APK i AAB.

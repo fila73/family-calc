@@ -90,5 +90,6 @@ Vytvoření webové kalkulačky rodinných vztahů inspirované čínskou kalkul
 37. Implementace redukčních pravidel pro sourozence dětí v `simplifyChain` (`s/d + b ➔ s`, `s/d + z ➔ d`) zajišťující správné zjednodušení řetězců typu `h, z, s, s, b` na **Prasynovec** a **Prateta**.
 38. Vývoj nativního `AndroidTTS` bridge v `MainActivity.java` pro offline hlasovou syntézu v Android WebView.
 39. Doladění responzivního rozložení karty výsledku (`min-height: 100%`, `flex-shrink: 0`, odstranění ořezu cesty).
+40. Integrace skutečných jmen a životních dat (`*YYYY – †YYYY`) do vizuálního rodokmenu `#treeModal` při přenosu z GEDCOM souboru a obousměrná inverze stromu pro vzájemné vztahy.
 
 
