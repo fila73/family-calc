@@ -308,3 +308,6 @@
   - Vytvořen `google-play/CLOSED_TESTING_GUIDE.md` pro povinný 14denní uzavřený test s min. 12 testery (příprava Google skupiny, vzorové pozvánky v CZ i EN a tahák s odpověďmi pro formulář žádosti o produkci).
   - Vytvořen `google-play/DATA_SAFETY_CHEAT_SHEET.md` pro bleskové a bezchybné vyplnění formuláře Bezpečnost údajů.
   - Aktualizován `google-play/RELEASE_GUIDE.md` (oprava URL zásad ochrany soukromí na `https://fila73.github.io/family-calc/privacy.html` a zohlednění 3-fázového testovacího workflow).
+- [x] Zpracování oficiální příručky Google Play Academy (`beginers_guide_to_publish.pdf`):
+  - Do `google-play/LAUNCH_ROADMAP.md` zapracována nová Fáze 7 pro životní cyklus po spuštění aplikace (sledování App / Update / Item status, stabilita a metriky Android Vitals, práce s recenzemi, postupné zavádění aktualizací Staged Rollouts).
+  - Soubor `beginers_guide_to_publish.pdf` přesunut do složky `google-play/` a do `.gitignore` doplněno pravidlo `*.pdf`.
