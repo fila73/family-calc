@@ -293,3 +293,7 @@
     - **Obousměrná perspektiva (Vzájemný vztah ⇄)**: Při přepnutí na vzájemný vztah se celá cesta v rodokmenu automaticky invertuje – začíná od původního cíle (s jeho jménem a daty) a směřuje k výchozímu probandovi se štítkem *🌟 Říká mně: [Vztah]*.
     - **Plynulý fallback**: Při manuálním zadávání na klávesnici kalkulačky se rodokmen hladce vrátí k výchozímu interaktivnímu zobrazení probanda.
   - Otestováno živě v prohlížeči (včetně recipročního běhu Eva Svobodová ➔ Tomáš Novák = Synovec a vzájemně Teta) a úspěšně přeloženo do nových balíčků APK i AAB.
+- [x] Obnova a reaktivace GitHub Pages po přepnutí viditelnosti repozitáře:
+  - Přepnutím repozitáře na Private GitHub automaticky smazal konfiguraci Pages. Po návratu na Public GitHub Pages sám nezapnul (vracel 404).
+  - Přes GitHub API (`POST /repos/fila73/family-calc/pages`) byla služba okamžitě znovu vytvořena a nakonfigurována nad větví `master` a kořenem `/`.
+  - Ověřeno živým dotazem – stav `built`, hlavní web na `https://fila73.github.io/family-calc/` i povinné zásady soukromí na `https://fila73.github.io/family-calc/privacy.html` jsou 100% online a funkční.
