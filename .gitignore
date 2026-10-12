@@ -7,3 +7,7 @@ www/
 *.jks
 .DS_Store
 Thumbs.db
+
+# Reference image & Google Play store assets
+1791674306641.jpg
+google-play/

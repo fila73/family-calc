@@ -297,3 +297,9 @@
   - Přepnutím repozitáře na Private GitHub automaticky smazal konfiguraci Pages. Po návratu na Public GitHub Pages sám nezapnul (vracel 404).
   - Přes GitHub API (`POST /repos/fila73/family-calc/pages`) byla služba okamžitě znovu vytvořena a nakonfigurována nad větví `master` a kořenem `/`.
   - Ověřeno živým dotazem – stav `built`, hlavní web na `https://fila73.github.io/family-calc/` i povinné zásady soukromí na `https://fila73.github.io/family-calc/privacy.html` jsou 100% online a funkční.
+
+## [2026-10-12]
+- [x] Úklid repozitáře a aktualizace `.gitignore`:
+  - Do `.gitignore` doplněn referenční screenshot `1791674306641.jpg` a složka podkladů pro obchod `google-play/`.
+  - Provedeno bezpečné vyřazení z verzování Gitu (`git rm --cached 1791674306641.jpg` a `git rm -r --cached google-play/`), takže soubory zůstávají lokálně zachovány pro potřeby nasazení, ale nezatěžují repozitář se zdrojovým kódem.
+  - Ověřeno testovací sadou (85/85 testů prošlo bez chyb).
