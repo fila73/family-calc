@@ -549,6 +549,83 @@ it('Detekce nepropojených větví rodokmenu', () => {
   assert.ok(result.error);
 });
 
+console.log('\n15. Regresní testy z hloubkového auditu (polorodí sourozenci, NOZ atributy, porovnání osob, i18n):');
+it('Polorodí sourozenci (jednobřišní i jednokrevní) mají ~25% DNA, 3. dědickou třídu a překážku sňatku (§ 675 NOZ)', () => {
+  const rUterine = resolveKinship(['m', 'step_h', 's'], 'm', cs);
+  assert.strictEqual(rUterine.key, 'step_f,s');
+  assert.strictEqual(rUterine.consanguinity.dnaPercent, 25);
+  assert.strictEqual(rUterine.consanguinity.degree, 2);
+  assert.strictEqual(rUterine.consanguinity.type, 'half_blood');
+  assert.strictEqual(rUterine.inheritance.classNumber, 3);
+  assert.strictEqual(rUterine.inheritance.class, 3);
+  assert.strictEqual(rUterine.marriageImpediment.hasImpediment, true);
+  assert.strictEqual(rUterine.marriageImpediment.allowed, false);
+
+  const rConsanguine = resolveKinship(['f', 'step_w', 'd'], 'm', cs);
+  assert.strictEqual(rConsanguine.key, 'step_m,d');
+  assert.strictEqual(rConsanguine.consanguinity.dnaPercent, 25);
+  assert.strictEqual(rConsanguine.inheritance.classNumber, 3);
+  assert.strictEqual(rConsanguine.marriageImpediment.hasImpediment, true);
+  assert.strictEqual(rConsanguine.marriageImpediment.allowed, false);
+
+  // Nepokrevní nevlastní sourozenec (step_b) má 0% DNA, mimo dědické třídy a povolený sňatek
+  const rStepB = resolveKinship(['step_b'], 'm', cs);
+  assert.strictEqual(rStepB.consanguinity.dnaPercent, 0);
+  assert.strictEqual(rStepB.inheritance.classNumber, null);
+  assert.strictEqual(rStepB.marriageImpediment.hasImpediment, false);
+  assert.strictEqual(rStepB.marriageImpediment.allowed, true);
+});
+
+it('Reciproční inverze polorodých sourozenců zachovává polorodý vztah (~25% DNA)', () => {
+  const invUterineF = invertChain(['m', 'step_h', 's'], 'f');
+  const resUterineF = resolveKinship(invUterineF, 'm', cs);
+  assert.ok(resUterineF.name.includes('Polosestra jednobřišní'));
+  assert.strictEqual(resUterineF.consanguinity.dnaPercent, 25);
+
+  const invConsanguineM = invertChain(['f', 'step_w', 'd'], 'm');
+  const resConsanguineM = resolveKinship(invConsanguineM, 'f', cs);
+  assert.ok(resConsanguineM.name.includes('Polobratr jednokrevní'));
+  assert.strictEqual(resConsanguineM.consanguinity.dnaPercent, 25);
+});
+
+it('Porovnání dvou osob: Matka vs Otec vyhodnotí vztah z pohledu matky (Manžel)', () => {
+  const chainA = ['m']; // Matka (žena)
+  const chainB = ['f']; // Otec (muž)
+  const invA = invertChain(chainA, 'm'); // ['s']
+  const combined = [...invA, ...chainB]; // ['s', 'f']
+  const res = resolveKinship(combined, 'f', cs); // z pohledu matky ('f') je synův otec -> Manžel
+  assert.strictEqual(res.name, 'Manžel');
+});
+
+it('Rozlišení staršího a mladšího sourozence v ukrajinštině (ob, lb, oz, lz)', () => {
+  assert.strictEqual(resolveKinship(['ob'], 'm', uk).name, 'Старший брат');
+  assert.strictEqual(resolveKinship(['lb'], 'm', uk).name, 'Молодший брат');
+  assert.strictEqual(resolveKinship(['oz'], 'm', uk).name, 'Старша сестра');
+  assert.strictEqual(resolveKinship(['lz'], 'm', uk).name, 'Молодша сестра');
+});
+
+it('Bilaterální synchronizace neúplných GEDCOM záznamů a extrakce plného data', () => {
+  const asymGed = `
+0 @I1@ INDI
+1 NAME Petr /Svoboda/
+1 SEX M
+1 BIRT
+2 DATE 14 MAY 1965
+0 @I2@ INDI
+1 NAME Jana /Svobodová/
+1 SEX F
+0 @F1@ FAM
+1 HUSB @I1@
+1 WIFE @I2@
+0 TRLR
+  `;
+  const parsed = parseGedcom(asymGed);
+  assert.strictEqual(parsed.individuals.get('@I1@').birthDate, '14 MAY 1965');
+  assert.strictEqual(parsed.individuals.get('@I1@').birthYear, 1965);
+  const path = parsed.findKinshipChain('@I1@', '@I2@');
+  assert.deepStrictEqual(path.chain, ['w']);
+});
+
 console.log(`\n========================================`);
 console.log(`Výsledky testů: ${passed} / ${total} prošlo.`);
 if (passed !== total) {
