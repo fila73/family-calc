@@ -87,6 +87,8 @@
   - Nastaven flex-shrink na všech vnitřních sekcích karty výsledku pro stoprocentní čitelnost i při velkém množství odznaků a dlouhých popisech.
 - [x] 39. **Integrace skutečných jmen a životních dat do vizuálního rodokmenu z GEDCOMu**:
   - `#treeModal` při přenosu cesty ze souboru `.ged` zobrazuje skutečná jména předků i potomků, data narození a úmrtí (`*1928 – †2005`), generační šipky a podporuje obousměrnou perspektivu při vzájemném vztahu.
+- [x] 40. **Komplexní technický, genealogický a právní audit aplikace (90 unit testů, 184 vztahů / 368 auditních běhů)**:
+  - Sjednoceno rozhraní právních kalkulátorů (`allowed`/`hasImpediment` u sňatků a `class`/`classNumber` u dědických tříd), opraven výpočet DNA (~25 %), 3. dědické třídy (§ 1637 NOZ), překážky manželství (§ 675 NOZ) a obousměrné inverze u polorodých sourozenců (`step_f,s`, `step_m,s`), opraveno pohlaví mluvčího v porovnávači dvou osob a ve vzájemném pohledu, doplněny kombinace 3. generace a sešvagřených prastrýců/pratet v `cs.js`, doplněny štítky `modStep`/`modGod` ve všech 25 jazycích, bilaterální synchronizace GEDCOMu, vyčištěny duplicitní CSS selektory a doplněna složka `icons/` do buildu `www/` a cache `sw.js` (`family-calc-v19`).
 
 ## Nové nápady a budoucí rozšíření
 1. **Export rodokmenu do vektorového SVG / PDF**:

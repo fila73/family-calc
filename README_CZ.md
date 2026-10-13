@@ -11,7 +11,7 @@ Interaktivní webová aplikace inspirovaná čínskou kalkulačkou příbuzenstv
   - **`⇧ Nevlastní`**: zadávání nevlastních rodičů (*Otčím*, *Macecha*), pastorků i polorodých a nevlastních sourozenců (*jednobřišní* i *jednokrevní* bratr/sestra, nepokrevní nevlastní bratr ze svazku rodičů).
   - **`✝ Křestní`**: duchovní příbuzenství (*Kmotr*, *Kmotra*, *Kmotřenec*, *Kmotřenka*).
 - **Oboustranný výpočet (互查 / Vzájemný vztah)**: přepnutí perspektivy s vizuálním neonovým zvýrazněním tlačítka a breadcrumbs – okamžité zjištění, jak daný příbuzný oslovuje vás ("Kdo jsem já pro něj?"), s automatickým určením mluvčího dle cílové osoby.
-- **Rychlé headless testování**: sada unit testů pokrývající 82 scénářů (`npm test`) a 160 vztahů (320 obousměrných auditních běhů) bez nutnosti spouštět prohlížeč.
+- **Rychlé headless testování**: sada unit testů pokrývající 90 scénářů (`npm test`) a 184 vztahů (368 obousměrných auditních běhů) bez nutnosti spouštět prohlížeč.
 - **Volba pohlaví EGO / probanda**: muž / žena (výrazně ovlivňuje partnerské a vzájemné vztahy).
 - **Vizuální minirodokmen (`#treeModal`)**: grafické schéma genealogické cesty s avatary, vztahovými štítky, generačními šipkami a zvýrazněním cíle. Při přenosu z GEDCOMu navíc zobrazuje skutečná jména předků i potomků, data narození a úmrtí (`*1928 – †2005`) a obousměrnou perspektivu při vzájemném vztahu.
 - **Kvíz rodinných vztahů (`#quizModal`)**: interaktivní procvičování a trénink genealogických i archaických pojmů se skóre a sériemi.

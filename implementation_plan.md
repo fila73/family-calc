@@ -48,7 +48,7 @@ Vytvoření webové kalkulačky rodinných vztahů inspirované čínskou kalkul
   - `index.js`: Správce slovníků a exporty pro všech 25 jazyků
   - Jednotlivé jazykové balíčky (`cs.js` až `ro.js`)
 - `js/app.js`: Řízení stavu, reakce na stisk kláves, haptika a zvuk, rendering displeje, dialogy, export PNG, hlasové vstupy/výstupy, GEDCOM analyzátor
-- `tests/`: Automatizované testy správnosti výpočtu příbuzenských vztahů a GEDCOM parseru v Node.js (49 / 49 testů)
+- `tests/`: Automatizované testy správnosti výpočtu příbuzenských vztahů, redukčních pravidel, NOZ atributů a GEDCOM parseru v Node.js (90 / 90 unit testů + 184 vztahů / 368 obousměrných auditních běhů)
 
 ## 3. Postup implementace
 1. Inicializace dokumentace (`implementation_plan.md`, `README.md`, `README_CZ.md`, `PLUGIN_DEV.md`, `jobs_done.md`, `nice_to_have.md`).
@@ -91,5 +91,6 @@ Vytvoření webové kalkulačky rodinných vztahů inspirované čínskou kalkul
 38. Vývoj nativního `AndroidTTS` bridge v `MainActivity.java` pro offline hlasovou syntézu v Android WebView.
 39. Doladění responzivního rozložení karty výsledku (`min-height: 100%`, `flex-shrink: 0`, odstranění ořezu cesty).
 40. Integrace skutečných jmen a životních dat (`*YYYY – †YYYY`) do vizuálního rodokmenu `#treeModal` při přenosu z GEDCOM souboru a obousměrná inverze stromu pro vzájemné vztahy.
+41. Komplexní hloubkový audit celé aplikace a oprava zjištěných nálezů (sjednocení rozhraní `allowed`/`hasImpediment` a `class`/`classNumber` mezi enginem a UI, oprava DNA ~25 %, 3. dědické třídy, překážky sňatku a inverze u polorodých sourozenců `step_f,s`/`step_m,s`, oprava pohlaví mluvčího v porovnávači dvou osob a ve vzájemném pohledu, doplnění chybějících 3. generací a sešvagřených prastrýců/pratet z matčiny strany v `cs.js` na 184 vztahů, doplnění `modStep`/`modGod` v 5 slovnících, bilaterální synchronizace GEDCOMu, deduplikace CSS selektorů a zahrnutí `icons/` do `www/` a `sw.js` v19; rozšířeno na 90 / 90 unit testů a 368 / 368 auditních běhů).
 
 

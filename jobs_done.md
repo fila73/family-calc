@@ -311,3 +311,26 @@
 - [x] Zpracování oficiální příručky Google Play Academy (`beginers_guide_to_publish.pdf`):
   - Do `google-play/LAUNCH_ROADMAP.md` zapracována nová Fáze 7 pro životní cyklus po spuštění aplikace (sledování App / Update / Item status, stabilita a metriky Android Vitals, práce s recenzemi, postupné zavádění aktualizací Staged Rollouts).
   - Soubor `beginers_guide_to_publish.pdf` přesunut do složky `google-play/` a do `.gitignore` doplněno pravidlo `*.pdf`.
+
+## [2026-10-13]
+- [x] Komplexní technický, funkční, genealogický, právní (NOZ ČR), i18n, CSS a PWA/Android audit aplikace a oprava všech nalezených defektů:
+  - **Sjednocení datového rozhraní mezi `kinship-engine.js` a `app.js` (NOZ sňatky a dědické třídy)**:
+    - `calculateMarriageImpediment()` nyní vrací jak `hasImpediment`, tak `allowed` (`!hasImpediment`, u prázdného řetězce `false`). Opravena chyba v UI, PNG exportu, modálu překážek manželství a GEDCOM kartě, kde se kvůli chybějící vlastnosti `.allowed` i povolené sňatky (`🟢 Sňatek právně možný (§ 675 NOZ)`) vykreslovaly červeně (`.badge-impediment-blocked`).
+    - `calculateInheritanceClass()` nyní vrací jak `classNumber`, tak alias `class`, a `openInheritanceModal()` kontroluje `inh.classNumber ?? inh.class`. Aktivní dědická třída (1.–6.) se nyní v modálu správně zvýrazňuje odznakem `🌟 Váš výpočet`.
+  - **Oprava výpočtů pro polorodé sourozence (`Polobratr/Polosestra jednobřišní` a `jednokrevní`)**:
+    - Po redukci v `simplifyChain` (`m,step_h,s` ➔ `step_f,s`, `f,step_w,s` ➔ `step_m,s`) nyní `calculateConsanguinity`, `calculateInheritanceClass`, `calculateMarriageImpediment` i `invertChain` plně rozpoznávají zkrácené klíče `step_f,s`, `step_f,d`, `step_m,s`, `step_m,d`.
+    - Polorodí sourozenci mají nyní správně **~25 % sdílené DNA (2. stupeň, `half_blood`)**, spadají do **3. dědické třídy (§ 1637 NOZ)**, mají **zákonnou překážku manželství (§ 675 NOZ)** a při obousměrné inverzi (`invertChain`) si zachovávají polorodý vztah (~25 % DNA). Naopak nepokrevní nevlastní sourozenci (`step_b`, `step_z`) mají 0 % DNA, jsou mimo dědické třídy a nemají překážku sňatku.
+  - **Oprava pohlaví mluvčího v porovnávači dvou osob (`executeCompare`) a v akcích při vzájemném pohledu**:
+    - V `executeCompare()` (`js/app.js`) nahrazen pevně zadaný mluvčí `'m'` skutečným pohlavím první vybrané osoby (`personAGender`). Porovnání *Matka* vs *Otec* nyní správně vrací **Manžel** (namísto dřívějšího chybného vyhodnocení *Já (proband)*).
+    - Do `FamilyCalcApp` přidána pomocná metoda `getActiveSpeakerGender()`, kterou využívají `onEquals()`, `speakResult()`, `shareResult()`, `renderTree()`, `downloadCardAsPNG()`, `openInheritanceModal()` a `openImpedimentModal()` pro konzistentní vyhodnocení ve vzájemném režimu (`isMutualView`).
+  - **Rozšíření českého slovníku (`cs.js`) a vícejazyčné lokalizace (25 jazyků)**:
+    - Do `cs.js` doplněno 24 chybějících kombinací 3. generace a sešvagření (`s,d,s`, `s,d,d`, `d,s,s`, `d,s,d`, `b,d,s`, `b,d,d`, `z,d,s`, `z,d,d`, `h/w,b/z,d,s/d` a `m,f/m,b/z,w/h` – celkem **184 vztahů** se 100% uzavřenou obousměrnou inverzí).
+    - Do `pl.js`, `ru.js`, `de.js`, `zh.js` a `ko.js` doplněny chybějící překlady tlačítek modifikátorů `labels.modStep` a `labels.modGod` (všech 25 jazyků má nyní 100% kompletní sadu `labels`, `tokens` i `lineTypes`).
+    - V `resolveKinship` upřednostněno přímé vyhledání před normalizací věku sourozenců (`ob`, `lb`, `oz`, `lz`) a v `generateDeepKinshipEntry` doplněny strukturní fallbacky pro cizí jazyky.
+  - **Vylepšení GEDCOM parseru, vyčištění CSS/JS a oprava PWA/Capacitor buildu**:
+    - V `js/engine/gedcom-parser.js` doplněno ukládání plných dat `birthDate`/`deathDate` a bilaterální synchronizace vazeb `FAM` ⇄ `INDI` pro neúplné/asymetrické exporty.
+    - V `js/app.js` odstraněna mrtvá reference `#openDictBtn` a opraveny překlepy (`prasneteře` ➔ `praneteře`, `Přenoseno` ➔ `Přeneseno`).
+    - V `css/style.css` odstraněny 4 duplicitní bloky selektorů (`.chain-mutual-indicator`, `.result-action-btn`, `.badge-mutual-mode`, `.quiz-streak-badge`).
+    - Do `scripts/build.js` doplněno kopírování `icons/` a `privacy.html` do `www/` a v `sw.js` (`family-calc-v19`) doplněno cachování `./icons/icon-192.png` a `./icons/icon-512.png`.
+    - Rozšířena sada unit testů na **90 / 90 úspěšných testů** (`npm test`) a **184 vztahů / 368 obousměrných běhů** (`node tests/audit_all.js`).
+
