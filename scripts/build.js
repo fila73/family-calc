@@ -24,9 +24,11 @@ function copyRecursive(src, dest) {
 
 const itemsToCopy = [
   'index.html',
+  'privacy.html',
   'css',
   'js',
   'img',
+  'icons',
   'manifest.json',
   'sw.js'
 ];

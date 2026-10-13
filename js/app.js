@@ -108,7 +108,6 @@ class FamilyCalcApp {
 
     // Modals & Extras
     this.dictModal = document.getElementById('dictModal');
-    this.openDictBtn = document.getElementById('openDictBtn');
     this.closeDictBtn = document.getElementById('closeDictBtn');
     this.dictSearchInput = document.getElementById('dictSearchInput');
     this.dictList = document.getElementById('dictList');
@@ -1087,6 +1086,13 @@ class FamilyCalcApp {
     this.showToast(this.isMutualView ? mutualMsg : baseMsg);
   }
 
+  getActiveSpeakerGender() {
+    if (this.isMutualView && this.chain.length > 0) {
+      return getTokenGender(this.chain[this.chain.length - 1]) || 'm';
+    }
+    return this.egoGender;
+  }
+
   onEquals() {
     this.triggerHaptic();
     // Flash animation on result
@@ -1096,7 +1102,7 @@ class FamilyCalcApp {
     });
     const dict = getDictionary(this.currentLang);
     const activeChain = this.isMutualView ? invertChain(this.chain, this.egoGender) : this.chain;
-    const resolved = resolveKinship(activeChain, this.egoGender, dict);
+    const resolved = resolveKinship(activeChain, this.getActiveSpeakerGender(), dict);
     this.showToast(`${resolved.name}`);
   }
 
@@ -1343,7 +1349,7 @@ class FamilyCalcApp {
 
     const dict = getDictionary(this.currentLang);
     const activeChain = this.isMutualView ? invertChain(this.chain, this.egoGender) : this.chain;
-    const resolved = resolveKinship(activeChain, this.egoGender, dict);
+    const resolved = resolveKinship(activeChain, this.getActiveSpeakerGender(), dict);
     const textToSpeak = `${resolved.name}. ${resolved.description || ''}`;
 
     const langMap = {
@@ -1404,7 +1410,7 @@ class FamilyCalcApp {
     this.triggerHaptic();
     const dict = getDictionary(this.currentLang);
     const activeChain = this.isMutualView ? invertChain(this.chain, this.egoGender) : this.chain;
-    const resolved = resolveKinship(activeChain, this.egoGender, dict);
+    const resolved = resolveKinship(activeChain, this.getActiveSpeakerGender(), dict);
 
     const pathText = this.chain.length > 0
       ? this.formatKeyPath(this.chain.join(','), dict)
@@ -1463,7 +1469,7 @@ class FamilyCalcApp {
 
     const dict = getDictionary(this.currentLang);
     const effectiveChain = this.isMutualView ? invertChain(this.chain, this.egoGender) : this.chain;
-    const resolved = resolveKinship(effectiveChain, this.egoGender, dict);
+    const resolved = resolveKinship(effectiveChain, this.getActiveSpeakerGender(), dict);
 
     // Ověříme, zda aktuální kalkulace odpovídá přenesené cestě z GEDCOMu
     const hasGedcomMatch = Boolean(
@@ -1865,7 +1871,7 @@ class FamilyCalcApp {
     this.triggerHaptic();
     const dict = getDictionary(this.currentLang);
     const activeChain = this.isMutualView ? invertChain(this.chain, this.egoGender) : this.chain;
-    const resolved = resolveKinship(activeChain, this.egoGender, dict);
+    const resolved = resolveKinship(activeChain, this.getActiveSpeakerGender(), dict);
 
     const canvas = document.createElement('canvas');
     const width = 800;
@@ -2011,8 +2017,9 @@ class FamilyCalcApp {
     this.triggerHaptic();
     const dict = getDictionary(this.currentLang);
     const activeChain = this.isMutualView ? invertChain(this.chain, this.egoGender) : this.chain;
-    const resolved = resolveKinship(activeChain, this.egoGender, dict);
-    const inh = resolved.inheritance || { class: null, title: 'Mimo zákonnou posloupnost', description: 'Není v 1.–6. dědické třídě.', badge: 'Mimo dědické třídy' };
+    const resolved = resolveKinship(activeChain, this.getActiveSpeakerGender(), dict);
+    const inh = resolved.inheritance || { classNumber: null, class: null, title: 'Mimo zákonnou posloupnost', description: 'Není v 1.–6. dědické třídě.', badge: 'Mimo dědické třídy' };
+    const inhClassNum = inh.classNumber ?? inh.class;
 
     const classesInfo = [
       { num: 1, title: '1. dědická třída (§ 1635 NOZ)', who: 'Děti zůstavitele a manžel/partner', share: 'Každý rovným dílem. Nedědí-li dítě, podíl připadá jeho dětem (vnukům).' },
@@ -2020,12 +2027,12 @@ class FamilyCalcApp {
       { num: 3, title: '3. dědická třída (§ 1637 NOZ)', who: 'Sourozenci zůstavitele a spolužijící osoby', share: 'Rovným dílem. Nedědí-li sourozenec, nastupují jeho děti (synovci/neteře).' },
       { num: 4, title: '4. dědická třída (§ 1638 NOZ)', who: 'Prarodiče zůstavitele', share: 'Každý dědí rovným dílem.' },
       { num: 5, title: '5. dědická třída (§ 1639 NOZ)', who: 'Prarodiče rodičů zůstavitele (praprarodiče)', share: 'Polovina připadá prarodičům otce, polovina prarodičům matky.' },
-      { num: 6, title: '6. dědická třída (§ 1640 NOZ)', who: 'Děti dětí sourozenců (prasynovci/prasneteře) a děti prarodičů (strýcové a tety)', share: 'Pokud strýc/teta nedědí, jejich děti (bratranci/sestřenice).' }
+      { num: 6, title: '6. dědická třída (§ 1640 NOZ)', who: 'Děti dětí sourozenců (prasynovci/praneteře) a děti prarodičů (strýcové a tety)', share: 'Pokud strýc/teta nedědí, jejich děti (bratranci/sestřenice).' }
     ];
 
     let html = `
       <div class="legal-summary-card">
-        <div class="legal-summary-badge ${inh.class ? 'highlight' : ''}">${inh.badge}</div>
+        <div class="legal-summary-badge ${inhClassNum ? 'highlight' : ''}">${inh.badge}</div>
         <div class="legal-summary-title">Aktuální vztah: <strong>${resolved.name}</strong></div>
         <div class="legal-summary-desc">${inh.description}</div>
       </div>
@@ -2034,7 +2041,7 @@ class FamilyCalcApp {
     `;
 
     classesInfo.forEach((c) => {
-      const isCurrent = inh.class === c.num;
+      const isCurrent = inhClassNum === c.num;
       html += `
         <div class="inheritance-class-card ${isCurrent ? 'active-class' : ''}">
           <div class="class-card-header">
@@ -2062,7 +2069,7 @@ class FamilyCalcApp {
     this.triggerHaptic();
     const dict = getDictionary(this.currentLang);
     const activeChain = this.isMutualView ? invertChain(this.chain, this.egoGender) : this.chain;
-    const resolved = resolveKinship(activeChain, this.egoGender, dict);
+    const resolved = resolveKinship(activeChain, this.getActiveSpeakerGender(), dict);
     const imp = resolved.marriageImpediment || { allowed: true, reason: 'Příbuzenský vztah nebrání uzavření manželství.', badge: 'Sňatek možný' };
 
     let html = `
@@ -2256,10 +2263,11 @@ class FamilyCalcApp {
     const dict = getDictionary(this.currentLang);
 
     const egoGender = this.egoGender;
+    const personAGender = chainA.length > 0 ? (getTokenGender(chainA[chainA.length - 1]) || 'm') : egoGender;
     const invA = invertChain(chainA, egoGender);
     const combinedChain = [...invA, ...chainB];
 
-    const resolved = resolveKinship(combinedChain, 'm', dict);
+    const resolved = resolveKinship(combinedChain, personAGender, dict);
 
     const nameA = this.comparePersonA.options[this.comparePersonA.selectedIndex].text;
     const nameB = this.comparePersonB.options[this.comparePersonB.selectedIndex].text;
@@ -2571,7 +2579,7 @@ class FamilyCalcApp {
     this.updateGenderUI();
     this.closeGedcomModal();
     this.render();
-    this.showToast(`Přenoseno do kalkulačky: ${this.gedcomKinshipResult.resolved.name}`);
+    this.showToast(`Přeneseno do kalkulačky: ${this.gedcomKinshipResult.resolved.name}`);
   }
 }
 
