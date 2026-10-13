@@ -389,8 +389,31 @@ export function simplifyChain(rawChain, egoGender = 'm') {
  * Obrátí perspektivu vztahu (Mutual Query / 互查).
  * Pokud X je příbuzný Ega přes chain, jaký je vztah Ega k X?
  */
+export function isHalfSiblingKey(key) {
+  return (
+    key === 'm,step_h,s' ||
+    key === 'm,step_h,d' ||
+    key === 'f,step_w,s' ||
+    key === 'f,step_w,d' ||
+    key === 'step_f,s' ||
+    key === 'step_f,d' ||
+    key === 'step_m,s' ||
+    key === 'step_m,d'
+  );
+}
+
 export function invertChain(chain, egoGender = 'm') {
   if (!chain || chain.length === 0) return [];
+
+  const key = chainToKey(chain);
+  // Polorodí sourozenci ze strany matky (jednobřišní / uterine)
+  if (key === 'm,step_h,s' || key === 'm,step_h,d' || key === 'step_f,s' || key === 'step_f,d') {
+    return ['step_f', egoGender === 'm' ? 's' : 'd'];
+  }
+  // Polorodí sourozenci ze strany otce (jednokrevní / consanguine)
+  if (key === 'f,step_w,s' || key === 'f,step_w,d' || key === 'step_m,s' || key === 'step_m,d') {
+    return ['step_m', egoGender === 'm' ? 's' : 'd'];
+  }
 
   // Vypočteme pohlaví každé osoby na cestě od Ega
   const genders = [egoGender];
@@ -511,10 +534,10 @@ export function calculateConsanguinity(chain) {
     };
   }
 
-  // Afinitní / sešvagření / nevlastní
+  // Afinitní / sešvagření / nevlastní (s výjimkou polorodých sourozenců)
   if (norm.some((t) => t === 'h' || t === 'w' || t.startsWith('step_'))) {
     const key = chainToKey(chain);
-    if (key === 'm,step_h,s' || key === 'm,step_h,d' || key === 'f,step_w,s' || key === 'f,step_w,d') {
+    if (isHalfSiblingKey(key)) {
       return {
         degree: 2,
         dnaPercent: 25,
@@ -642,6 +665,7 @@ export function calculateInheritanceClass(chain) {
   if (!chain || chain.length === 0) {
     return {
       classNumber: 0,
+      class: 0,
       title: 'Zůstavitel (EGO)',
       description: 'Výchozí osoba, jejíž pozůstalost je předmětem dědického práva.',
       badge: '🏛️ Zůstavitel'
@@ -650,12 +674,14 @@ export function calculateInheritanceClass(chain) {
 
   const norm = chain.map(normalizeToken);
   const len = norm.length;
+  const key = chainToKey(chain);
 
   // 1. třída: Děti zůstavitele a jejich potomci (§ 1635)
   const allDescendants = norm.every((t) => t === 's' || t === 'd');
   if (allDescendants) {
     return {
       classNumber: 1,
+      class: 1,
       title: '1. dědická třída (§ 1635 NOZ)',
       description: 'Zůstavitelovy děti a jejich potomci dědí rovným dílem (spolu s manželem).',
       badge: '🏛️ 1. dědická třída'
@@ -665,6 +691,7 @@ export function calculateInheritanceClass(chain) {
   if (len === 1 && (norm[0] === 'h' || norm[0] === 'w')) {
     return {
       classNumber: 1,
+      class: 1,
       title: '1. a 2. dědická třída (§ 1635 & § 1636 NOZ)',
       description: 'Manžel dědí v 1. třídě společně s dětmi, nedědí-li děti, dědí ve 2. třídě nejméně polovinu pozůstalosti.',
       badge: '🏛️ 1. / 2. dědická třída'
@@ -675,20 +702,22 @@ export function calculateInheritanceClass(chain) {
   if (len === 1 && (norm[0] === 'f' || norm[0] === 'm')) {
     return {
       classNumber: 2,
+      class: 2,
       title: '2. dědická třída (§ 1636 NOZ)',
       description: 'Rodiče zůstavitele dědí ve 2. třídě rovným dílem (spolu s manželem a spolužijícími osobami).',
       badge: '🏛️ 2. dědická třída'
     };
   }
 
-  // 3. třída: Sourozenci a jejich děti (§ 1637)
+  // 3. třída: Sourozenci plnorodí i polorodí a jejich děti (§ 1637)
   const firstIsSibling = norm[0] === 'b' || norm[0] === 'z';
   const restAreChildren = norm.slice(1).every((t) => t === 's' || t === 'd');
-  if (firstIsSibling && (len === 1 || (len === 2 && restAreChildren))) {
+  if ((firstIsSibling && (len === 1 || (len === 2 && restAreChildren))) || isHalfSiblingKey(key)) {
     return {
       classNumber: 3,
+      class: 3,
       title: '3. dědická třída (§ 1637 NOZ)',
-      description: 'Sourozenci zůstavitele (a nedědí-li některý z nich, jeho děti – synovci a neteře).',
+      description: 'Sourozenci zůstavitele (plnorodí i polorodí; a nedědí-li některý z nich, jeho děti – synovci a neteře).',
       badge: '🏛️ 3. dědická třída'
     };
   }
@@ -697,6 +726,7 @@ export function calculateInheritanceClass(chain) {
   if (len === 2 && (norm[0] === 'f' || norm[0] === 'm') && (norm[1] === 'f' || norm[1] === 'm')) {
     return {
       classNumber: 4,
+      class: 4,
       title: '4. dědická třída (§ 1638 NOZ)',
       description: 'Prarodiče zůstavitele (z otcovy i matčiny strany rovným dílem).',
       badge: '🏛️ 4. dědická třída'
@@ -707,6 +737,7 @@ export function calculateInheritanceClass(chain) {
   if (len === 3 && norm.every((t) => t === 'f' || t === 'm')) {
     return {
       classNumber: 5,
+      class: 5,
       title: '5. dědická třída (§ 1639 NOZ)',
       description: 'Prarodiče rodičů zůstavitele (praprarodiče – celkem až 8 osob).',
       badge: '🏛️ 5. dědická třída'
@@ -717,6 +748,7 @@ export function calculateInheritanceClass(chain) {
   if (firstIsSibling && len === 3 && restAreChildren) {
     return {
       classNumber: 6,
+      class: 6,
       title: '6. dědická třída (§ 1640 NOZ)',
       description: 'Děti dětí sourozenců zůstavitele (prasynovci a praneteře).',
       badge: '🏛️ 6. dědická třída'
@@ -725,6 +757,7 @@ export function calculateInheritanceClass(chain) {
   if (len === 2 && (norm[0] === 'f' || norm[0] === 'm') && (norm[1] === 'b' || norm[1] === 'z')) {
     return {
       classNumber: 6,
+      class: 6,
       title: '6. dědická třída (§ 1640 NOZ)',
       description: 'Děti prarodičů zůstavitele (strýcové a tety).',
       badge: '🏛️ 6. dědická třída'
@@ -733,6 +766,7 @@ export function calculateInheritanceClass(chain) {
 
   return {
     classNumber: null,
+    class: null,
     title: 'Mimo zákonné dědické třídy',
     description: 'Vzdálenější příbuzní (např. bratranci) nebo nepokrevní osoby ze zákona nedědí, ledaže by byli uvedeni v závěti.',
     badge: '🏛️ Mimo dědické třídy'
@@ -746,6 +780,7 @@ export function calculateMarriageImpediment(chain) {
   if (!chain || chain.length === 0) {
     return {
       hasImpediment: false,
+      allowed: false,
       reason: 'Sama se sebou nelze uzavřít manželství',
       badge: '—'
     };
@@ -758,6 +793,7 @@ export function calculateMarriageImpediment(chain) {
   if (len === 1 && (norm[0] === 'h' || norm[0] === 'w')) {
     return {
       hasImpediment: true,
+      allowed: false,
       reason: 'Překážka trvajícího manželství / bigamie (§ 672 NOZ)',
       badge: '⛔ Trvající manželství (§ 672 NOZ)'
     };
@@ -769,6 +805,7 @@ export function calculateMarriageImpediment(chain) {
   if (allAncestors || allDescendants) {
     return {
       hasImpediment: true,
+      allowed: false,
       reason: 'Zákonný zákaz sňatku mezi předky a potomky (§ 675 NOZ)',
       badge: '⛔ Zákaz sňatku (přímá linie, § 675 NOZ)'
     };
@@ -778,15 +815,17 @@ export function calculateMarriageImpediment(chain) {
   if (len === 1 && (norm[0] === 'b' || norm[0] === 'z')) {
     return {
       hasImpediment: true,
+      allowed: false,
       reason: 'Zákonný zákaz sňatku mezi sourozenci (§ 675 NOZ)',
       badge: '⛔ Zákaz sňatku (sourozenci, § 675 NOZ)'
     };
   }
 
   const key = chainToKey(chain);
-  if (key === 'm,step_h,s' || key === 'm,step_h,d' || key === 'f,step_w,s' || key === 'f,step_w,d' || key === 'step_b' || key === 'step_z') {
+  if (isHalfSiblingKey(key)) {
     return {
       hasImpediment: true,
+      allowed: false,
       reason: 'Zákonný zákaz sňatku mezi polorodými sourozenci (§ 675 NOZ)',
       badge: '⛔ Zákaz sňatku (polorodí sourozenci, § 675 NOZ)'
     };
@@ -794,6 +833,7 @@ export function calculateMarriageImpediment(chain) {
 
   return {
     hasImpediment: false,
+    allowed: true,
     reason: 'Podle českého práva (§ 675 NOZ) nevzniká zákonná překážka sňatku (příbuzenství v pobočné linii od 3. stupně je přípustné).',
     badge: '🟢 Sňatek právně možný (§ 675 NOZ)'
   };
@@ -827,12 +867,13 @@ export function resolveKinship(chain, egoGender = 'm', dictionary) {
   }
 
   const simplified = simplifyChain(chain, egoGender);
+  const rawSimplifiedKey = simplified.join(',');
   const key = chainToKey(simplified);
 
-  // Přímé vyhledání ve slovníku
-  let entry = dictionary.relations[key];
+  // Přímé vyhledání ve slovníku (nejprve přesný klíč včetně ob/lb/oz/lz, poté normalizovaný)
+  let entry = dictionary.relations[rawSimplifiedKey] || dictionary.relations[key];
 
-  // Pokud není přímý záznam, zkusíme generátor pro N-té generace předků a potomků
+  // Pokud není přímý záznam, zkusíme generátor pro N-té generace předků, potomků a pobočných větví
   if (!entry) {
     entry = generateDeepKinshipEntry(simplified, dictionary);
   }
@@ -866,11 +907,32 @@ export function resolveKinship(chain, egoGender = 'm', dictionary) {
 }
 
 /**
- * Generátor pro hluboké generace předků, potomků a strýců (pra-pra-...)
+ * Generátor pro hluboké generace předků, potomků, strýců a mezinárodních strukturních ekvivalentů
  */
 function generateDeepKinshipEntry(chain, dictionary) {
   const norm = chain.map(normalizeToken);
   const len = norm.length;
+  const key = norm.join(',');
+
+  // Polorodí sourozenci (step_f,s / step_m,s / m,step_h,s / f,step_w,s) v jazycích, kde chybí přímý klíč
+  if (isHalfSiblingKey(key)) {
+    const isMale = norm[len - 1] === 's';
+    const isUterine = key.startsWith('m,') || key.startsWith('step_f,');
+    const altKey = isUterine
+      ? (isMale ? 'm,step_h,s' : 'm,step_h,d')
+      : (isMale ? 'f,step_w,s' : 'f,step_w,d');
+    const shortKey = isUterine
+      ? (isMale ? 'step_f,s' : 'step_f,d')
+      : (isMale ? 'step_m,s' : 'step_m,d');
+    const fallbackSibling = isMale ? 'step_b' : 'step_z';
+    return (
+      dictionary.relations[altKey] ||
+      dictionary.relations[shortKey] ||
+      dictionary.relations[fallbackSibling] ||
+      null
+    );
+  }
+
   if (len < 3) return null;
 
   // Samí otcové/matky: předkové
@@ -880,7 +942,7 @@ function generateDeepKinshipEntry(chain, dictionary) {
     const isMale = lastToken === 'f';
     const praCount = len - 2; // např. f,f,f = 3-2 = 1x pra (praděda), 4 = 2x pra (prapraděda)
     const praPrefix = 'pra'.repeat(praCount);
-    
+
     if (dictionary.code === 'cs') {
       const base = isMale ? 'dědeček' : 'babička';
       const alt = isMale ? 'děda' : 'babička';
@@ -891,6 +953,15 @@ function generateDeepKinshipEntry(chain, dictionary) {
         description: `Předek v ${len}. generaci přímé linie (${isMale ? 'mužský' : 'ženský'})`,
         lineType: 'direct_ascendant'
       };
+    }
+
+    if (len === 3) {
+      const paternal3 = isMale ? 'f,f,f' : 'f,f,m';
+      const maternal3 = isMale ? 'm,m,f' : 'm,m,m';
+      return (norm[0] === 'f' ? dictionary.relations[paternal3] : dictionary.relations[maternal3])
+        || dictionary.relations[paternal3]
+        || dictionary.relations[maternal3]
+        || null;
     }
   }
 
@@ -912,6 +983,14 @@ function generateDeepKinshipEntry(chain, dictionary) {
         lineType: 'direct_descendant'
       };
     }
+
+    if (len === 3) {
+      return (
+        dictionary.relations[isMale ? 's,s,s' : 's,s,d'] ||
+        dictionary.relations[isMale ? 'd,d,s' : 'd,d,d'] ||
+        null
+      );
+    }
   }
 
   // Předek + bratr / sestra: prastrýc / prateta
@@ -931,6 +1010,14 @@ function generateDeepKinshipEntry(chain, dictionary) {
         description: `Sourozenec tvého předka v ${len - 1}. generaci`,
         lineType: 'collateral'
       };
+    }
+
+    if (len === 3) {
+      return (
+        dictionary.relations[isMale ? 'f,f,b' : 'f,f,z'] ||
+        dictionary.relations[isMale ? 'm,m,b' : 'm,m,z'] ||
+        null
+      );
     }
   }
 
@@ -954,6 +1041,30 @@ function generateDeepKinshipEntry(chain, dictionary) {
         lineType: 'collateral'
       };
     }
+
+    if (len === 3) {
+      return (
+        dictionary.relations[`${norm[0]},s,${lastToken}`] ||
+        dictionary.relations[isMale ? 'b,s,s' : 'b,s,d'] ||
+        dictionary.relations[isMale ? 'z,s,s' : 'z,s,d'] ||
+        null
+      );
+    }
+  }
+
+  // Bratranec / sestřenice (f/m, b/z, s/d) pro jazyky s částečným pokrytím
+  if (
+    len === 3 &&
+    (norm[0] === 'f' || norm[0] === 'm') &&
+    (norm[1] === 'b' || norm[1] === 'z') &&
+    (norm[2] === 's' || norm[2] === 'd')
+  ) {
+    const lastToken = norm[2];
+    return (
+      dictionary.relations[`${norm[0]},b,${lastToken}`] ||
+      dictionary.relations[`f,b,${lastToken}`] ||
+      null
+    );
   }
 
   // Partner + sourozenec + samí potomci: sešvagřený synovec / prasynovec (0% DNA, afinitní vztah)
@@ -1008,10 +1119,23 @@ function generateDeepKinshipEntry(chain, dictionary) {
       };
     }
 
-    const base = isMale ? 'synovec' : 'neteř';
+    if (len === 3) {
+      const directNephew = dictionary.relations[`${norm[1]},${lastToken}`] || dictionary.relations[isMale ? 'b,s' : 'b,d'];
+      if (directNephew) {
+        return {
+          id: `inlaw_nephew_${len}_${lastToken}`,
+          name: directNephew.name,
+          archaic: directNephew.archaic || null,
+          description: directNephew.description,
+          lineType: 'affinity'
+        };
+      }
+    }
+
+    const base = isMale ? 'Nephew' : 'Niece';
     return {
       id: `inlaw_nephew_${len}_${lastToken}`,
-      name: `${base.charAt(0).toUpperCase() + base.slice(1)} (in-law)`,
+      name: `${base} (in-law)`,
       archaic: null,
       description: `Affinity relative via spouse's sibling`,
       lineType: 'affinity'

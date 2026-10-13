@@ -28,6 +28,8 @@ export const ru = {
     backspace: 'Назад',
     calculate: 'Вычислить',
     mutual: 'Взаимное родство',
+    modStep: '⇧ Неродной',
+    modGod: '✝ Крёстный',
     tokens: {
       f: 'отец',
       m: 'мать',

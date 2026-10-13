@@ -28,6 +28,8 @@ export const ko = {
     backspace: '지우기',
     calculate: '계산',
     mutual: '상호 호칭',
+    modStep: '⇧ 계/재혼',
+    modGod: '✝ 대부모',
     tokens: {
       f: '아버지',
       m: '어머니',

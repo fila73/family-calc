@@ -45,7 +45,9 @@ export function parseGedcom(gedcomText) {
             type: 'INDI',
             name: '',
             sex: 'U', // M, F, U
+            birthDate: null,
             birthYear: null,
+            deathDate: null,
             deathYear: null,
             famc: null, // rodina, kde je dítětem
             fams: []   // rodiny, kde je partnerem
@@ -83,12 +85,16 @@ export function parseGedcom(gedcomText) {
         } else if (tag === 'FAMC') {
           currentRecord.famc = value;
         } else if (tag === 'FAMS') {
-          currentRecord.fams.push(value);
+          if (!currentRecord.fams.includes(value)) {
+            currentRecord.fams.push(value);
+          }
         }
       } else if (level === 2 && currentSubTag === 'BIRT' && tag === 'DATE') {
+        currentRecord.birthDate = value;
         const yearMatch = value.match(/\b(\d{4})\b/);
         if (yearMatch) currentRecord.birthYear = parseInt(yearMatch[1], 10);
       } else if (level === 2 && currentSubTag === 'DEAT' && tag === 'DATE') {
+        currentRecord.deathDate = value;
         const yearMatch = value.match(/\b(\d{4})\b/);
         if (yearMatch) currentRecord.deathYear = parseInt(yearMatch[1], 10);
       }
@@ -96,8 +102,34 @@ export function parseGedcom(gedcomText) {
       if (level === 1) {
         if (tag === 'HUSB') currentRecord.husb = value;
         else if (tag === 'WIFE') currentRecord.wife = value;
-        else if (tag === 'CHIL') currentRecord.children.push(value);
+        else if (tag === 'CHIL' && !currentRecord.children.includes(value)) {
+          currentRecord.children.push(value);
+        }
       }
+    }
+  }
+
+  // Bilaterální synchronizace vazeb mezi FAM a INDI (pro neúplné/asymetrické exporty)
+  for (const [famId, fam] of families.entries()) {
+    if (fam.husb && individuals.has(fam.husb)) {
+      const husb = individuals.get(fam.husb);
+      if (!husb.fams.includes(famId)) husb.fams.push(famId);
+    }
+    if (fam.wife && individuals.has(fam.wife)) {
+      const wife = individuals.get(fam.wife);
+      if (!wife.fams.includes(famId)) wife.fams.push(famId);
+    }
+    for (const childId of fam.children) {
+      if (individuals.has(childId)) {
+        const child = individuals.get(childId);
+        if (!child.famc) child.famc = famId;
+      }
+    }
+  }
+  for (const [indId, ind] of individuals.entries()) {
+    if (ind.famc && families.has(ind.famc)) {
+      const fam = families.get(ind.famc);
+      if (!fam.children.includes(indId)) fam.children.push(indId);
     }
   }
 

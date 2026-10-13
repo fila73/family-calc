@@ -29,6 +29,8 @@ export const zh = {
     backspace: '退格',
     calculate: '计算',
     mutual: '互查',
+    modStep: '⇧ 继/再婚',
+    modGod: '✝ 干亲/教父母',
     tokens: {
       f: '爸爸',
       m: '妈妈',

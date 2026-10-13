@@ -28,6 +28,8 @@ export const de = {
     backspace: 'Zurück',
     calculate: 'Berechnen',
     mutual: 'Gegenseitige Anrede',
+    modStep: '⇧ Stief-',
+    modGod: '✝ Paten-',
     tokens: {
       f: 'Vater',
       m: 'Mutter',

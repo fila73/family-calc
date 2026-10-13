@@ -28,6 +28,8 @@ export const pl = {
     backspace: 'Cofnij',
     calculate: 'Oblicz',
     mutual: 'Wzajemna relacja',
+    modStep: '⇧ Przybrany',
+    modGod: '✝ Chrzestny',
     tokens: {
       f: 'ojciec',
       m: 'matka',
