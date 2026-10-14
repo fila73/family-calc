@@ -385,6 +385,8 @@
     - **V kalkulačce**: Tyto vazby jsou plně podporovány (celkem 188 vztahů v `cs.js`). Pokud uživatel v kalkulačce zadá `Bratr ➔ Manžel`, kalkulačka korektně a přirozeně vrátí **Švagr** (*Manžel tvého bratra*); pro `Matka ➔ Bratr ➔ Manžel` vrátí **Strýc** (*Manžel bratra tvé matky*).
     - **V kvízu**: Do kvízu tyto vazby **nikdy nevstupují**. Filtrem `isConservative(key)` je kvízový fond striktně omezen na 164 tradičních rodinných vazeb. Kvíz tak zůstává 100% tradiční a konzervativní.
     - **Nová testovací sekce 8 v `tests/reductions_mutual.test.js`**: Doplněno 6 regresních testů pro ověření `b,h` = Švagr, `m,b,h` = Strýc, `f,b,h` = Strýc, `z,w` = Švagrová, `s,h` = Zeť, `d,w` = Snacha. Celkový počet úspěšných unit testů vzrostl na **96 / 96**.
-
-
+- [x] **Instalace a ověření aplikace na připojeném tabletu Lenovo (`TB328XU`)**:
+  - Připojený tablet Lenovo (`model: TB328XU`, ADB ID: `HGT7T347`) detekován přes ADB.
+  - Nainstalován nejnovější balíček `build-android/Rodinna-Kalkulacka-debug.apk` (`adb -s HGT7T347 install -r`).
+  - Aplikace `cz.fila73.familycalc` úspěšně spuštěna a ověřena v popředí (`MainActivity`, bez chyb v logcatu).
 
