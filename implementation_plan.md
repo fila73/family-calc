@@ -101,8 +101,6 @@ Vytvoření webové kalkulačky rodinných vztahů inspirované čínskou kalkul
     - `screenshot_5_quiz.png`: Kvíz a procvičování rodinných vztahů se skóre, sérií, možnostmi A-D a oslavou správné odpovědi.
     - `screenshot_6_settings.png`: Nová dedikovaná obrazovka Nastavení aplikace (zvuky, haptika, jazyk, výchozí pohlaví probanda).
 44. Vyčištění nekonservativních vztahů ze slovníku `cs.js` (odstranění 23 netradičních položek vzniklých při plošném generování vazeb), zavedení striktního filtru tradičních/konzervativních rodinných vazeb `isConservative(key)` do genealogického kvízu (`generateQuizQuestion` v `js/app.js`), zachování 100% průchodnosti unit testů a znovupořízení screenshotu kvízu č. 5 pro Google Play v poměru 9:16 s čistou tradiční otázkou.
-45. Podpora přirozených stejnopohlavních afinitních vazeb v kalkulačce (`b,h` = Švagr, `m,b,h` = Strýc, `f,b,h` = Strýc, `z,w` = Švagrová, `s,h` = Zeť, `d,w` = Snacha) při striktní izolaci genealogického kvízu (fond 164 konzervativních položek chráněný filtrem `isConservative(key)`). Rozšíření testovací sady o sekci 8 v `tests/reductions_mutual.test.js` na celkových **96 / 96 úspěšných unit testů**, sestavení debug APK a nasazení na telefon Xiaomi Redmi Note 11 Pro 5G.
-
-
-
+45. Podpora přirozených stejnopohlavních afinitních vazeb v kalkulačce (`b,h` = Švagr, `m,b,h` = Strýc, `f,b,h` = Strýc, `z,w` = Švagrová, `s,h` = Zeť, `d,w` = Snacha) při striktní izolaci genealogického kvízu (fond 164 konzervativních položek chráněný filtrem `isConservative(key)`). Rozšíření testovací sady o sekci 8 v `tests/reductions_mutual.test.js` na celkových **96 / 96 úspěšných unit testů**, sestavení debug APK a nasazení na telefon Xiaomi Redmi Note 11 Pro 5G i tablet Lenovo TB328XU.
+46. Vygenerování produkčního podpisového klíče (`android/familycalc-release-key.jks`, 2048-bit RSA, platnost 10 000 dní), nastavení automatického podepisování přes `android/keystore.properties` v `android/app/build.gradle` (`signingConfigs.release`) a kompilace kryptograficky podepsaného balíčku `build-android/Rodinna-Kalkulacka-release.aab` (3,90 MB) pro Google Play Console.
 

@@ -390,5 +390,10 @@
   - Nainstalován nejnovější balíček `build-android/Rodinna-Kalkulacka-debug.apk` (`adb -s HGT7T347 install -r`).
   - Aplikace `cz.fila73.familycalc` úspěšně spuštěna a ověřena v popředí (`MainActivity`, bez chyb v logcatu).
   - Do `/sdcard/Download/` na tabletu nahráno všech 5 testovacích GEDCOM rodokmenů (`9i7efa_248548bkfd5396b740a9bl_A.ged`, `bb2769_70868886mn5a77f2196bb9_A.ged`, `2bab8u_1083818bwf09d6bj9y8fax_A.ged`, `47a68f_0208578aq4sw8l546dfab3_A.ged`, `fbf87c_1715507b4z829f698a3c6d_A.ged`).
+- [x] **Vygenerování produkčního podpisového klíče (Keystore) a sestavení podepsaného `.aab` pro Google Play**:
+  - Pomocí `keytool` (JDK 17) vygenerován produkční klíč `android/familycalc-release-key.jks` (`RSA 2048-bit`, `SHA256withRSA`, platnost 10 000 dní do 2054-03-01, `CN=Filip Novak, O=fila73, C=CZ`, alias `familycalc`).
+  - Přístupové údaje uloženy do `android/keystore.properties` (chráněno v `.gitignore` spolu s `*.jks` a `*.ged`).
+  - V `android/app/build.gradle` nakonfigurován `signingConfigs.release` načítající `keystore.properties` a připojený na `buildTypes.release`.
+  - Sestaven a `jarsigner` nástrojem ověřen kryptograficky podepsaný produkční balíček `build-android/Rodinna-Kalkulacka-release.aab` (3,90 MB) i `android/app/build/outputs/bundle/release/app-release.aab`.
 
 
