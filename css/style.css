@@ -141,24 +141,6 @@ body.is-mobile-device .app-wrapper {
   gap: 12px;
 }
 
-.back-btn {
-  background: transparent;
-  border: none;
-  color: var(--text-primary);
-  width: 36px;
-  height: 36px;
-  border-radius: var(--radius-sm);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.back-btn:hover {
-  background: rgba(255, 255, 255, 0.08);
-}
-
 .app-title-group h1 {
   font-size: 1.15rem;
   font-weight: 600;

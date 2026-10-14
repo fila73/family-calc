@@ -113,7 +113,6 @@ class FamilyCalcApp {
     this.dictList = document.getElementById('dictList');
     this.dictModalTitle = document.getElementById('dictModalTitle');
     this.toast = document.getElementById('toast');
-    this.resetBtn = document.getElementById('resetBtn');
 
     // Visual Tree Modal
     this.treeModal = document.getElementById('treeModal');
@@ -461,12 +460,6 @@ class FamilyCalcApp {
         if (e.target === this.shortcutsModal) this.closeShortcutsModal();
       });
     }
-
-    // Reset button
-    this.resetBtn.addEventListener('click', () => {
-      this.triggerHaptic();
-      this.clearAll();
-    });
 
     // Modifiers
     this.btnModStep.addEventListener('click', () => this.toggleModifier('step'));

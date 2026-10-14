@@ -333,4 +333,10 @@
     - V `css/style.css` odstraněny 4 duplicitní bloky selektorů (`.chain-mutual-indicator`, `.result-action-btn`, `.badge-mutual-mode`, `.quiz-streak-badge`).
     - Do `scripts/build.js` doplněno kopírování `icons/` a `privacy.html` do `www/` a v `sw.js` (`family-calc-v19`) doplněno cachování `./icons/icon-192.png` a `./icons/icon-512.png`.
     - Rozšířena sada unit testů na **90 / 90 úspěšných testů** (`npm test`) a **184 vztahů / 368 obousměrných běhů** (`node tests/audit_all.js`).
+  - **Odstranění matoucího reset tlačítka (šipky zpět) z hlavičky**:
+    - Z hlavičky aplikace ([index.html](file:///c:/Users/filip/AntigravityProjects/family-calc/index.html)) zcela odstraněno tlačítko `resetBtn` (`.back-btn` s ikonou levé šipky `←`).
+    - Z [js/app.js](file:///c:/Users/filip/AntigravityProjects/family-calc/js/app.js) odstraněna reference a event listener.
+    - Z [css/style.css](file:///c:/Users/filip/AntigravityProjects/family-calc/css/style.css) odstraněna nepoužívaná třída `.back-btn`.
+    - Pro kompletní reset kalkulačky nadále slouží žluté tlačítko **C** (Clear) a pro krok zpět tlačítko **⌫** (Backspace) přímo na klávesnici.
+    - Znovusestaven webový balíček (`npm run build`) a synchronizovány nativní Android assety (`npx cap sync android`).
 
