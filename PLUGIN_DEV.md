@@ -29,7 +29,7 @@ Každý jazykový balíček implementuje standardní rozhraní v adresáři `js/
 - `code`: ISO kód jazyka (v současnosti 25 jazyků: `cs`, `sk`, `pl`, `de`, `en`, `fr`, `it`, `es`, `ru`, `zh`, `ja`, `ko`, `vi`, `uk`, `pt`, `nl`, `hu`, `tr`, `el`, `sv`, `hi`, `id`, `ar`, `hr`, `ro`)
 - `name`: Nativní název jazyka
 - `labels`: Překlady prvků uživatelského rozhraní
-- `relations`: Mapování normalizovaných relačních kódů na názvy, synonyma a vysvětlení
+- `relations`: Mapování normalizovaných relačních kódů na názvy, synonyma a vysvětlení (striktně dodržující tradiční rodinné a manželské vazby: mužské tokeny uzavírají manželství s `w`, ženské s `h`)
 
 ### Přidání nového jazyka do škálovatelného výběru
 Pro zařazení jazyka do vyhledávače a dialogu:

@@ -160,12 +160,16 @@ console.log('\n6. Multilingual stepbrother resolution:');
 }
 
 // 7. Full inventory audit: every relation in cs.js must invert to a known relation
-console.log('\n7. Exhaustive audit of cs.js (all relations x 2 genders):');
+console.log('\n7. Exhaustive audit of cs.js (conservative perspective per ego gender):');
 {
   let unhandled = 0;
   for (const [key, val] of Object.entries(cs.relations)) {
     const chain = key.split(',');
     for (const ego of ['m', 'f']) {
+      // V konzervativní rodinné genealogii má muž (m) manželku (w), žena (f) manžela (h)
+      if (chain[0] === 'w' && ego === 'f') continue;
+      if (chain[0] === 'h' && ego === 'm') continue;
+
       const targetGender = getTokenGender(chain[chain.length - 1]) || 'm';
       const inv = invertChain(chain, ego);
       const resInv = resolveKinship(inv, targetGender, cs);

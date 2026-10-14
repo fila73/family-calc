@@ -368,5 +368,21 @@
     5. `screenshot_5_quiz.png` (1080×1920): Genealogický kvíz (`#quizModal`) se skóre 1/1, sérií 1, historickým pojmem „Švagr“ a zeleně zvýrazněnou správnou odpovědí s oslavou.
     6. `screenshot_6_settings.png` (1080×1920): Nová samostatná obrazovka Nastavení aplikace (`#settingsModal`) s přepínači zvuků, vibrací, jazyka rozhraní a výchozího pohlaví probanda.
   - Všechny screenshoty v `google-play/assets/` jsou plně ověřeny, bez stavové lišty a systémového smetí, připravené k okamžitému nahrání do Google Play Console.
+- [x] **Vyčištění slovníku a striktní konzervativní rodinné vazby v kvízu**:
+  - **Identifikace příčiny**: Zjištěno, že v `js/i18n/cs.js` se v minulosti ocitlo 23 nekonservativních stejnojmenných/stejnopohlavních svazků (přidaných pod blokem `// Vzájemné doplňkové sešvagření (včetně stejnopohlavních párů)` a `// Doplňkové a stejnopohlavní afinitní inverze`), z nichž náhodný generátor kvízu vytáhl vztah `h,b,h: Manžel bratra tvého manžela`. Ostatních 24 jazykových slovníků kalkulačky bylo již dříve 100% tradičních/konzervativních.
+  - **Odstranění nestandardních vazeb z `cs.js`**:
+    - Kompletně odstraněno všech 23 netradičních položek (`f,b,h`, `m,b,h`, `f,z,w`, `m,z,w`, `f,f,b,h`, `f,m,b,h`, `f,f,z,w`, `f,m,z,w`, `m,f,b,h`, `m,m,b,h`, `m,f,z,w`, `m,m,z,w`, `s,s,h`, `s,d,w`, `d,d,w`, `d,w`, `s,h`, `z,w`, `b,h`, `h,z,w`, `w,z,w`, `h,b,h`, `w,b,h`).
+    - Doplněny symetrické tradiční in-law vztahy: `d,s,w` (Prasnacha – manželka syna tvé dcery), `h,m,f` (Pratchán – otec matky tvého manžela) a `h,m,m` (Pratchyně – matka matky tvého manžela).
+  - **Zavedení přísného filtru v kvízu (`generateQuizQuestion` v `js/app.js`)**:
+    - Implementována validační funkce `isConservative(key)`, která prověřuje celý řetězec a zaručuje, že mužské tokeny mohou uzavírat sňatek výhradně s `w` (manželka) a ženské s `h` (manžel). Kvízové otázky i všechny 3 distraktory jsou vybírány striktně z tradičních rodinných vazeb.
+  - **Úprava testovací sady (`tests/reductions_mutual.test.js`)**:
+    - Test 7 (komplexní obousměrná inverze) upraven tak, aby respektoval konzervativní perspektivu probanda (muž má manželku `w`, žena manžela `h`).
+    - Všech **90 / 90 unit testů** úspěšně prochází na výbornou.
+  - **Build a aktualizace na reálném zařízení Xiaomi Redmi Note 11 Pro 5G**:
+    - Proveden web build (`npm run build`), synchronizace Capacitoru (`npx cap sync android`), kompilace debug balíčku (`./gradlew assembleDebug`) a instalace na telefon přes ADB.
+  - **Znovupořízení screenshotu č. 5 (Kvíz) v poměru 9:16**:
+    - Přímo z displeje telefonu pořízen nový reprezentativní screenshot kvízu s tradiční otázkou: *Kdo je to „Praneteř“? ➔ Dcera dcery tvé sestry (dcera neteře)* se zeleným zvýrazněním správné odpovědi, oslavným bannerem a skóre 1/1.
+    - Zpracováno pomocí `scripts/generate_store_screenshots.ps1` do `screenshot_5_quiz.png` (1080×1920) a `screenshot_5_quiz_9_16_1350x2400.png`.
+
 
 

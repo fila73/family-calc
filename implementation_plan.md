@@ -100,6 +100,8 @@ Vytvoření webové kalkulačky rodinných vztahů inspirované čínskou kalkul
     - `screenshot_4_gedcom.png`: Import rodokmenu GEDCOM (.ged), genealogická cesta a detekce překážky sňatku dle § 675 NOZ.
     - `screenshot_5_quiz.png`: Kvíz a procvičování rodinných vztahů se skóre, sérií, možnostmi A-D a oslavou správné odpovědi.
     - `screenshot_6_settings.png`: Nová dedikovaná obrazovka Nastavení aplikace (zvuky, haptika, jazyk, výchozí pohlaví probanda).
+44. Vyčištění nekonservativních vztahů ze slovníku `cs.js` (odstranění 23 netradičních položek vzniklých při plošném generování vazeb), zavedení striktního filtru tradičních/konzervativních rodinných vazeb `isConservative(key)` do genealogického kvízu (`generateQuizQuestion` v `js/app.js`), zachování 100% průchodnosti unit testů (90/90 testů v `tests/`) a znovupořízení screenshotu kvízu č. 5 pro Google Play v poměru 9:16 s čistou tradiční otázkou.
+
 
 
 

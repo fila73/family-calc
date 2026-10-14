@@ -802,43 +802,11 @@ export const cs = {
       lineType: 'affinity'
     },
 
-    // Doplňkové a stejnopohlavní afinitní inverze
-    'f,b,h': {
-      name: 'Strýc',
-      archaic: 'Přiženěný strýc',
-      description: 'Manžel bratra tvého otce',
-      lineType: 'affinity'
-    },
-    'm,b,h': {
-      name: 'Strýc',
-      archaic: 'Posel / přiženěný strýc',
-      description: 'Manžel bratra tvé matky',
-      lineType: 'affinity'
-    },
-    'f,z,w': {
-      name: 'Teta',
-      archaic: 'Přivdaná teta',
-      description: 'Manželka sestry tvého otce',
-      lineType: 'affinity'
-    },
-    'm,z,w': {
-      name: 'Teta',
-      archaic: 'Přivdaná teta',
-      description: 'Manželka sestry tvé matky',
-      lineType: 'affinity'
-    },
-
     // Sešvagření prastrýcové a pratety (inverze prasynovců a praneteří)
     'f,f,b,w': {
       name: 'Prateta',
       archaic: 'Přivdaná prateta',
       description: 'Manželka prastrýce z otcovy strany',
-      lineType: 'affinity'
-    },
-    'f,f,b,h': {
-      name: 'Prastrýc',
-      archaic: 'Přiženěný prastrýc',
-      description: 'Manžel prastrýce z otcovy strany',
       lineType: 'affinity'
     },
     'f,m,b,w': {
@@ -847,22 +815,10 @@ export const cs = {
       description: 'Manželka prastrýce z matčiny strany',
       lineType: 'affinity'
     },
-    'f,m,b,h': {
-      name: 'Prastrýc',
-      archaic: 'Přiženěný prastrýc',
-      description: 'Manžel prastrýce z matčiny strany',
-      lineType: 'affinity'
-    },
     'f,f,z,h': {
       name: 'Prastrýc',
       archaic: 'Přiženěný prastrýc',
       description: 'Manžel pratety z otcovy strany',
-      lineType: 'affinity'
-    },
-    'f,f,z,w': {
-      name: 'Prateta',
-      archaic: 'Přivdaná prateta',
-      description: 'Manželka pratety z otcovy strany',
       lineType: 'affinity'
     },
     'f,m,z,h': {
@@ -871,22 +827,10 @@ export const cs = {
       description: 'Manžel pratety z matčiny strany',
       lineType: 'affinity'
     },
-    'f,m,z,w': {
-      name: 'Prateta',
-      archaic: 'Přivdaná prateta',
-      description: 'Manželka pratety z matčiny strany',
-      lineType: 'affinity'
-    },
     'm,f,b,w': {
       name: 'Prateta',
       archaic: 'Přivdaná prateta',
       description: 'Manželka prastrýce z matčiny strany',
-      lineType: 'affinity'
-    },
-    'm,f,b,h': {
-      name: 'Prastrýc',
-      archaic: 'Přiženěný prastrýc',
-      description: 'Manžel prastrýce z matčiny strany',
       lineType: 'affinity'
     },
     'm,m,b,w': {
@@ -895,34 +839,16 @@ export const cs = {
       description: 'Manželka prastrýce z matčiny strany',
       lineType: 'affinity'
     },
-    'm,m,b,h': {
-      name: 'Prastrýc',
-      archaic: 'Přiženěný prastrýc',
-      description: 'Manžel prastrýce z matčiny strany',
-      lineType: 'affinity'
-    },
     'm,f,z,h': {
       name: 'Prastrýc',
       archaic: 'Přiženěný prastrýc',
       description: 'Manžel pratety z matčiny strany',
       lineType: 'affinity'
     },
-    'm,f,z,w': {
-      name: 'Prateta',
-      archaic: 'Přivdaná prateta',
-      description: 'Manželka pratety z matčiny strany',
-      lineType: 'affinity'
-    },
     'm,m,z,h': {
       name: 'Prastrýc',
       archaic: 'Přiženěný prastrýc',
       description: 'Manžel pratety z matčiny strany',
-      lineType: 'affinity'
-    },
-    'm,m,z,w': {
-      name: 'Prateta',
-      archaic: 'Přivdaná prateta',
-      description: 'Manželka pratety z matčiny strany',
       lineType: 'affinity'
     },
 
@@ -957,22 +883,10 @@ export const cs = {
       description: 'Manžel dcery tvého syna',
       lineType: 'affinity'
     },
-    's,s,h': {
-      name: 'Prazeť',
-      archaic: 'Manžel vnuka (ve stejnopohlavním svazku)',
-      description: 'Manžel tvého vnuka',
-      lineType: 'affinity'
-    },
-    's,d,w': {
+    'd,s,w': {
       name: 'Prasnacha',
-      archaic: 'Manželka vnučky',
-      description: 'Manželka dcery tvého syna',
-      lineType: 'affinity'
-    },
-    'd,d,w': {
-      name: 'Prasnacha',
-      archaic: 'Manželka vnučky',
-      description: 'Manželka dcery tvé dcery',
+      archaic: 'Manželka vnuka (syna dcery)',
+      description: 'Manželka syna tvé dcery',
       lineType: 'affinity'
     },
     'f,z,d,s': {
@@ -997,6 +911,18 @@ export const cs = {
       name: 'Pratchyně',
       archaic: 'Babička manželky (matka tchyně)',
       description: 'Matka matky tvé manželky',
+      lineType: 'affinity'
+    },
+    'h,m,f': {
+      name: 'Pratchán',
+      archaic: 'Dědeček manžela (otec tchyně)',
+      description: 'Otec matky tvého manžela',
+      lineType: 'affinity'
+    },
+    'h,m,m': {
+      name: 'Pratchyně',
+      archaic: 'Babička manžela (matka tchyně)',
+      description: 'Matka matky tvého manžela',
       lineType: 'affinity'
     },
 
@@ -1052,55 +978,7 @@ export const cs = {
       lineType: 'step'
     },
 
-    // Vzájemné doplňkové sešvagření (včetně stejnopohlavních párů)
-    'd,w': {
-      name: 'Snacha',
-      archaic: 'Přivdaná partnerka dcery',
-      description: 'Manželka tvé dcery',
-      lineType: 'affinity'
-    },
-    's,h': {
-      name: 'Zeť',
-      archaic: 'Přiženěný partner syna',
-      description: 'Manžel tvého syna',
-      lineType: 'affinity'
-    },
-    'z,w': {
-      name: 'Švagrová',
-      archaic: 'Manželka sestry',
-      description: 'Manželka tvé sestry',
-      lineType: 'affinity'
-    },
-    'b,h': {
-      name: 'Švagr',
-      archaic: 'Manžel bratra',
-      description: 'Manžel tvého bratra',
-      lineType: 'affinity'
-    },
-    'h,z,w': {
-      name: 'Švagrová',
-      archaic: 'Manželka švagrové',
-      description: 'Manželka sestry tvého manžela',
-      lineType: 'affinity'
-    },
-    'w,z,w': {
-      name: 'Švagrová',
-      archaic: 'Manželka švagrové',
-      description: 'Manželka sestry tvé manželky',
-      lineType: 'affinity'
-    },
-    'h,b,h': {
-      name: 'Švagr',
-      archaic: 'Manžel švagra',
-      description: 'Manžel bratra tvého manžela',
-      lineType: 'affinity'
-    },
-    'w,b,h': {
-      name: 'Švagr',
-      archaic: 'Manžel švagra',
-      description: 'Manžel bratra tvé manželky',
-      lineType: 'affinity'
-    },
+
 
     // Rodiče partnerů dětí (Svat a svatka)
     's,w,f': {

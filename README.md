@@ -11,7 +11,7 @@ An interactive web application inspired by the Chinese kinship calculator (亲�
 - **Mutual Relationship Mode (互查)**: Determine reciprocal terms ("What does this relative call me?") with active neon button highlighting, breadcrumb reciprocal indicators, and target-speaker perspective.
 - **Fast Headless Test Suite**: Full suite of 90 unit tests (`npm test`) and 184 relationships audit (368 bidirectional runs) validating 100% of relationships, half-sibling consanguinity/NOZ succession, and mutual query inversions without browser overhead.
 - **Visual Family Tree Modal (`#treeModal`)**: Interactive graphical chain with avatars, step connectors, directional arrows, and target node highlighting. When loaded from GEDCOM, displays real ancestor/descendant names, birth and death dates (`*1928 – †2005`), and automatic bidirectional path reversal for mutual relationships.
-- **Kinship Quiz Mode (`#quizModal`)**: Educational game mode with dynamic question generation, instant feedback, streaks, and score tracking.
+- **Kinship Quiz Mode (`#quizModal`)**: Educational game mode with dynamic question generation strictly adhering to conservative/traditional family ties, instant feedback, streaks, and score tracking.
 - **Voice Text-to-Speech (🔊 TTS)**: Natural speech synthesis in all 25 languages with animated sound waves.
 - **Share & Copy Result (↗ Share)**: Formatted rich card with emojis for social sharing or instant clipboard copy.
 - **PNG Card Generator (🖼️ HTML5 Canvas)**: Generate and download an AMOLED-themed social card image.

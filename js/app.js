@@ -1730,7 +1730,23 @@ class FamilyCalcApp {
 
   generateQuizQuestion() {
     const dict = getDictionary(this.currentLang);
-    const entries = Object.entries(dict.relations);
+    const maleTokens = new Set(['f', 's', 'b', 'ob', 'lb', 'h', 'step_f', 'step_b', 'god_f', 'god_s']);
+    const femaleTokens = new Set(['m', 'd', 'z', 'oz', 'lz', 'w', 'step_m', 'step_z', 'god_m', 'god_d']);
+
+    const isConservative = (key) => {
+      const tokens = key.split(',');
+      for (let i = 0; i < tokens.length - 1; i++) {
+        const cur = tokens[i];
+        const next = tokens[i + 1];
+        if (maleTokens.has(cur) && next === 'h') return false;
+        if (femaleTokens.has(cur) && next === 'w') return false;
+      }
+      return true;
+    };
+
+    const entries = Object.entries(dict.relations).filter(([key, item]) => {
+      return item && item.name && item.description && isConservative(key);
+    });
     if (entries.length < 4) return;
 
     // Pick 1 random correct relation

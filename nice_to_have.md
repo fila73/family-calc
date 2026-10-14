@@ -93,6 +93,8 @@
   - Restrukturalizace záhlaví do čistého 2řádkového rozložení (Řádek 1: Hlavní název `Rodinná kalkulačka` + rychlý přepínač jazyka `🇨🇿 CS ▾` + hamburger `☰`; Řádek 2: podnadpis `Kalkulačka příbuzenských vztahů`). Samostatné tlačítko zvuku přesunuto do nového Nastavení. Vytvořena dedikovaná sekce v menu `⚙️ Nastavení aplikace` a komplexní AMOLED modální okno s přepínači zvukových efektů, haptiky/vibrací, volbou jazyka a výchozího pohlaví probanda.
 - [x] 42. **Sada 6 oficiálních screenshotů pro Google Play v poměru stran 9:16**:
   - Příprava skriptu `scripts/generate_store_screenshots.ps1` pro konverzi a vygenerování 6 oficiálních snímků ve formátu 9:16 (1080×1920 px i 1350×2400 px) z reálného telefonu Xiaomi Redmi Note 11 Pro 5G přes ADB, zahrnujících kalkulačku s 2řádkovou hlavičkou, vizuální minirodokmen, výběr z 25 jazyků, GEDCOM analyzátor, kvíz a obrazovku Nastavení.
+- [x] 43. **Vyčištění slovníku a striktní konzervativní rodinné vazby v kvízu**:
+  - Odstranění 23 nestandardních stejnojmenných/stejnopohlavních svazků z `cs.js` (např. `h,b,h`), implementace přísného konzervativního filtru `isConservative(key)` v generátoru kvízových otázek a distractorů, 100% průchodnost testovací sady (90/90 unit testů) a přefocení screenshotu kvízu č. 5 pro Google Play v poměru 9:16 s tradiční genealogickou otázkou.
 
 
 ## Nové nápady a budoucí rozšíření
