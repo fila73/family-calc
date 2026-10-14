@@ -27,35 +27,27 @@
     
     <!-- Header -->
     <header class="app-header" id="appHeader">
-      <div class="header-left">
-        <div class="app-title-group">
-          <h1 id="appTitle">Rodinná kalkulačka</h1>
-          <p id="appSubtitle">Terms of kinship</p>
+      <div class="header-top-row">
+        <h1 class="app-title" id="appTitle">Rodinná kalkulačka</h1>
+        <div class="header-controls">
+          <!-- Language Selector Trigger Button -->
+          <button class="lang-trigger-btn" id="openLangModalBtn" type="button" title="Vybrat jazyk" aria-label="Vybrat jazyk">
+            <span class="lang-trigger-flag" id="langTriggerFlag">🇨🇿</span>
+            <span class="lang-trigger-code" id="langTriggerCode">CS</span>
+            <span class="lang-trigger-arrow">▾</span>
+          </button>
+
+          <!-- Hamburger Menu Button -->
+          <button class="icon-action-btn hamburger-btn" id="openMenuBtn" type="button" title="Menu aplikace a nástroje" aria-label="Menu aplikace">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="3" y1="12" x2="21" y2="12"></line>
+              <line x1="3" y1="6" x2="21" y2="6"></line>
+              <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+          </button>
         </div>
       </div>
-
-      <div class="header-controls">
-        <!-- Sound Effect Toggle Button -->
-        <button class="icon-action-btn sound-btn" id="soundToggleBtn" type="button" title="Zvukové efekty klávesnice (Web Audio)" aria-label="Přepnout zvukové efekty">
-          <span id="soundIcon">🔊</span>
-        </button>
-
-        <!-- Language Selector Trigger Button -->
-        <button class="lang-trigger-btn" id="openLangModalBtn" type="button" title="Vybrat jazyk" aria-label="Vybrat jazyk">
-          <span class="lang-trigger-flag" id="langTriggerFlag">🇨🇿</span>
-          <span class="lang-trigger-code" id="langTriggerCode">CS</span>
-          <span class="lang-trigger-arrow">▾</span>
-        </button>
-
-        <!-- Hamburger Menu Button -->
-        <button class="icon-action-btn hamburger-btn" id="openMenuBtn" type="button" title="Menu aplikace a nástroje" aria-label="Menu aplikace">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-            <line x1="3" y1="12" x2="21" y2="12"></line>
-            <line x1="3" y1="6" x2="21" y2="6"></line>
-            <line x1="3" y1="18" x2="21" y2="18"></line>
-          </svg>
-        </button>
-      </div>
+      <p class="app-subtitle" id="appSubtitle">Kalkulačka příbuzenských vztahů</p>
     </header>
 
     <!-- Proband (Ego) Gender Selector Bar -->
@@ -265,6 +257,17 @@
         <button class="modal-close-btn" id="closeMenuModalBtn" aria-label="Zavřít menu">&times;</button>
       </div>
       <div class="menu-items-list">
+        <!-- 0. Nastavení aplikace -->
+        <button class="menu-item-btn" id="menuSettingsBtn" type="button">
+          <span class="menu-item-icon" style="background: rgba(59, 130, 246, 0.15); color: #60a5fa;">⚙️</span>
+          <div class="menu-item-content">
+            <div class="menu-item-title">Nastavení aplikace</div>
+            <div class="menu-item-desc">Zvuky kláves, haptika, jazyk rozhraní a předvolby</div>
+          </div>
+          <span class="menu-item-arrow">➔</span>
+        </button>
+        <div class="menu-divider"></div>
+
         <!-- 1. Slovník rodinných vztahů -->
         <button class="menu-item-btn" id="menuDictBtn" type="button">
           <span class="menu-item-icon">📖</span>
@@ -380,6 +383,112 @@
           </div>
           <span class="menu-item-arrow">➔</span>
         </button>
+      </div>
+    </div>
+
+    <!-- Settings Modal (Samostatná obrazovka / modal nastavení) -->
+    <div class="modal-overlay" id="settingsModal" role="dialog" aria-modal="true" aria-labelledby="settingsModalTitle">
+      <div class="modal-header">
+        <h2 id="settingsModalTitle">Nastavení aplikace ⚙️</h2>
+        <button class="modal-close-btn" id="closeSettingsModalBtn" aria-label="Zavřít nastavení">&times;</button>
+      </div>
+      <div class="settings-modal-body">
+        
+        <!-- Sekce Zvuk a haptika -->
+        <div class="settings-section">
+          <div class="settings-section-title">Zvuk a odezva</div>
+          
+          <div class="setting-item">
+            <div class="setting-item-info">
+              <div class="setting-item-label">
+                <span class="setting-item-icon">🔊</span>
+                <span>Zvukové efekty klávesnice</span>
+              </div>
+              <div class="setting-item-desc">Zvukový doprovod při stisku tlačítek kalkulačky</div>
+            </div>
+            <label class="switch-toggle" for="settingSoundToggle">
+              <input type="checkbox" id="settingSoundToggle" checked>
+              <span class="switch-slider"></span>
+            </label>
+          </div>
+
+          <div class="setting-item">
+            <div class="setting-item-info">
+              <div class="setting-item-label">
+                <span class="setting-item-icon">📳</span>
+                <span>Haptická odezva (Vibrace)</span>
+              </div>
+              <div class="setting-item-desc">Jemné zavibrování při stisku tlačítek na telefonu</div>
+            </div>
+            <label class="switch-toggle" for="settingHapticToggle">
+              <input type="checkbox" id="settingHapticToggle" checked>
+              <span class="switch-slider"></span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Sekce Jazyk a zobrazení -->
+        <div class="settings-section">
+          <div class="settings-section-title">Jazyk a zobrazení</div>
+          
+          <div class="setting-item clickable-setting" id="settingLangRow">
+            <div class="setting-item-info">
+              <div class="setting-item-label">
+                <span class="setting-item-icon">🌐</span>
+                <span>Jazyk rozhraní</span>
+              </div>
+              <div class="setting-item-desc" id="settingLangCurrentDesc">Čeština (25 světových jazyků)</div>
+            </div>
+            <button class="setting-action-btn" id="settingChangeLangBtn" type="button">
+              <span id="settingLangBadge">🇨🇿 CS</span>
+              <span class="setting-arrow">➔</span>
+            </button>
+          </div>
+
+          <div class="setting-item">
+            <div class="setting-item-info">
+              <div class="setting-item-label">
+                <span class="setting-item-icon">👤</span>
+                <span>Výchozí pohlaví probanda</span>
+              </div>
+              <div class="setting-item-desc">Pohlaví pro výchozí osobu („Já“) při spuštění</div>
+            </div>
+            <div class="setting-gender-pills">
+              <button class="setting-gender-pill active" id="settingGenderMale" type="button">Muž ♂</button>
+              <button class="setting-gender-pill" id="settingGenderFemale" type="button">Žena ♀</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sekce Informace a soukromí -->
+        <div class="settings-section">
+          <div class="settings-section-title">O aplikaci</div>
+          
+          <div class="setting-item">
+            <div class="setting-item-info">
+              <div class="setting-item-label">
+                <span class="setting-item-icon">⭐</span>
+                <span>Rodinná kalkulačka vztahů</span>
+              </div>
+              <div class="setting-item-desc">Verze 1.0.0 • 100% offline nástroj • Bez reklam a sledování</div>
+            </div>
+          </div>
+
+          <div class="setting-item clickable-setting" id="settingPrivacyRow">
+            <div class="setting-item-info">
+              <div class="setting-item-label">
+                <span class="setting-item-icon">🔒</span>
+                <span>Zásady ochrany osobních údajů</span>
+              </div>
+              <div class="setting-item-desc">Informace o nulovém sběru dat a lokálním zpracování</div>
+            </div>
+            <a href="privacy.html" class="setting-action-btn" target="_blank">
+              <span>Zobrazit</span>
+              <span class="setting-arrow">➔</span>
+            </a>
+          </div>
+        </div>
+
       </div>
     </div>
 

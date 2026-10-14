@@ -38,9 +38,19 @@ class FamilyCalcApp {
     this.genderBtnFemale = document.getElementById('genderBtnFemale');
     this.probandLabelText = document.getElementById('probandLabelText');
 
-    // Sound button in header
-    this.soundToggleBtn = document.getElementById('soundToggleBtn');
-    this.soundIcon = document.getElementById('soundIcon');
+    // Settings elements
+    this.menuSettingsBtn = document.getElementById('menuSettingsBtn');
+    this.settingsModal = document.getElementById('settingsModal');
+    this.closeSettingsModalBtn = document.getElementById('closeSettingsModalBtn');
+    this.settingSoundToggle = document.getElementById('settingSoundToggle');
+    this.settingHapticToggle = document.getElementById('settingHapticToggle');
+    this.settingLangRow = document.getElementById('settingLangRow');
+    this.settingChangeLangBtn = document.getElementById('settingChangeLangBtn');
+    this.settingLangBadge = document.getElementById('settingLangBadge');
+    this.settingLangCurrentDesc = document.getElementById('settingLangCurrentDesc');
+    this.settingGenderMale = document.getElementById('settingGenderMale');
+    this.settingGenderFemale = document.getElementById('settingGenderFemale');
+    this.hapticEnabled = localStorage.getItem('family_calc_haptic') !== 'false';
 
     // Language modal elements
     this.openLangModalBtn = document.getElementById('openLangModalBtn');
@@ -226,6 +236,61 @@ class FamilyCalcApp {
         if (e.target === this.menuModal) this.closeMenu();
       });
     }
+    if (this.menuSettingsBtn) {
+      this.menuSettingsBtn.addEventListener('click', () => {
+        this.closeMenu();
+        this.openSettingsModal();
+      });
+    }
+    if (this.closeSettingsModalBtn) {
+      this.closeSettingsModalBtn.addEventListener('click', () => this.closeSettingsModal());
+    }
+    if (this.settingsModal) {
+      this.settingsModal.addEventListener('click', (e) => {
+        if (e.target === this.settingsModal) this.closeSettingsModal();
+      });
+    }
+    if (this.settingSoundToggle) {
+      this.settingSoundToggle.addEventListener('change', (e) => {
+        this.soundEnabled = e.target.checked;
+        localStorage.setItem('family_calc_sound', this.soundEnabled ? 'true' : 'false');
+        if (this.soundEnabled) this.playClickSound();
+        this.showToast(this.soundEnabled ? 'Zvukové efekty: Zapnuto 🔊' : 'Zvukové efekty: Vypnuto 🔇');
+      });
+    }
+    if (this.settingHapticToggle) {
+      this.settingHapticToggle.addEventListener('change', (e) => {
+        this.hapticEnabled = e.target.checked;
+        localStorage.setItem('family_calc_haptic', this.hapticEnabled ? 'true' : 'false');
+        if (this.hapticEnabled) this.triggerHaptic();
+        this.showToast(this.hapticEnabled ? 'Haptika: Zapnuto 📳' : 'Haptika: Vypnuto');
+      });
+    }
+    if (this.settingChangeLangBtn) {
+      this.settingChangeLangBtn.addEventListener('click', () => {
+        this.closeSettingsModal();
+        this.openLanguageModal();
+      });
+    }
+    if (this.settingLangRow) {
+      this.settingLangRow.addEventListener('click', (e) => {
+        if (!e.target.closest('button')) {
+          this.closeSettingsModal();
+          this.openLanguageModal();
+        }
+      });
+    }
+    if (this.settingGenderMale) {
+      this.settingGenderMale.addEventListener('click', () => {
+        this.setGender('m');
+      });
+    }
+    if (this.settingGenderFemale) {
+      this.settingGenderFemale.addEventListener('click', () => {
+        this.setGender('w');
+      });
+    }
+
     if (this.menuDictBtn) {
       this.menuDictBtn.addEventListener('click', () => {
         this.closeMenu();
@@ -609,6 +674,7 @@ class FamilyCalcApp {
 
   triggerHaptic() {
     this.playClickSound();
+    if (!this.hapticEnabled) return;
     if (typeof navigator !== 'undefined' && navigator.vibrate) {
       try {
         navigator.vibrate(12);
@@ -656,8 +722,44 @@ class FamilyCalcApp {
   }
 
   updateSoundUI() {
-    if (this.soundIcon) {
-      this.soundIcon.textContent = this.soundEnabled ? '🔊' : '🔇';
+    if (this.settingSoundToggle) {
+      this.settingSoundToggle.checked = this.soundEnabled;
+    }
+  }
+
+  openSettingsModal() {
+    this.triggerHaptic();
+    if (this.settingSoundToggle) {
+      this.settingSoundToggle.checked = this.soundEnabled;
+    }
+    if (this.settingHapticToggle) {
+      this.settingHapticToggle.checked = this.hapticEnabled;
+    }
+    this.updateSettingsLangUI();
+    this.syncSettingsGender();
+    if (this.settingsModal) {
+      this.settingsModal.classList.add('open');
+    }
+  }
+
+  closeSettingsModal() {
+    if (this.settingsModal) {
+      this.settingsModal.classList.remove('open');
+    }
+  }
+
+  syncSettingsGender() {
+    if (this.settingGenderMale && this.settingGenderFemale) {
+      this.settingGenderMale.classList.toggle('active', this.egoGender === 'm');
+      this.settingGenderFemale.classList.toggle('active', this.egoGender === 'w');
+    }
+  }
+
+  updateSettingsLangUI() {
+    if (this.settingLangBadge && this.settingLangCurrentDesc) {
+      const meta = getLanguageMeta(this.currentLang);
+      this.settingLangBadge.textContent = `${meta.flag} ${meta.code.toUpperCase()}`;
+      this.settingLangCurrentDesc.textContent = `${meta.localName} (${meta.czechName})`;
     }
   }
 
@@ -666,6 +768,7 @@ class FamilyCalcApp {
     this.egoGender = gender;
     localStorage.setItem('ego_gender', gender);
     this.updateGenderUI();
+    this.syncSettingsGender();
     this.render();
   }
 
@@ -843,6 +946,7 @@ class FamilyCalcApp {
     const dict = getDictionary(this.currentLang);
     this.appTitle.textContent = dict.labels.appTitle;
     this.appSubtitle.textContent = dict.labels.subtitle;
+    this.updateSettingsLangUI();
     this.probandLabelText.textContent = dict.labels.egoGender;
     this.genderBtnMale.textContent = dict.labels.male;
     this.genderBtnFemale.textContent = dict.labels.female;

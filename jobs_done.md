@@ -340,3 +340,28 @@
     - Pro kompletní reset kalkulačky nadále slouží žluté tlačítko **C** (Clear) a pro krok zpět tlačítko **⌫** (Backspace) přímo na klávesnici.
     - Znovusestaven webový balíček (`npm run build`) a synchronizovány nativní Android assety (`npx cap sync android`).
 
+## [2026-10-14]
+- [x] **Dvouřádková hlavička (Header 2-row layout refactoring)**:
+  - Nápis „Rodinná kalkulačka“ a podnadpis „Kalkulačka příbuzenských vztahů“, které se dříve na úzkých mobilních displejích rozpadaly do 4 řádků, byly restrukturalizovány striktně do 2 řádků.
+  - **Řádek 1**: Hlavní název `h1.app-title` (větší tučné písmo) zarovnán vlevo; ovládací prvky (`.header-controls`) vpravo: rychlý přepínač jazyka (`#openLangModalBtn` s vlajkou, kódem `CS` a šipkou `▾`) a hamburger tlačítko menu (`#openMenuBtn` s ikonou `☰`).
+  - **Řádek 2**: Podnadpis `p.app-subtitle` („Kalkulačka příbuzenských vztahů“) v decentní barvě s jednorázovým zobrazením bez nežádoucího zalamování.
+  - Z horní lišty bylo zcela odstraněno samostatné tlačítko zvuku `🔊` (uvolněno místo pro čistý a prostorný dvouřádkový layout).
+- [x] **Samostatná obrazovka / modal Nastavení aplikace (`#settingsModal`)**:
+  - Do hamburger menu (`#menuModal`) doplněna na první čelní pozici položka `⚙️ Nastavení aplikace` (`#menuSettingsBtn`).
+  - Vytvořeno nové komplexní modální okno `#settingsModal` s AMOLED dark motivem:
+    - **Zvuk a odezva**:
+      - Přepínač zvukových efektů klávesnice (`#settingSoundToggle`, iOS/Android switch design) s perzistencí v `localStorage` (`family_calc_sound`).
+      - Přepínač haptické odezvy / vibrací (`#settingHapticToggle`) s perzistencí v `localStorage` (`family_calc_haptic`).
+    - **Jazyk a zobrazení**:
+      - Rychlá volba aktuálního jazyka rozhraní (`#settingLangRow`) s indikátorem vlajky a kódu, přecházející do plného vyhledávače 25 jazyků.
+      - Přepínač výchozího pohlaví probanda („Já“) mezi Muž ♂ a Žena ♀ (`#settingGenderMale` / `#settingGenderFemale`) s perzistencí v `localStorage` (`ego_gender`).
+    - **O aplikaci**:
+      - Informace o verzi 1.0.0, 100% offline nástroji bez reklam a sledování.
+      - Přímý odkaz na zásady ochrany osobních údajů (`privacy.html`).
+- [x] **Ověření a nasazení na fyzické zařízení**:
+  - Úspěšný běh všech 90/90 unit testů (`npm test`).
+  - Build webové aplikace (`npm run build`) a synchronizace do Androidu (`npx cap sync android`).
+  - Kompilace instalačního balíčku APK (`gradlew.bat assembleDebug`) a instalace na připojený telefon Xiaomi Redmi Note 11 Pro 5G přes ADB.
+  - Pořízeny kontrolní snímky obrazovky a ověřeno plynulé otevírání i zavírání modálu Nastavení a striktně 2řádková hlavička.
+
+

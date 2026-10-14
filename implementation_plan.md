@@ -92,5 +92,6 @@ Vytvoření webové kalkulačky rodinných vztahů inspirované čínskou kalkul
 39. Doladění responzivního rozložení karty výsledku (`min-height: 100%`, `flex-shrink: 0`, odstranění ořezu cesty).
 40. Integrace skutečných jmen a životních dat (`*YYYY – †YYYY`) do vizuálního rodokmenu `#treeModal` při přenosu z GEDCOM souboru a obousměrná inverze stromu pro vzájemné vztahy.
 41. Komplexní hloubkový audit celé aplikace a oprava zjištěných nálezů (sjednocení rozhraní `allowed`/`hasImpediment` a `class`/`classNumber` mezi enginem a UI, oprava DNA ~25 %, 3. dědické třídy, překážky sňatku a inverze u polorodých sourozenců `step_f,s`/`step_m,s`, oprava pohlaví mluvčího v porovnávači dvou osob a ve vzájemném pohledu, doplnění chybějících 3. generací a sešvagřených prastrýců/pratet z matčiny strany v `cs.js` na 184 vztahů, doplnění `modStep`/`modGod` v 5 slovnících, bilaterální synchronizace GEDCOMu, deduplikace CSS selektorů a zahrnutí `icons/` do `www/` a `sw.js` v19; rozšířeno na 90 / 90 unit testů a 368 / 368 auditních běhů).
+42. Refaktoring hlavičky do striktně dvou řádků (Řádek 1: Název vlevo, přepínač jazyka a hamburger menu vpravo; Řádek 2: Podnadpis) a vytvoření dedikované obrazovky / modálu Nastavení aplikace (`#settingsModal`) s přepínači zvuků, haptiky, volbou jazyka a výchozího pohlaví probanda.
 
 

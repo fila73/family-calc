@@ -22,10 +22,11 @@ An interactive web application inspired by the Chinese kinship calculator (亲�
 - **Two Persons Kinship Comparison (👥)**: Determine relationship between any two relatives from common proband.
 - **GEDCOM Family Tree Import & Pathfinder (📜 .ged)**: Load standard genealogies from Ancestry, MyHeritage, or Gramps, direct sibling link resolving, path visualization with directional arrows (`↗` up, `↘` down, `→` sibling, `↔` spouse), disambiguation of identical names, one-click visual tree view with names/dates, and transfer to calculator.
 - **Desktop Keyboard Hotkeys (⌨️)**: Full physical typing support with dedicated shortcuts cheat sheet modal (`?`).
-- **Web Audio Click Feedback (🔊)**: Zero-latency synthesized haptic audio click with header toggle.
+- **Web Audio Click Feedback & Haptics (🔊📳)**: Zero-latency synthesized audio click and gentle haptic vibration feedback with dedicated toggles in the new Settings screen.
 - **Calculation History (🕒)**: Auto-save previous calculations with one-click reload.
 - **Dictionary Explorer & Reverse Search (📖)**: Full-text search of all relationship terms with direct loading into the calculator.
-- **Hamburger Drawer Menu (☰)**: Clean mobile menu organizing all 10 tools and calculators.
+- **Hamburger Drawer Menu (☰) & Dedicated Settings Screen (⚙️)**: Clean mobile menu organizing all tools and featuring a dedicated Settings modal (`#settingsModal`) for sound toggles, haptics, language selection, default proband gender, and privacy info.
+- **2-Row Header Layout & Quick Language Selector**: Structured 2-row header (Row 1: App Title + Quick Language Trigger `🇨🇿 CS ▾` + Hamburger `☰`; Row 2: Subtitle) preventing multi-line clutter on narrower screens.
 - **Scalable Language Selector Dialog**: Modern modal dialog with instant search (e.g. *pol*, *jap*, *viet*, *deutsch*, *ukr*, *tur*), categorized language families, and recent languages quick chips with local storage persistence.
 - **25 Fully Localized Languages**:
   - Czech 🇨🇿, Slovak 🇸🇰, Polish 🇵🇱, German 🇩🇪, English 🇬🇧, French 🇫🇷, Italian 🇮🇹, Spanish 🇪🇸, Russian 🇷🇺, Chinese 🇨🇳, Japanese 🇯🇵, Korean 🇰🇷, Vietnamese 🇻🇳,

@@ -25,10 +25,11 @@ Interaktivní webová aplikace inspirovaná čínskou kalkulačkou příbuzenstv
 - **Porovnání dvou osob v rodokmenu (👥)**: stanovení vzájemného vztahu dvou libovolných členů rodiny.
 - **Import a analýza GEDCOM souborů (📜 .ged)**: načtení reálných rodokmenů z Ancestry, MyHeritage či Gramps, vestavěný ukázkový 4-generační strom, přímé propojování sourozenců, vizualizace cesty s generačními šipkami (`↗` nahoru, `↘` dolů, `→` sourozenec, `↔` partner), rozlišením shodných jmen, přímým tlačítkem pro zobrazení vizuálního rodokmenu se jmény a životními daty a přenosem vztahu do kalkulačky.
 - **Klávesové zkratky pro desktop (⌨️ Hotkeys)**: plnohodnotné ovládání z fyzické klávesnice s nápovědním modálem (`?`).
-- **Zvukové efekty klávesnice (🔊 Web Audio)**: diskrétní syntetizované kliknutí při stisku klávesy s přepínačem v záhlaví.
+- **Zvukové efekty klávesnice & haptika (🔊📳)**: diskrétní syntetizované kliknutí při stisku klávesy a jemná haptická odezva s možností zapnutí/vypnutí v Nastavení.
 - **Historie výpočtů (🕒)**: automatický záznam provedených kalkulací s možností návratu k libovolnému předchozímu vztahu.
 - **Slovník rodinných vztahů (📖)**: fulltextový reverzní vyhledávač termínů s přenosem vzorce přímo do kalkulačky.
-- **Hamburger vysouvací menu (☰)**: přehledné mobilní drawer menu pro rychlý přístup ke všem 10 pokročilým nástrojům.
+- **Hamburger vysouvací menu (☰) & Nastavení aplikace (⚙️)**: přehledné mobilní drawer menu pro rychlý přístup ke všem pokročilým nástrojům a dedikované obrazovce Nastavení aplikace (přepínače zvuků kláves, vibrací/haptiky, výběr jazyka rozhraní, volba výchozího probanda a informace o soukromí).
+- **Dvouřádková hlavička & rychlá volba jazyka**: čisté záhlaví rozdělené do 2 řádků (Řádek 1: Hlavní název + tlačítko jazyka s vlajkou `🇨🇿 CS ▾` + hamburger `☰`; Řádek 2: podnadpis bez nechtěného zalamování).
 - **Škálovatelný výběr jazyků s vyhledáváním**: moderní dialogové okno s okamžitým fulltextovým vyhledáváním (např. *pol*, *jap*, *deutsch*, *viet*, *ukr*, *tur*), rychlými čipy pro nedávno použité jazyky a seskupením do jazykových rodin/regionů.
 - **25 plně lokalizovaných světových jazyků**:
   - Čeština 🇨🇿, Slovenčina 🇸🇰, Polski 🇵🇱, Deutsch 🇩🇪, English 🇬🇧, Français 🇫🇷, Italiano 🇮🇹, Español 🇪🇸, Русский 🇷🇺, 中文 🇨🇳, 日本語 🇯🇵, 한국어 🇰🇷, Tiếng Việt 🇻🇳,
