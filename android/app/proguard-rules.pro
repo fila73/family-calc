@@ -5,6 +5,10 @@
 # For more details, see
 #   http://developer.android.com/guide/developing/tools/proguard.html
 
+# Repackage optimized classes into a single package (Google Play R8 checklist item #4)
+-repackageclasses 'cz.fila73.familycalc.internal'
+-allowaccessmodification
+
 # Keep JavascriptInterface methods for WebView bridge (AndroidTTS & Capacitor)
 -keepattributes *Annotation*,JavascriptInterface
 -keepattributes Signature,InnerClasses,EnclosingMethod
@@ -14,6 +18,7 @@
     @android.webkit.JavascriptInterface <methods>;
 }
 
--keep public class cz.fila73.familycalc.** { *; }
+-keep public class cz.fila73.familycalc.MainActivity { *; }
 -keep class com.getcapacitor.** { *; }
+
 

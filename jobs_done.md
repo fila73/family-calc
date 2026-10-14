@@ -390,11 +390,16 @@
   - Nainstalován nejnovější balíček `build-android/Rodinna-Kalkulacka-debug.apk` (`adb -s HGT7T347 install -r`).
   - Aplikace `cz.fila73.familycalc` úspěšně spuštěna a ověřena v popředí (`MainActivity`, bez chyb v logcatu).
   - Do `/sdcard/Download/` na tabletu nahráno všech 5 testovacích GEDCOM rodokmenů (`9i7efa_248548bkfd5396b740a9bl_A.ged`, `bb2769_70868886mn5a77f2196bb9_A.ged`, `2bab8u_1083818bwf09d6bj9y8fax_A.ged`, `47a68f_0208578aq4sw8l546dfab3_A.ged`, `fbf87c_1715507b4z829f698a3c6d_A.ged`).
-- [x] **Vygenerování produkčního podpisového klíče (Keystore), zapnutí R8 optimalizace a sestavení podepsaného `.aab` pro Google Play**:
+- [x] **Vygenerování produkčního podpisového klíče (Keystore), zapnutí všech 4 R8 optimalizací a sestavení podepsaného `.aab` pro Google Play**:
   - Pomocí `keytool` (JDK 17) vygenerován produkční klíč `android/familycalc-release-key.jks` (`RSA 2048-bit`, `SHA256withRSA`, platnost 10 000 dní do 2054-03-01, `CN=Filip Novak, O=fila73, C=CZ`, alias `familycalc`).
   - Přístupové údaje uloženy do `android/keystore.properties` (chráněno v `.gitignore` spolu s `*.jks` a `*.ged`).
-  - V `android/app/build.gradle` nakonfigurován `signingConfigs.release`, zapnuta plná **R8 optimalizace DEX kódu a prostředků** (`minifyEnabled true`, `shrinkResources true`, `proguard-android-optimize.txt`, `android.enableR8.fullMode=true` v `gradle.properties`, `versionCode 2` / `1.0.1`) a v `android/app/proguard-rules.pro` doplněna `-keep` pravidla pro `@JavascriptInterface` (`AndroidTTS`), `MainActivity` a Capacitor.
-  - Sestaven a na tabletu Lenovo (`TB328XU`) přímo otestován R8-optimalizovaný a kryptograficky podepsaný produkční balíček `build-android/Rodinna-Kalkulacka-release.aab` (velikost klesla z 3,90 MB na **2,20 MB** / 2 309 KB).
+  - V `android/app/build.gradle`, `android/gradle.properties` a `android/app/proguard-rules.pro` nakonfigurovány všechny 4 položky R8 kontroly Google Play Console:
+    1. **Úplný režim**: `android.enableR8.fullMode=true` + `minifyEnabled true` + `proguard-android-optimize.txt`
+    2. **Odstranění nepoužívaných zdrojů**: `shrinkResources true`
+    3. **Optimalizováno odstranění nepoužívaných zdrojů**: `android.r8.optimizedResourceShrinking=true`
+    4. **Přesunutí tříd do samostatného balíčku**: `-repackageclasses 'cz.fila73.familycalc.internal'` a `-allowaccessmodification` v `proguard-rules.pro` (spolu s `-keep` pravidly pro `@JavascriptInterface` `AndroidTTS`, `MainActivity` a Capacitor).
+  - Sestaven a na tabletu Lenovo (`TB328XU`) přímo otestován R8-optimalizovaný a kryptograficky podepsaný produkční balíček `build-android/Rodinna-Kalkulacka-release.aab` (`versionCode 3` / `1.0.2`, velikost klesla z 3,90 MB na **2,18 MB** / 2 283 KB).
+
 
 
 

@@ -17,9 +17,9 @@ Nativní Android projekt je plně inicializován v adresáři `android/` (`cz.fi
    - `MainActivity.java` implementuje `android.speech.tts.TextToSpeech` a exportuje rozhraní `@JavascriptInterface` jako `window.AndroidTTS`.
    - V `js/app.js` funkce `speakResult()` prioritně odesílá řeč do nativního systému, což obchází absenci Web Speech API v mobilním Android WebView.
 6. Sestavení, R8 optimalizace a podepsání APK / AAB přes Gradle:
-   - Produkční podpisový klíč je uložen lokálně v `android/familycalc-release-key.jks` a konfigurován přes `android/keystore.properties` (oba soubory jsou ignorovány v `.gitignore`). `android/app/build.gradle` automaticky aplikuje `signingConfigs.release` a plnou R8 optimalizaci (`minifyEnabled true`, `shrinkResources true`, `proguard-android-optimize.txt`, `android.enableR8.fullMode=true`).
+   - Produkční podpisový klíč je uložen lokálně v `android/familycalc-release-key.jks` a konfigurován přes `android/keystore.properties` (oba soubory jsou ignorovány v `.gitignore`). `android/app/build.gradle` automaticky aplikuje `signingConfigs.release` a všech 4 R8 optimalizací Google Play (`minifyEnabled true`, `shrinkResources true`, `proguard-android-optimize.txt`, `android.enableR8.fullMode=true`, `android.r8.optimizedResourceShrinking=true` a `-repackageclasses` v `proguard-rules.pro`).
    - `cd android && .\gradlew.bat assembleDebug` – vytvoří testovací balíček `build-android/Rodinna-Kalkulacka-debug.apk` (5,24 MB).
-   - `cd android && .\gradlew.bat bundleRelease` – vytvoří R8-optimalizovaný a kryptograficky podepsaný produkční balíček pro Google Play `build-android/Rodinna-Kalkulacka-release.aab` (2,20 MB / `versionCode 2`).
+   - `cd android && .\gradlew.bat bundleRelease` – vytvoří R8-optimalizovaný a kryptograficky podepsaný produkční balíček pro Google Play `build-android/Rodinna-Kalkulacka-release.aab` (2,18 MB / `versionCode 3`).
 7. Pro iOS (na macOS s Xcode):
    - `npx cap add ios`
    - `npx cap sync ios`
