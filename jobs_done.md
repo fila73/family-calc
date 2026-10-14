@@ -358,10 +358,15 @@
     - **O aplikaci**:
       - Informace o verzi 1.0.0, 100% offline nástroji bez reklam a sledování.
       - Přímý odkaz na zásady ochrany osobních údajů (`privacy.html`).
-- [x] **Ověření a nasazení na fyzické zařízení**:
-  - Úspěšný běh všech 90/90 unit testů (`npm test`).
-  - Build webové aplikace (`npm run build`) a synchronizace do Androidu (`npx cap sync android`).
-  - Kompilace instalačního balíčku APK (`gradlew.bat assembleDebug`) a instalace na připojený telefon Xiaomi Redmi Note 11 Pro 5G přes ADB.
-  - Pořízeny kontrolní snímky obrazovky a ověřeno plynulé otevírání i zavírání modálu Nastavení a striktně 2řádková hlavička.
+- [x] **Pořízení oficiálních screenshotů pro Google Play v poměru stran 9:16**:
+  - Na základě požadavků Google Play Console (maximální poměr stran 2:1 a doporučený 9:16) byl vytvořen konverzní a generovací skript `scripts/generate_store_screenshots.ps1` (`System.Drawing`, HighQualityBicubic, seamless `#0a0a0d` padding).
+  - Přímo z reálného telefonu Xiaomi Redmi Note 11 Pro 5G přes ADB byla pořízena a zpracována kompletní sada 6 reprezentativních screenshotů ve formátech 1080×1920 px (standard 9:16), 1350×2400 px (high-res 9:16) a raw 1080×2400 px:
+    1. `screenshot_1_calculator.png` (1080×1920): Hlavní obrazovka kalkulačky s novou 2řádkovou hlavičkou, probandem, výpočtem **Strýc** (otec ➔ starší bratr), ~25 % DNA, 6. dědickou třídou, legalitou sňatku dle § 675 NOZ a vertikálním overlay panelem.
+    2. `screenshot_2_tree.png` (1080×1920): Vizuální minirodokmen (`#treeModal`) s generacemi JÁ ➔ otec ➔ Strýc, avatary a zlatě zvýrazněným cílem výpočtu.
+    3. `screenshot_3_languages.png` (1080×1920): Dialog výběru z 25 světových jazyků (`#langModal`) s live vyhledáváním, recent čipy a jazykovými rodinami.
+    4. `screenshot_4_gedcom.png` (1080×1920): Import a analýza GEDCOM rodokmenu (`#gedcomModal`) s genealogickou cestou v rodině Novákových a detekcí zákazu sňatku sourozenců.
+    5. `screenshot_5_quiz.png` (1080×1920): Genealogický kvíz (`#quizModal`) se skóre 1/1, sérií 1, historickým pojmem „Švagr“ a zeleně zvýrazněnou správnou odpovědí s oslavou.
+    6. `screenshot_6_settings.png` (1080×1920): Nová samostatná obrazovka Nastavení aplikace (`#settingsModal`) s přepínači zvuků, vibrací, jazyka rozhraní a výchozího pohlaví probanda.
+  - Všechny screenshoty v `google-play/assets/` jsou plně ověřeny, bez stavové lišty a systémového smetí, připravené k okamžitému nahrání do Google Play Console.
 
 

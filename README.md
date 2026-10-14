@@ -37,7 +37,7 @@ An interactive web application inspired by the Chinese kinship calculator (亲�
 - **Store Graphics & Screenshots in `google-play/assets/`**:
   - High-res App Icon 512 × 512 px PNG (`icon-512.png`).
   - Feature Graphic 1024 × 500 px PNG (`feature-graphic-1024x500.png`).
-  - 5 Full HD Phone Screenshots 1080 × 2400 px captured directly on real Xiaomi Redmi Note 11 Pro 5G via ADB (`screenshot_1_calculator.png` to `screenshot_5_quiz.png`).
+  - 6 Official Store Screenshots in strict 9:16 aspect ratio (1080 × 1920 px standard and 1350 × 2400 px high-res) captured directly on physical Xiaomi Redmi Note 11 Pro 5G via ADB (`screenshot_1_calculator.png` to `screenshot_6_settings.png` covering 2-row header calculator, visual tree, 25 languages, GEDCOM analyzer, quiz game, and dedicated settings).
 - **GitHub Pages Web Presentation & Privacy Policy**:
   - `https://fila73.github.io/family-calc/`
   - `https://fila73.github.io/family-calc/privacy.html`

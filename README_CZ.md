@@ -39,8 +39,7 @@ Interaktivní webová aplikace inspirovaná čínskou kalkulačkou příbuzenstv
 - **Registrace do Google Play Store**: kompletní podklady v adresáři `google-play/` (Zásady ochrany soukromí `privacy.html`, texty zápisu `STORE_LISTING.md`, příručka pro podpis a vydání `RELEASE_GUIDE.md`).
 - **Grafické podklady pro Google Play v `google-play/assets/`**:
   - Ikona aplikace 512 × 512 px PNG (`icon-512.png`).
-  - Hlavní banner 1024 × 500 px PNG (`feature-graphic-1024x500.png`).
-  - 5 oficiálních screenshotů 1080 × 2400 px nasnímaných přímo na reálném telefonu Xiaomi Redmi Note 11 Pro 5G přes ADB (`screenshot_1_calculator.png` až `screenshot_5_quiz.png`).
+  - 6 oficiálních screenshotů ve standardním formátu Google Play 9:16 (1080 × 1920 px standard i 1350 × 2400 px high-res) nasnímaných přímo na reálném telefonu Xiaomi Redmi Note 11 Pro 5G přes ADB (`screenshot_1_calculator.png` až `screenshot_6_settings.png` pokrývající kalkulačku s 2řádkovou hlavičkou, vizuální rodokmen, výběr z 25 jazyků, GEDCOM analyzátor, genealogický kvíz a samostatné Nastavení).
 - **Webová prezentace a zásady soukromí na GitHub Pages**:
   - `https://fila73.github.io/family-calc/`
   - `https://fila73.github.io/family-calc/privacy.html`

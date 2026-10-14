@@ -91,6 +91,8 @@
   - Sjednoceno rozhraní právních kalkulátorů (`allowed`/`hasImpediment` u sňatků a `class`/`classNumber` u dědických tříd), opraven výpočet DNA (~25 %), 3. dědické třídy (§ 1637 NOZ), překážky manželství (§ 675 NOZ) a obousměrné inverze u polorodých sourozenců (`step_f,s`, `step_m,s`), opraveno pohlaví mluvčího v porovnávači dvou osob a ve vzájemném pohledu, doplněny kombinace 3. generace a sešvagřených prastrýců/pratet v `cs.js`, doplněny štítky `modStep`/`modGod` ve všech 25 jazycích, bilaterální synchronizace GEDCOMu, vyčištěny duplicitní CSS selektory a doplněna složka `icons/` do buildu `www/` a cache `sw.js` (`family-calc-v19`).
 - [x] 41. **Dvouřádková hlavička & samostatná obrazovka Nastavení aplikace (`#settingsModal`)**:
   - Restrukturalizace záhlaví do čistého 2řádkového rozložení (Řádek 1: Hlavní název `Rodinná kalkulačka` + rychlý přepínač jazyka `🇨🇿 CS ▾` + hamburger `☰`; Řádek 2: podnadpis `Kalkulačka příbuzenských vztahů`). Samostatné tlačítko zvuku přesunuto do nového Nastavení. Vytvořena dedikovaná sekce v menu `⚙️ Nastavení aplikace` a komplexní AMOLED modální okno s přepínači zvukových efektů, haptiky/vibrací, volbou jazyka a výchozího pohlaví probanda.
+- [x] 42. **Sada 6 oficiálních screenshotů pro Google Play v poměru stran 9:16**:
+  - Příprava skriptu `scripts/generate_store_screenshots.ps1` pro konverzi a vygenerování 6 oficiálních snímků ve formátu 9:16 (1080×1920 px i 1350×2400 px) z reálného telefonu Xiaomi Redmi Note 11 Pro 5G přes ADB, zahrnujících kalkulačku s 2řádkovou hlavičkou, vizuální minirodokmen, výběr z 25 jazyků, GEDCOM analyzátor, kvíz a obrazovku Nastavení.
 
 
 ## Nové nápady a budoucí rozšíření
