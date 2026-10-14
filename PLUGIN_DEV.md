@@ -49,9 +49,10 @@ Postup pro integraci nového nástroje (např. GEDCOM import, audio efekty apod.
 
 ## 5. Headless testování bez nutnosti prohlížeče
 Pro rychlé a úsporné ověření správnosti všech vztahů a redukčních pravidel:
-- Spusťte `npm test`, který sekvenčně spustí `tests/kinship.test.js` (54 testů) i `tests/reductions_mutual.test.js` (36 testů) – celkem 90 unit testů.
-- Pro audit inverze všech 184 vztahů (368 obousměrných běhů) spusťte `node tests/audit_all.js`.
+- Spusťte `npm test`, který sekvenčně spustí `tests/kinship.test.js` (54 testů) i `tests/reductions_mutual.test.js` (42 testů) – celkem **96 unit testů**.
+- Pro audit inverze všech 188 vztahů (368+ obousměrných běhů) spusťte `node tests/audit_all.js`.
 - Tyto testy zaručují 100% obousměrnou invertibilitu, správnost výpočtu DNA (včetně ~25 % DNA pro polorodé sourozence a 0 % DNA pro afinitní vztahy) a přesnost právních výpočtů dle NOZ.
+
 
 ## 6. Publikace do Google Play, GitHub Pages & Etická monetizace
 Podrobné návody a podklady pro nahrání do Google Play Console jsou v adresáři `google-play/`:

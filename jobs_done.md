@@ -380,9 +380,11 @@
     - Všech **90 / 90 unit testů** úspěšně prochází na výbornou.
   - **Build a aktualizace na reálném zařízení Xiaomi Redmi Note 11 Pro 5G**:
     - Proveden web build (`npm run build`), synchronizace Capacitoru (`npx cap sync android`), kompilace debug balíčku (`./gradlew assembleDebug`) a instalace na telefon přes ADB.
-  - **Znovupořízení screenshotu č. 5 (Kvíz) v poměru 9:16**:
-    - Přímo z displeje telefonu pořízen nový reprezentativní screenshot kvízu s tradiční otázkou: *Kdo je to „Praneteř“? ➔ Dcera dcery tvé sestry (dcera neteře)* se zeleným zvýrazněním správné odpovědi, oslavným bannerem a skóre 1/1.
-    - Zpracováno pomocí `scripts/generate_store_screenshots.ps1` do `screenshot_5_quiz.png` (1080×1920) a `screenshot_5_quiz_9_16_1350x2400.png`.
+  - **Podpora stejnopohlavních afinit v kalkulačce vs. konzervativní kvíz**:
+    - **Jazyková a genealogická logika**: V češtině i dalších jazycích se pojmenování sešvagření přirozeně odvíjí od typu vazby a rodu dané osoby (nikoliv od role v manželství): partner bratra je muž sešvagřený přes sourozence ➔ **Švagr**; partner strýce je muž sešvagřený přes sourozence rodiče ➔ **Strýc**; partner syna je muž přiženěný k potomkovi ➔ **Zeť**; partnerka sestry ➔ **Švagrová**; partnerka dcery ➔ **Snacha**.
+    - **V kalkulačce**: Tyto vazby jsou plně podporovány (celkem 188 vztahů v `cs.js`). Pokud uživatel v kalkulačce zadá `Bratr ➔ Manžel`, kalkulačka korektně a přirozeně vrátí **Švagr** (*Manžel tvého bratra*); pro `Matka ➔ Bratr ➔ Manžel` vrátí **Strýc** (*Manžel bratra tvé matky*).
+    - **V kvízu**: Do kvízu tyto vazby **nikdy nevstupují**. Filtrem `isConservative(key)` je kvízový fond striktně omezen na 164 tradičních rodinných vazeb. Kvíz tak zůstává 100% tradiční a konzervativní.
+    - **Nová testovací sekce 8 v `tests/reductions_mutual.test.js`**: Doplněno 6 regresních testů pro ověření `b,h` = Švagr, `m,b,h` = Strýc, `f,b,h` = Strýc, `z,w` = Švagrová, `s,h` = Zeť, `d,w` = Snacha. Celkový počet úspěšných unit testů vzrostl na **96 / 96**.
 
 
 

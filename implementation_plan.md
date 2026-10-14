@@ -100,7 +100,8 @@ Vytvoření webové kalkulačky rodinných vztahů inspirované čínskou kalkul
     - `screenshot_4_gedcom.png`: Import rodokmenu GEDCOM (.ged), genealogická cesta a detekce překážky sňatku dle § 675 NOZ.
     - `screenshot_5_quiz.png`: Kvíz a procvičování rodinných vztahů se skóre, sérií, možnostmi A-D a oslavou správné odpovědi.
     - `screenshot_6_settings.png`: Nová dedikovaná obrazovka Nastavení aplikace (zvuky, haptika, jazyk, výchozí pohlaví probanda).
-44. Vyčištění nekonservativních vztahů ze slovníku `cs.js` (odstranění 23 netradičních položek vzniklých při plošném generování vazeb), zavedení striktního filtru tradičních/konzervativních rodinných vazeb `isConservative(key)` do genealogického kvízu (`generateQuizQuestion` v `js/app.js`), zachování 100% průchodnosti unit testů (90/90 testů v `tests/`) a znovupořízení screenshotu kvízu č. 5 pro Google Play v poměru 9:16 s čistou tradiční otázkou.
+44. Vyčištění nekonservativních vztahů ze slovníku `cs.js` (odstranění 23 netradičních položek vzniklých při plošném generování vazeb), zavedení striktního filtru tradičních/konzervativních rodinných vazeb `isConservative(key)` do genealogického kvízu (`generateQuizQuestion` v `js/app.js`), zachování 100% průchodnosti unit testů a znovupořízení screenshotu kvízu č. 5 pro Google Play v poměru 9:16 s čistou tradiční otázkou.
+45. Podpora přirozených stejnopohlavních afinitních vazeb v kalkulačce (`b,h` = Švagr, `m,b,h` = Strýc, `f,b,h` = Strýc, `z,w` = Švagrová, `s,h` = Zeť, `d,w` = Snacha) při striktní izolaci genealogického kvízu (fond 164 konzervativních položek chráněný filtrem `isConservative(key)`). Rozšíření testovací sady o sekci 8 v `tests/reductions_mutual.test.js` na celkových **96 / 96 úspěšných unit testů**, sestavení debug APK a nasazení na telefon Xiaomi Redmi Note 11 Pro 5G.
 
 
 

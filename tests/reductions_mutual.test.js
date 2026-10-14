@@ -182,6 +182,28 @@ console.log('\n7. Exhaustive audit of cs.js (conservative perspective per ego ge
   assertEquals(unhandled, 0, '100 % všech vztahů se invertuje na platný rodinný termín bez selhání');
 }
 
+// 8. Stejnopohlavní afinitní vazby v kalkulačce (bratr -> manžel = švagr, matka -> bratr -> manžel = strýc...)
+console.log('\n8. Stejnopohlavní afinitní vazby v kalkulačce:');
+{
+  const res1 = resolveKinship(['b', 'h'], 'm', cs);
+  assertEquals(res1.name, 'Švagr', 'b, h (bratr -> manžel) = Švagr');
+
+  const res2 = resolveKinship(['m', 'b', 'h'], 'm', cs);
+  assertEquals(res2.name, 'Strýc', 'm, b, h (matka -> bratr -> manžel) = Strýc');
+
+  const res3 = resolveKinship(['f', 'b', 'h'], 'm', cs);
+  assertEquals(res3.name, 'Strýc', 'f, b, h (otec -> bratr -> manžel) = Strýc');
+
+  const res4 = resolveKinship(['z', 'w'], 'f', cs);
+  assertEquals(res4.name, 'Švagrová', 'z, w (sestra -> manželka) = Švagrová');
+
+  const res5 = resolveKinship(['s', 'h'], 'm', cs);
+  assertEquals(res5.name, 'Zeť', 's, h (syn -> manžel) = Zeť');
+
+  const res6 = resolveKinship(['d', 'w'], 'f', cs);
+  assertEquals(res6.name, 'Snacha', 'd, w (dcera -> manželka) = Snacha');
+}
+
 console.log('\n========================================');
 console.log(`Výsledky testů: ${passed} / ${passed + failed} prošlo.`);
 if (failed > 0) {

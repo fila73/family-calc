@@ -95,6 +95,11 @@
   - Příprava skriptu `scripts/generate_store_screenshots.ps1` pro konverzi a vygenerování 6 oficiálních snímků ve formátu 9:16 (1080×1920 px i 1350×2400 px) z reálného telefonu Xiaomi Redmi Note 11 Pro 5G přes ADB, zahrnujících kalkulačku s 2řádkovou hlavičkou, vizuální minirodokmen, výběr z 25 jazyků, GEDCOM analyzátor, kvíz a obrazovku Nastavení.
 - [x] 43. **Vyčištění slovníku a striktní konzervativní rodinné vazby v kvízu**:
   - Odstranění 23 nestandardních stejnojmenných/stejnopohlavních svazků z `cs.js` (např. `h,b,h`), implementace přísného konzervativního filtru `isConservative(key)` v generátoru kvízových otázek a distractorů, 100% průchodnost testovací sady (90/90 unit testů) a přefocení screenshotu kvízu č. 5 pro Google Play v poměru 9:16 s tradiční genealogickou otázkou.
+- [x] 44. **Přirozená afinitní sešvagření v kalkulačce vs. konzervativní kvíz**:
+  - Plná podpora přirozených afinitních vazeb v kalkulačce (`b,h` = Švagr, `m,b,h` = Strýc, `z,w` = Švagrová, `s,h` = Zeť, `d,w` = Snacha – celkem 188 položek v `cs.js`), kde pohlaví a typ vazby přímo určují české pojmenování.
+  - Striktní oddělení kvízu: filtr `isConservative(key)` zajišťuje, že do kvízu nevstupuje žádná nekonzervativní vazba (kvízový fond 164 prověřených otázek).
+  - Rozšíření headless testů na 96 unit testů (`npm test`).
+
 
 
 ## Nové nápady a budoucí rozšíření
