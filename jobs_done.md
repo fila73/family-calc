@@ -389,4 +389,6 @@
   - Připojený tablet Lenovo (`model: TB328XU`, ADB ID: `HGT7T347`) detekován přes ADB.
   - Nainstalován nejnovější balíček `build-android/Rodinna-Kalkulacka-debug.apk` (`adb -s HGT7T347 install -r`).
   - Aplikace `cz.fila73.familycalc` úspěšně spuštěna a ověřena v popředí (`MainActivity`, bez chyb v logcatu).
+  - Do `/sdcard/Download/` na tabletu nahráno všech 5 testovacích GEDCOM rodokmenů (`9i7efa_248548bkfd5396b740a9bl_A.ged`, `bb2769_70868886mn5a77f2196bb9_A.ged`, `2bab8u_1083818bwf09d6bj9y8fax_A.ged`, `47a68f_0208578aq4sw8l546dfab3_A.ged`, `fbf87c_1715507b4z829f698a3c6d_A.ged`).
+
 
