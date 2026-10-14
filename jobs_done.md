@@ -398,7 +398,9 @@
     2. **Odstranění nepoužívaných zdrojů**: `shrinkResources true`
     3. **Optimalizováno odstranění nepoužívaných zdrojů**: `android.r8.optimizedResourceShrinking=true`
     4. **Přesunutí tříd do samostatného balíčku**: `-repackageclasses 'cz.fila73.familycalc.internal'` a `-allowaccessmodification` v `proguard-rules.pro` (spolu s `-keep` pravidly pro `@JavascriptInterface` `AndroidTTS`, `MainActivity` a Capacitor).
-  - Sestaven a na tabletu Lenovo (`TB328XU`) přímo otestován R8-optimalizovaný a kryptograficky podepsaný produkční balíček `build-android/Rodinna-Kalkulacka-release.aab` (`versionCode 3` / `1.0.2`, velikost klesla z 3,90 MB na **2,18 MB** / 2 283 KB).
+  - V `android/variables.gradle` navýšen `targetSdkVersion` z `35` na **`36`** (při zachování `minSdkVersion = 24` pro plnou zpětnou kompatibilitu se staršími zařízeními od Androidu 7.0+).
+  - Sestaven a na tabletu Lenovo (`TB328XU`, Android 12 / API 31) přímo otestován R8-optimalizovaný a kryptograficky podepsaný produkční balíček `build-android/Rodinna-Kalkulacka-release.aab` (`versionCode 4` / `1.0.3`, velikost **2,18 MB** / 2 283 KB).
+
 
 
 
