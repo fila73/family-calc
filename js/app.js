@@ -2898,13 +2898,6 @@ document.addEventListener('DOMContentLoaded', () => {
     document.body.classList.add('is-mobile-device');
   }
 
-  // Attempt JS screen orientation lock to portrait
-  try {
-    if (screen.orientation && typeof screen.orientation.lock === 'function') {
-      screen.orientation.lock('portrait').catch(() => {});
-    }
-  } catch (e) {}
-
   window.app = new FamilyCalcApp();
 
   // Register service worker if available

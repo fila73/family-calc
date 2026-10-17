@@ -12,8 +12,8 @@ android {
     defaultConfig {
         applicationId "cz.fila73.familycalc"
         minSdkVersion rootProject.ext.minSdkVersion
-        targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 5
+        targetSdkVersion rootProject.ext.minSdkVersion == 36 ? 36 : rootProject.ext.targetSdkVersion
+        versionCode 6
         versionName "1.1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         aaptOptions {
