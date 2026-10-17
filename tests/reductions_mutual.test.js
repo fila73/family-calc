@@ -247,6 +247,175 @@ console.log('\n10. Pravidlo prosté cesty a detekce slepých uliček (getDeadEnd
   assert(deFatherSon.has('f') && !deFatherSon.has('m'), 'Po Otec -> Syn je Otec slepá ulička (návrat na Otce)');
 }
 
+// 11. Úplný audit všech strukturních vzorů (2^k kombinací pohlaví) a jejich inverzí
+console.log('\n11. Úplný audit strukturních vzorů (všechny kombinace pohlaví + reciproční inverze):');
+{
+  const tokenGroups = {
+    P: ['f', 'm'],
+    B: ['b', 'z'],
+    C: ['s', 'd'],
+    S: ['h', 'w'],
+    SP: ['step_f', 'step_m'],
+    SB: ['step_b', 'step_z'],
+    SC: ['step_s', 'step_d'],
+    SS: ['step_h', 'step_w'],
+    GP: ['god_f', 'god_m'],
+    GC: ['god_s', 'god_d']
+  };
+
+  function expandPattern(patternStr) {
+    const symbols = patternStr.split(',');
+    let results = [[]];
+    for (const sym of symbols) {
+      const opts = tokenGroups[sym] || [sym];
+      const next = [];
+      for (const prefix of results) {
+        for (const opt of opts) {
+          next.push([...prefix, opt]);
+        }
+      }
+      results = next;
+    }
+    return results;
+  }
+
+  const expectedPatterns = [
+    // Přímá linie
+    { pattern: 'P', male: 'Otec', female: 'Matka' },
+    { pattern: 'P,P', male: 'Dědeček', female: 'Babička' },
+    { pattern: 'P,P,P', male: 'Pradědeček', female: 'Prababička' },
+    { pattern: 'P,P,P,P', male: 'prapradědeček', female: 'praprababička' },
+    { pattern: 'C', male: 'Syn', female: 'Dcera' },
+    { pattern: 'C,C', male: 'Vnuk', female: 'Vnučka' },
+    { pattern: 'C,C,C', male: 'Pravnuk', female: 'Pravnučka' },
+    { pattern: 'C,C,C,C', male: 'prapravnuk', female: 'prapravnučka' },
+    // Pobočná linie 1. a 2. řádu
+    { pattern: 'B', male: 'Bratr', female: 'Sestra' },
+    { pattern: 'P,B', male: 'Strýc', female: 'Teta' },
+    { pattern: 'P,P,B', male: 'Prastrýc', female: 'Prateta' },
+    { pattern: 'P,P,P,B', male: 'praprastrýc', female: 'praprateta' },
+    { pattern: 'B,C', male: 'Synovec', female: 'Neteř' },
+    { pattern: 'B,C,C', male: 'Prasynovec', female: 'Praneteř' },
+    { pattern: 'B,C,C,C', male: 'praprasynovec', female: 'prapraneteř' },
+    // Bratranci, sestřenice, 2. koleno
+    { pattern: 'P,B,C', male: 'Bratranec', female: 'Sestřenice' },
+    { pattern: 'P,P,B,C', male: 'Strýc z 2. kolena', female: 'Teta z 2. kolena' },
+    { pattern: 'P,B,C,C', male: 'Synovec z 2. kolena', female: 'Neteř z 2. kolena' },
+    { pattern: 'P,P,B,C,C', male: 'Bratranec z 2. kolene', female: 'Sestřenice z 2. kolene' },
+    // Afinitní (sešvagření)
+    { pattern: 'S', male: 'Manžel', female: 'Manželka' },
+    { pattern: 'S,P', male: 'Tchán', female: 'Tchyně' },
+    { pattern: 'S,P,P', male: 'Pratchán', female: 'Pratchyně' },
+    { pattern: 'S,P,P,P', male: 'Prapratchán', female: 'Prapratchyně' },
+    { pattern: 'C,S', male: 'Zeť', female: 'Snacha' },
+    { pattern: 'C,C,S', male: 'Prazeť', female: 'Prasnacha' },
+    { pattern: 'C,C,C,S', male: 'Praprazeť', female: 'Praprasnacha' },
+    { pattern: 'C,S,P', male: 'Svat', female: 'Svatka' },
+    { pattern: 'B,S', male: 'Švagr', female: 'Švagrová' },
+    { pattern: 'S,B', male: 'Švagr', female: 'Švagrová' },
+    { pattern: 'S,B,S', male: 'Švagr', female: 'Švagrová' },
+    { pattern: 'P,B,S', male: 'Strýc', female: 'Teta' },
+    { pattern: 'P,P,B,S', male: 'Prastrýc', female: 'Prateta' },
+    { pattern: 'P,P,P,B,S', male: 'Praprastrýc', female: 'Praprateta' },
+    // Nevlastní a kmotrovské
+    { pattern: 'SP', male: 'Otčím', female: 'Macecha' },
+    { pattern: 'SC', male: 'Nevlastní syn', female: 'Nevlastní dcera' },
+    { pattern: 'SB', male: 'Nevlastní bratr', female: 'Nevlastní sestra' },
+    { pattern: 'SS', male: 'Druh', female: 'Družka' },
+    { pattern: 'GP', male: 'Kmotr', female: 'Kmotra' },
+    { pattern: 'GC', male: 'Kmotřenec', female: 'Kmotřenka' }
+  ];
+
+  let comboCount = 0;
+  let patternFailures = 0;
+  for (const spec of expectedPatterns) {
+    const combos = expandPattern(spec.pattern);
+    for (const c of combos) {
+      comboCount++;
+      const res = resolveKinship(c, 'm', cs, 'own');
+      const targetGender = getTokenGender(c[c.length - 1]);
+      const expectedName = targetGender === 'm' ? spec.male : spec.female;
+      if (res.name !== expectedName) {
+        patternFailures++;
+        console.error(`  ✗ Vzor ${spec.pattern} [${c.join(',')}]: očekáváno "${expectedName}", vráceno "${res.name}"`);
+      }
+      // Reciproční inverze nesmí nikdy spadnout do Vzdáleného příbuzného
+      for (const ego of ['m', 'f']) {
+        const inv = invertChain(c, ego);
+        const invRes = resolveKinship(inv, targetGender, cs, 'own');
+        if (invRes.id === 'unknown') {
+          patternFailures++;
+          console.error(`  ✗ Inverze [${c.join(',')}] (ego=${ego}) -> [${inv.join(',')}] spadla do Vzdáleného příbuzného`);
+        }
+      }
+    }
+  }
+  assertEquals(patternFailures, 0, `Všech ${comboCount} genderových kombinací napříč ${expectedPatterns.length} strukturními vzory + jejich inverze vrací přesný český výraz`);
+}
+
+// 12. Pasti, víceúrovňové redukce a vychytávky (Multi-step traps & edge cases)
+console.log('\n12. Pasti, víceúrovňové redukce a vychytávky:');
+{
+  // A) Přechod přes prarodiče dolů: Já -> Otec -> Otec -> Syn = Strýc
+  assertEquals(resolveKinship(['f', 'f', 's'], 'm', cs, 'own').name, 'Strýc', 'Past: Já -> Otec -> Otec -> Syn = Strýc');
+  assertEquals(resolveKinship(['m', 'm', 'd'], 'f', cs, 'own').name, 'Teta', 'Past: Já -> Matka -> Matka -> Dcera = Teta');
+
+  // B) Přechod přes tchána/tchyni dolů: Já -> Manželka -> Otec -> Dcera = Švagrová
+  assertEquals(resolveKinship(['w', 'f', 'd'], 'm', cs, 'own').name, 'Švagrová', 'Past: Já -> Manželka -> Otec -> Dcera = Švagrová');
+  assertEquals(resolveKinship(['h', 'm', 's'], 'f', cs, 'own').name, 'Švagr', 'Past: Já -> Manžel -> Matka -> Syn = Švagr');
+
+  // C) Přechod přes sourozence snachy nahoru: Já -> Syn -> Manželka -> Bratr -> Otec = Svat
+  assertEquals(resolveKinship(['s', 'w', 'b', 'f'], 'm', cs, 'own').name, 'Svat', 'Past: Já -> Syn -> Manželka -> Bratr -> Otec = Svat');
+  assertEquals(resolveKinship(['d', 'h', 'z', 'm'], 'f', cs, 'own').name, 'Svatka', 'Past: Já -> Dcera -> Manžel -> Sestra -> Matka = Svatka');
+
+  // D) Přechod přes bratrance zpět nahoru na tetu/strýce: Já -> Otec -> Bratr -> Syn -> Matka = Teta (přivdaná stryna)
+  assertEquals(resolveKinship(['f', 'b', 's', 'm'], 'm', cs, 'own').name, 'Teta', 'Past: Já -> Otec -> Bratr -> Syn -> Matka = Teta');
+  assertEquals(resolveKinship(['m', 'z', 'd', 'f'], 'f', cs, 'own').name, 'Strýc', 'Past: Já -> Matka -> Sestra -> Dcera -> Otec = Strýc');
+
+  // E) Přechod přes vnuka zpět nahoru na snachu/zetě: Já -> Syn -> Syn -> Matka = Snacha
+  assertEquals(resolveKinship(['s', 's', 'm'], 'm', cs, 'own').name, 'Snacha', 'Past: Já -> Syn -> Syn -> Matka = Snacha');
+  assertEquals(resolveKinship(['d', 's', 'f'], 'f', cs, 'own').name, 'Zeť', 'Past: Já -> Dcera -> Syn -> Otec = Zeť');
+
+  // F) Přechod přes synovce/neteř zpět na sourozence (3-tokenová redukce dítě -> rodič):
+  assertEquals(resolveKinship(['b', 's', 'f'], 'm', cs, 'own').name, 'Bratr', 'Past: Já -> Bratr -> Syn -> Otec = Bratr');
+  assertEquals(resolveKinship(['z', 'd', 'm'], 'f', cs, 'own').name, 'Sestra', 'Past: Já -> Sestra -> Dcera -> Matka = Sestra');
+  assertEquals(resolveKinship(['b', 's', 'm'], 'm', cs, 'own').name, 'Švagrová', 'Past: Já -> Bratr -> Syn -> Matka = Švagrová');
+  assertEquals(resolveKinship(['z', 'd', 'f'], 'm', cs, 'own').name, 'Švagr', 'Past: Já -> Sestra -> Dcera -> Otec = Švagr');
+
+  // G) Preference nevlastních vztahů ('step') nesmí rozbít odbočky uprostřed řetězce (i > 0):
+  assertEquals(resolveKinship(['b', 'w', 's'], 'm', cs, 'step').name, 'Synovec', 'Step mód uprostřed cesty: Bratr -> Manželka -> Syn = Synovec');
+  assertEquals(resolveKinship(['f', 'f', 'w'], 'm', cs, 'step').name, 'Babička', 'Step mód uprostřed cesty: Otec -> Otec -> Manželka = Babička');
+  assertEquals(resolveKinship(['s', 'w', 'f', 'w'], 'm', cs, 'step').name, 'Svatka', 'Step mód uprostřed cesty: Syn -> Manželka -> Otec -> Manželka = Svatka');
+}
+
+// 13. Hranice přechodu na „Vzdálený příbuzný“ (Boundary tests)
+console.log('\n13. Hranice přechodu z konkrétního názvu na „Vzdálený příbuzný“:');
+{
+  // A) Bratranci: 1. koleno (P,B,C) a 2. koleno (P,P,B,C,C) mají název, 3. koleno (P,P,P,B,C,C,C) = Vzdálený příbuzný
+  assertEquals(resolveKinship(['f', 'b', 's'], 'm', cs, 'own').name, 'Bratranec', 'Hranice bratranců: 1. koleno = Bratranec');
+  assertEquals(resolveKinship(['f', 'f', 'b', 's', 's'], 'm', cs, 'own').name, 'Bratranec z 2. kolene', 'Hranice bratranců: 2. koleno = Bratranec z 2. kolene');
+  assertEquals(resolveKinship(['f', 'f', 'f', 'b', 's', 's', 's'], 'm', cs, 'own').name, 'Vzdálený příbuzný', 'Hranice bratranců: 3. koleno = Vzdálený příbuzný');
+
+  // B) Potomci bratrance: Synovec z 2. kolena (P,B,C,C) má název, vnuk bratrance (P,B,C,C,C) = Vzdálený příbuzný
+  assertEquals(resolveKinship(['f', 'b', 's', 's'], 'm', cs, 'own').name, 'Synovec z 2. kolena', 'Hranice potomků bratrance: 1. generace = Synovec z 2. kolena');
+  assertEquals(resolveKinship(['f', 'b', 's', 's', 's'], 'm', cs, 'own').name, 'Vzdálený příbuzný', 'Hranice potomků bratrance: 2. generace = Vzdálený příbuzný');
+
+  // C) Partner bratrance nebo synovce: Bratranec -> Manželka (P,B,C,S) a Synovec -> Manželka (B,C,S) = Vzdálený příbuzný
+  assertEquals(resolveKinship(['f', 'b', 's', 'w'], 'm', cs, 'own').name, 'Vzdálený příbuzný', 'Hranice sešvagření: Manželka bratrance = Vzdálený příbuzný');
+  assertEquals(resolveKinship(['b', 's', 'w'], 'm', cs, 'own').name, 'Vzdálený příbuzný', 'Hranice sešvagření: Manželka synovce = Vzdálený příbuzný');
+
+  // D) Sourozenec švagra / zeťova bratra: Bratr -> Manželka -> Bratr (B,S,B) = Vzdálený příbuzný
+  assertEquals(resolveKinship(['b', 'w', 'b'], 'm', cs, 'own').name, 'Vzdálený příbuzný', 'Hranice řetězeného švagrovství: Bratr manželky bratra = Vzdálený příbuzný');
+
+  // E) Rodiče švagra: Bratr -> Manželka -> Otec (B,S,P) = Vzdálený příbuzný (kdežto Dítě -> Manželka -> Otec = Svat)
+  assertEquals(resolveKinship(['s', 'w', 'f'], 'm', cs, 'own').name, 'Svat', 'Hranice svatovství: Syn -> Manželka -> Otec = Svat');
+  assertEquals(resolveKinship(['b', 'w', 'f'], 'm', cs, 'own').name, 'Vzdálený příbuzný', 'Hranice svatovství: Bratr -> Manželka -> Otec = Vzdálený příbuzný');
+
+  // F) Zřetězené kmotrovství nebo nevlastní prarodiče: Kmotr -> Otec (GP,P) a Otčím -> Otec (SP,P) = Vzdálený příbuzný
+  assertEquals(resolveKinship(['god_f', 'f'], 'm', cs, 'own').name, 'Vzdálený příbuzný', 'Hranice kmotrovství: Otec kmotra = Vzdálený příbuzný');
+  assertEquals(resolveKinship(['step_f', 'f'], 'm', cs, 'own').name, 'Vzdálený příbuzný', 'Hranice nevlastních: Otec otčíma = Vzdálený příbuzný');
+}
+
 console.log('\n========================================');
 console.log(`Výsledky testů: ${passed} / ${passed + failed} prošlo.`);
 if (failed > 0) {
@@ -255,4 +424,5 @@ if (failed > 0) {
 } else {
   console.log('VŠECHNY TESTY PROŠLY NA VÝBORNOU!');
 }
+
 

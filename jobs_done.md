@@ -415,8 +415,17 @@
     - V `#settingsModal` doplněna sekce **„Pravidla výpočtu a nejednoznačné vazby“** s přepínačem režimu (`#settingPrefOwn` / `#settingPrefStep`), přepínačem upozornění (`#settingShortenNotifyToggle`) a rozbalovacím přehledem pravidel a příkladů (`#settingsRulesDetails`).
     - V `js/i18n/cs.js` sjednocen primární název `step_s` / `step_d` na srozumitelné **Nevlastní syn** / **Nevlastní dcera** (s historickým tvarem *Pastorek* / *Pastorkyně* v poli `archaic`).
     - Rozšířena testovací sada `tests/reductions_mutual.test.js` o sekce 9 a 10 – celkem **113 / 113 unit testů** (`npm test`) a 376 / 376 obousměrných auditních běhů (`node tests/audit_all.js`).
-
-
-
-
+- [x] **Hloubkový strukturní audit všech kombinací pohlaví ($2^k$), víceúrovňových redukčních pastí a hranice „Vzdálený příbuzný“**:
+  - **Odhalení a oprava 58 dříve nepokrytých genderových kombinací v `generateDeepKinshipEntry` (`js/engine/kinship-engine.js`) a `cs.js`**:
+    - Doplněno plné pokrytí všech 32 kombinací vzoru `P,P,B,C,C` (`(f|m),(f|m),(b|z),(s|d),(s|d)`) $\rightarrow$ **Bratranec z 2. kolene** / **Sestřenice z 2. kolene** (dříve byly ve slovníku jen 2 z 32 a zbylých 30 vracelo *Vzdálený příbuzný*).
+    - Doplněno plné pokrytí všech 16 kombinací vzoru `P,P,B,C` (`(f|m),(f|m),(b|z),(s|d)`) $\rightarrow$ **Strýc z 2. kolena** / **Teta z 2. kolena** (dříve 12 z 16 vracelo *Vzdálený příbuzný*).
+    - Doplněno plné pokrytí všech 16 kombinací vzoru `P,B,C,C` (`(f|m),(b|z),(s|d),(s|d)`) $\rightarrow$ **Synovec z 2. kolena** / **Neteř z 2. kolena** (dříve 12 z 16 vracelo *Vzdálený příbuzný*) a sjednocen název `f,b,s,s` / `f,b,s,d` v `cs.js` na symetrické **Synovec z 2. kolena** / **Neteř z 2. kolena**.
+    - Doplněny zbývající 4 stejnopohlavní kombinace vzoru `C,S,P` (`s,h,f`, `s,h,m`, `d,w,f`, `d,w,m`) $\rightarrow$ **Svat** / **Svatka**.
+    - Doplněno vyhodnocení `SP,S` / `SP,SS` (`step_f/step_m + w/h/step_w/step_h`) $\rightarrow$ **Manžel/ka otčíma** / **Manžel/ka macechy** a přímé položky `step_h` (**Druh**) a `step_w` (**Družka**) v `cs.js`.
+    - Doplněny generátory pro 4.+ generaci sešvagřených prastrýců/pratet (`P,P,P...,B,S`), prapratchánů (`S,P,P,P...`) a praprazeťů/praprasnach (`C,C,C...,S`).
+  - **Oprava víceúrovňových redukčních pastí v `simplifyChain` (`js/engine/kinship-engine.js`)**:
+    - Přidána 3-tokenová redukce přechodu přes dítě zpět na rodiče (`[muž] ➔ s/d ➔ f = [muž]` a `[žena] ➔ s/d ➔ m = [žena]`), takže např. `Bratr ➔ Syn ➔ Otec` redukuje na **Bratr** a `Syn ➔ Syn ➔ Matka` na **Snacha**.
+    - Omezena aplikace režimu `preferMode === 'step'` u `(w|h)+(s|d)` a `f+w` / `m+h` výhradně na začátek řetězce (`i === 0`), aby odbočky uprostřed řetězce (`Bratr ➔ Manželka ➔ Syn` = **Synovec**, `Otec ➔ Otec ➔ Manželka` = **Babička**, `Syn ➔ Manželka ➔ Otec ➔ Manželka` = **Svatka**) fungovaly správně i při zapnuté preferenci nevlastních vztahů.
+  - **Rozšíření automatizovaných testů (`tests/reductions_mutual.test.js` sekce 11, 12 a 13)**:
+    - Testuje všech **340 genderových kombinací** napříč **39 strukturními vzory** + jejich **680 recipročních inverzí**, víceúrovňové pasti i přesnou hranici přechodu na *Vzdálený příbuzný* (**143 / 143 unit testů** v `npm test`, **380 / 380** v `tests/audit_all.js`).
 
