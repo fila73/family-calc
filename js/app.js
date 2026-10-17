@@ -2,7 +2,7 @@
  * Rodinná kalkulačka - Hlavní aplikační kontrolér
  */
 
-import { resolveKinship, invertChain, TOKENS, getTokenGender } from './engine/kinship-engine.js';
+import { resolveKinship, invertChain, simplifyChain, getDeadEndTokens, TOKENS, getTokenGender } from './engine/kinship-engine.js';
 import { parseGedcom, getStepDirection } from './engine/gedcom-parser.js';
 import { getDictionary, languagesRegistry, languageCategories, getLanguageMeta } from './i18n/index.js';
 
@@ -10,9 +10,13 @@ class FamilyCalcApp {
   constructor() {
     this.chain = [];
     this.egoGender = localStorage.getItem('ego_gender') || 'm';
+    if (this.egoGender === 'w') this.egoGender = 'f';
     this.currentLang = localStorage.getItem('lang_code') || 'cs';
     this.isMutualView = false;
     this.modifier = null; // null | 'step' | 'god'
+    this.preferMode = localStorage.getItem('family_calc_prefer_mode') || 'own'; // 'own' | 'step'
+    this.shortenNotifyEnabled = localStorage.getItem('family_calc_shorten_notify') !== 'false';
+    this.lastUnshortenedChain = null;
     this.history = this.loadHistory();
     this.recentLangs = this.loadRecentLangs();
     this.quizState = { score: 0, total: 0, streak: 0, currentQuestion: null };
@@ -28,6 +32,7 @@ class FamilyCalcApp {
     this.updateLanguageTrigger();
     this.updateLanguage();
     this.updateSoundUI();
+    this.updatePreferModeUI();
     this.render();
   }
 
@@ -50,7 +55,17 @@ class FamilyCalcApp {
     this.settingLangCurrentDesc = document.getElementById('settingLangCurrentDesc');
     this.settingGenderMale = document.getElementById('settingGenderMale');
     this.settingGenderFemale = document.getElementById('settingGenderFemale');
+    this.settingPrefOwn = document.getElementById('settingPrefOwn');
+    this.settingPrefStep = document.getElementById('settingPrefStep');
+    this.settingShortenNotifyToggle = document.getElementById('settingShortenNotifyToggle');
     this.hapticEnabled = localStorage.getItem('family_calc_haptic') !== 'false';
+
+    // Shortening notice banner elements
+    this.shortenNoticeBanner = document.getElementById('shortenNoticeBanner');
+    this.shortenNoticeText = document.getElementById('shortenNoticeText');
+    this.shortenCloseBtn = document.getElementById('shortenCloseBtn');
+    this.shortenSwitchStepBtn = document.getElementById('shortenSwitchStepBtn');
+    this.shortenMuteBtn = document.getElementById('shortenMuteBtn');
 
     // Language modal elements
     this.openLangModalBtn = document.getElementById('openLangModalBtn');
@@ -63,11 +78,14 @@ class FamilyCalcApp {
     this.langTriggerFlag = document.getElementById('langTriggerFlag');
     this.langTriggerCode = document.getElementById('langTriggerCode');
 
-    // Modifiers
+    // Modifiers & Preference Toggle
     this.btnModStep = document.getElementById('btnModStep');
     this.btnModGod = document.getElementById('btnModGod');
     this.labelModStep = document.getElementById('labelModStep');
     this.labelModGod = document.getElementById('labelModGod');
+    this.btnPreferMode = document.getElementById('btnPreferMode');
+    this.iconPreferMode = document.getElementById('iconPreferMode');
+    this.labelPreferMode = document.getElementById('labelPreferMode');
 
     this.chainContainer = document.getElementById('chainContainer');
     this.resultMain = document.getElementById('resultMain');
@@ -266,6 +284,52 @@ class FamilyCalcApp {
         this.showToast(this.hapticEnabled ? 'Haptika: Zapnuto 📳' : 'Haptika: Vypnuto');
       });
     }
+    if (this.settingPrefOwn) {
+      this.settingPrefOwn.addEventListener('click', () => {
+        this.setPreferMode('own');
+      });
+    }
+    if (this.settingPrefStep) {
+      this.settingPrefStep.addEventListener('click', () => {
+        this.setPreferMode('step');
+      });
+    }
+    if (this.settingShortenNotifyToggle) {
+      this.settingShortenNotifyToggle.addEventListener('change', (e) => {
+        this.shortenNotifyEnabled = e.target.checked;
+        localStorage.setItem('family_calc_shorten_notify', this.shortenNotifyEnabled ? 'true' : 'false');
+        if (this.hapticEnabled) this.triggerHaptic();
+        if (!this.shortenNotifyEnabled) this.hideShortenBanner();
+        this.showToast(this.shortenNotifyEnabled ? 'Upozornění na zkrácení: Zapnuto ✂️' : 'Upozornění na zkrácení: Vypnuto 🔕');
+      });
+    }
+    if (this.shortenCloseBtn) {
+      this.shortenCloseBtn.addEventListener('click', () => {
+        this.hideShortenBanner();
+      });
+    }
+    if (this.shortenSwitchStepBtn) {
+      this.shortenSwitchStepBtn.addEventListener('click', () => {
+        this.triggerHaptic();
+        if (this.lastUnshortenedChain && this.lastUnshortenedChain.length > 0) {
+          this.chain = [...this.lastUnshortenedChain];
+        }
+        this.hideShortenBanner();
+        this.setPreferMode('step', true);
+      });
+    }
+    if (this.shortenMuteBtn) {
+      this.shortenMuteBtn.addEventListener('click', () => {
+        this.triggerHaptic();
+        this.shortenNotifyEnabled = false;
+        localStorage.setItem('family_calc_shorten_notify', 'false');
+        if (this.settingShortenNotifyToggle) {
+          this.settingShortenNotifyToggle.checked = false;
+        }
+        this.hideShortenBanner();
+        this.showToast('Upozornění skryto (lze znovu zapnout v Nastavení ⚙️)');
+      });
+    }
     if (this.settingChangeLangBtn) {
       this.settingChangeLangBtn.addEventListener('click', () => {
         this.closeSettingsModal();
@@ -287,7 +351,7 @@ class FamilyCalcApp {
     }
     if (this.settingGenderFemale) {
       this.settingGenderFemale.addEventListener('click', () => {
-        this.setGender('w');
+        this.setGender('f');
       });
     }
 
@@ -526,9 +590,12 @@ class FamilyCalcApp {
       });
     }
 
-    // Modifiers
+    // Modifiers & Preference Toggle
     this.btnModStep.addEventListener('click', () => this.toggleModifier('step'));
     this.btnModGod.addEventListener('click', () => this.toggleModifier('god'));
+    if (this.btnPreferMode) {
+      this.btnPreferMode.addEventListener('click', () => this.togglePreferMode());
+    }
 
     // Keypad key clicks
     this.keyHusband.addEventListener('click', () => this.addToken(TOKENS.HUSBAND));
@@ -577,6 +644,7 @@ class FamilyCalcApp {
         this.quizModal,
         this.historyModal,
         this.menuModal,
+        this.settingsModal,
         this.inheritanceModal,
         this.impedimentModal,
         this.voiceModal,
@@ -597,6 +665,7 @@ class FamilyCalcApp {
           if (this.quizModal && this.quizModal.classList.contains('open')) this.closeQuizModal();
           if (this.historyModal && this.historyModal.classList.contains('open')) this.closeHistoryModal();
           if (this.menuModal && this.menuModal.classList.contains('open')) this.closeMenu();
+          if (this.settingsModal && this.settingsModal.classList.contains('open')) this.closeSettingsModal();
           if (this.inheritanceModal && this.inheritanceModal.classList.contains('open')) this.closeInheritanceModal();
           if (this.impedimentModal && this.impedimentModal.classList.contains('open')) this.closeImpedimentModal();
           if (this.voiceModal && this.voiceModal.classList.contains('open')) this.closeVoiceModal();
@@ -672,6 +741,75 @@ class FamilyCalcApp {
     this.keypad.classList.toggle('shift-god-active', this.modifier === 'god');
   }
 
+  togglePreferMode() {
+    const nextMode = this.preferMode === 'own' ? 'step' : 'own';
+    this.setPreferMode(nextMode);
+  }
+
+  setPreferMode(mode, skipShortenCurrent = false) {
+    this.triggerHaptic();
+    this.preferMode = mode === 'step' ? 'step' : 'own';
+    localStorage.setItem('family_calc_prefer_mode', this.preferMode);
+    this.updatePreferModeUI();
+
+    if (this.preferMode === 'own' && !skipShortenCurrent && this.chain.length > 1) {
+      const before = [...this.chain];
+      const shortened = simplifyChain(this.chain, this.egoGender, 'own');
+      if (shortened.join(',') !== before.join(',')) {
+        this.lastUnshortenedChain = before;
+        this.chain = shortened;
+        if (this.shortenNotifyEnabled) {
+          this.showShortenBanner(before, shortened);
+        }
+      }
+    } else if (this.preferMode === 'step') {
+      this.hideShortenBanner();
+    }
+
+    this.render();
+    this.showToast(
+      this.preferMode === 'own'
+        ? '🔗 Režim: Vlastní rodina (zkracovat cesty)'
+        : '🔀 Režim: Preferovat nevlastní (nezkracovat)'
+    );
+  }
+
+  updatePreferModeUI() {
+    const isStep = this.preferMode === 'step';
+    if (this.btnPreferMode) {
+      this.btnPreferMode.classList.toggle('active-pref-step', isStep);
+    }
+    if (this.iconPreferMode) {
+      this.iconPreferMode.textContent = isStep ? '🔀' : '🔗';
+    }
+    if (this.labelPreferMode) {
+      this.labelPreferMode.textContent = isStep ? 'Okliky: Nevlastní' : 'Okliky: Vlastní';
+    }
+    if (this.settingPrefOwn && this.settingPrefStep) {
+      this.settingPrefOwn.classList.toggle('active', !isStep);
+      this.settingPrefStep.classList.toggle('active', isStep);
+    }
+    if (this.settingShortenNotifyToggle) {
+      this.settingShortenNotifyToggle.checked = this.shortenNotifyEnabled;
+    }
+  }
+
+  showShortenBanner(beforeChain, afterChain) {
+    if (!this.shortenNoticeBanner || !this.shortenNoticeText) return;
+    const dict = getDictionary(this.currentLang);
+    const fmt = (arr) => arr.map((t) => dict.labels.tokens[t] || t).join(' ➔ ');
+    const beforeStr = fmt(beforeChain);
+    const afterStr = afterChain.length > 0 ? fmt(afterChain) : (dict.labels.self || 'JÁ');
+    this.shortenNoticeText.innerHTML = `✂️ Vazba <strong>„${beforeStr}“</strong> byla zkrácena na <strong>„${afterStr}“</strong> (režim Vlastní rodina).`;
+    this.shortenNoticeBanner.style.display = 'flex';
+  }
+
+  hideShortenBanner() {
+    if (this.shortenNoticeBanner) {
+      this.shortenNoticeBanner.style.display = 'none';
+    }
+  }
+
   triggerHaptic() {
     this.playClickSound();
     if (!this.hapticEnabled) return;
@@ -735,6 +873,7 @@ class FamilyCalcApp {
     if (this.settingHapticToggle) {
       this.settingHapticToggle.checked = this.hapticEnabled;
     }
+    this.updatePreferModeUI();
     this.updateSettingsLangUI();
     this.syncSettingsGender();
     if (this.settingsModal) {
@@ -751,7 +890,7 @@ class FamilyCalcApp {
   syncSettingsGender() {
     if (this.settingGenderMale && this.settingGenderFemale) {
       this.settingGenderMale.classList.toggle('active', this.egoGender === 'm');
-      this.settingGenderFemale.classList.toggle('active', this.egoGender === 'w');
+      this.settingGenderFemale.classList.toggle('active', this.egoGender !== 'm');
     }
   }
 
@@ -765,8 +904,8 @@ class FamilyCalcApp {
 
   setGender(gender) {
     this.triggerHaptic();
-    this.egoGender = gender;
-    localStorage.setItem('ego_gender', gender);
+    this.egoGender = gender === 'm' ? 'm' : 'f';
+    localStorage.setItem('ego_gender', this.egoGender);
     this.updateGenderUI();
     this.syncSettingsGender();
     this.render();
@@ -1062,27 +1201,32 @@ class FamilyCalcApp {
       this.setKeyContent(this.keySisterOld, sisOldMain, '', false);
       this.setKeyContent(this.keySisterYoung, sisYoungMain, '', false);
     } else {
-      // Standard key labels (all enabled)
-      this.setKeyContent(this.keyHusband, t.h, '', true);
-      this.setKeyContent(this.keyWife, t.w, '', true);
-      this.setKeyContent(this.keyFather, t.f, '', true);
-      this.setKeyContent(this.keyMother, t.m, '', true);
-      this.setKeyContent(this.keySon, t.s, '', true);
-      this.setKeyContent(this.keyDaughter, t.d, '', true);
+      // Standard key labels (disable dead-end backtracking tokens per Rule 1)
+      const deadEnds = getDeadEndTokens(this.chain, this.egoGender);
+      this.setKeyContent(this.keyHusband, t.h, '', !deadEnds.has(TOKENS.HUSBAND));
+      this.setKeyContent(this.keyWife, t.w, '', !deadEnds.has(TOKENS.WIFE));
+      this.setKeyContent(this.keyFather, t.f, '', !deadEnds.has(TOKENS.FATHER));
+      this.setKeyContent(this.keyMother, t.m, '', !deadEnds.has(TOKENS.MOTHER));
+      this.setKeyContent(this.keySon, t.s, '', !deadEnds.has(TOKENS.SON));
+      this.setKeyContent(this.keyDaughter, t.d, '', !deadEnds.has(TOKENS.DAUGHTER));
 
-      this.setKeyContent(this.keyBrotherOld, broOldMain, broOldSub, true);
-      this.setKeyContent(this.keyBrotherYoung, broYoungMain, broYoungSub, true);
-      this.setKeyContent(this.keySisterOld, sisOldMain, sisOldSub, true);
-      this.setKeyContent(this.keySisterYoung, sisYoungMain, sisYoungSub, true);
+      this.setKeyContent(this.keyBrotherOld, broOldMain, broOldSub, !deadEnds.has(TOKENS.OLDER_BROTHER));
+      this.setKeyContent(this.keyBrotherYoung, broYoungMain, broYoungSub, !deadEnds.has(TOKENS.YOUNGER_BROTHER));
+      this.setKeyContent(this.keySisterOld, sisOldMain, sisOldSub, !deadEnds.has(TOKENS.OLDER_SISTER));
+      this.setKeyContent(this.keySisterYoung, sisYoungMain, sisYoungSub, !deadEnds.has(TOKENS.YOUNGER_SISTER));
     }
 
     this.keyMutual.textContent = dict.labels.mutual;
     this.updateGenderUI();
     this.updateModifierUI();
+    this.updatePreferModeUI();
   }
 
   setKeyContent(keyEl, mainText, subText, enabled = true) {
     keyEl.disabled = !enabled;
+    keyEl.title = enabled
+      ? ''
+      : 'Slepá ulička (návrat do již navštíveného uzlu). Pro nevlastní vztah stiskněte ⇧ Nevlastní.';
     if (!subText) {
       keyEl.textContent = mainText;
     } else {
@@ -1119,10 +1263,36 @@ class FamilyCalcApp {
       this.modifier = null;
       this.updateModifierUI();
       this.updateLanguage();
+    } else {
+      // Guard against dead-end backtracking tokens (e.g., via keyboard shortcuts)
+      const deadEnds = getDeadEndTokens(this.chain, this.egoGender);
+      if (deadEnds.has(token)) {
+        this.showToast('⛔ Slepá ulička (cesta zpět). Pro nevlastní vztah použijte ⇧ Nevlastní.');
+        return;
+      }
     }
 
-    this.chain.push(finalToken);
+    const rawNextChain = [...this.chain, finalToken];
     this.gedcomPathMeta = null;
+
+    const isExplicitModifier = finalToken.startsWith('step_') || finalToken.startsWith('god_');
+    if (this.preferMode === 'own' && !isExplicitModifier) {
+      const shortened = simplifyChain(rawNextChain, this.egoGender, 'own');
+      if (shortened.length < rawNextChain.length) {
+        this.lastUnshortenedChain = [...rawNextChain];
+        this.chain = shortened;
+        this.showShortenBanner(rawNextChain, shortened);
+      } else {
+        this.lastUnshortenedChain = null;
+        this.chain = rawNextChain;
+        this.hideShortenBanner();
+      }
+    } else {
+      this.lastUnshortenedChain = null;
+      this.chain = rawNextChain;
+      this.hideShortenBanner();
+    }
+
     this.render();
   }
 
@@ -1130,6 +1300,8 @@ class FamilyCalcApp {
     this.triggerHaptic();
     this.isMutualView = false;
     this.gedcomPathMeta = null;
+    this.lastUnshortenedChain = null;
+    this.hideShortenBanner();
     if (this.chain.length > 0) {
       this.chain.pop();
       this.render();
@@ -1141,10 +1313,11 @@ class FamilyCalcApp {
     this.chain = [];
     this.isMutualView = false;
     this.gedcomPathMeta = null;
+    this.lastUnshortenedChain = null;
+    this.hideShortenBanner();
     if (this.modifier) {
       this.modifier = null;
       this.updateModifierUI();
-      this.updateLanguage();
     }
     this.render();
   }
@@ -1198,13 +1371,16 @@ class FamilyCalcApp {
       this.resultMain.style.animation = 'fadeInResult 0.3s ease-out';
     });
     const dict = getDictionary(this.currentLang);
-    const activeChain = this.isMutualView ? invertChain(this.chain, this.egoGender) : this.chain;
-    const resolved = resolveKinship(activeChain, this.getActiveSpeakerGender(), dict);
+    const activeChain = this.isMutualView ? invertChain(this.chain, this.egoGender, this.preferMode) : this.chain;
+    const resolved = resolveKinship(activeChain, this.getActiveSpeakerGender(), dict, this.preferMode);
     this.showToast(`${resolved.name}`);
   }
 
   render() {
     const dict = getDictionary(this.currentLang);
+
+    // Update keypad enabled/disabled states for dead-end backtracking prevention
+    this.updateLanguage();
 
     // Update active class on mutual key
     if (this.keyMutual) {
@@ -1218,7 +1394,7 @@ class FamilyCalcApp {
         this.keyMutual.classList.remove('active-mutual');
         this.keyMutual.setAttribute('aria-pressed', 'false');
       }
-      const selfResolved = resolveKinship([], this.egoGender, dict);
+      const selfResolved = resolveKinship([], this.egoGender, dict, this.preferMode);
       this.renderChainBreadcrumbs(dict);
       this.resultMain.textContent = selfResolved.name;
       this.metaBadges.innerHTML = '<span class="meta-badge badge-line">📍 Výchozí osoba</span>';
@@ -1234,11 +1410,11 @@ class FamilyCalcApp {
     const targetGender = getTokenGender(lastToken) || 'm';
 
     // 1. Direct relationship from Ego -> Target
-    const directResolved = resolveKinship(this.chain, this.egoGender, dict);
+    const directResolved = resolveKinship(this.chain, this.egoGender, dict, this.preferMode);
 
     // 2. Mutual / Reciprocal relationship from Target -> Ego
-    const invertedChain = invertChain(this.chain, this.egoGender);
-    const mutualResolved = resolveKinship(invertedChain, targetGender, dict);
+    const invertedChain = invertChain(this.chain, this.egoGender, this.preferMode);
+    const mutualResolved = resolveKinship(invertedChain, targetGender, dict, this.preferMode);
 
     // Active displayed item based on mutual mode
     const displayedResolved = this.isMutualView ? mutualResolved : directResolved;
@@ -1445,8 +1621,8 @@ class FamilyCalcApp {
     this.triggerHaptic();
 
     const dict = getDictionary(this.currentLang);
-    const activeChain = this.isMutualView ? invertChain(this.chain, this.egoGender) : this.chain;
-    const resolved = resolveKinship(activeChain, this.getActiveSpeakerGender(), dict);
+    const activeChain = this.isMutualView ? invertChain(this.chain, this.egoGender, this.preferMode) : this.chain;
+    const resolved = resolveKinship(activeChain, this.getActiveSpeakerGender(), dict, this.preferMode);
     const textToSpeak = `${resolved.name}. ${resolved.description || ''}`;
 
     const langMap = {
@@ -1506,8 +1682,8 @@ class FamilyCalcApp {
   async shareResult() {
     this.triggerHaptic();
     const dict = getDictionary(this.currentLang);
-    const activeChain = this.isMutualView ? invertChain(this.chain, this.egoGender) : this.chain;
-    const resolved = resolveKinship(activeChain, this.getActiveSpeakerGender(), dict);
+    const activeChain = this.isMutualView ? invertChain(this.chain, this.egoGender, this.preferMode) : this.chain;
+    const resolved = resolveKinship(activeChain, this.getActiveSpeakerGender(), dict, this.preferMode);
 
     const pathText = this.chain.length > 0
       ? this.formatKeyPath(this.chain.join(','), dict)
@@ -1565,8 +1741,8 @@ class FamilyCalcApp {
     this.treeCanvasContainer.innerHTML = '';
 
     const dict = getDictionary(this.currentLang);
-    const effectiveChain = this.isMutualView ? invertChain(this.chain, this.egoGender) : this.chain;
-    const resolved = resolveKinship(effectiveChain, this.getActiveSpeakerGender(), dict);
+    const effectiveChain = this.isMutualView ? invertChain(this.chain, this.egoGender, this.preferMode) : this.chain;
+    const resolved = resolveKinship(effectiveChain, this.getActiveSpeakerGender(), dict, this.preferMode);
 
     // Ověříme, zda aktuální kalkulace odpovídá přenesené cestě z GEDCOMu
     const hasGedcomMatch = Boolean(
@@ -1983,8 +2159,8 @@ class FamilyCalcApp {
   downloadCardAsPNG() {
     this.triggerHaptic();
     const dict = getDictionary(this.currentLang);
-    const activeChain = this.isMutualView ? invertChain(this.chain, this.egoGender) : this.chain;
-    const resolved = resolveKinship(activeChain, this.getActiveSpeakerGender(), dict);
+    const activeChain = this.isMutualView ? invertChain(this.chain, this.egoGender, this.preferMode) : this.chain;
+    const resolved = resolveKinship(activeChain, this.getActiveSpeakerGender(), dict, this.preferMode);
 
     const canvas = document.createElement('canvas');
     const width = 800;
@@ -2129,8 +2305,8 @@ class FamilyCalcApp {
   openInheritanceModal() {
     this.triggerHaptic();
     const dict = getDictionary(this.currentLang);
-    const activeChain = this.isMutualView ? invertChain(this.chain, this.egoGender) : this.chain;
-    const resolved = resolveKinship(activeChain, this.getActiveSpeakerGender(), dict);
+    const activeChain = this.isMutualView ? invertChain(this.chain, this.egoGender, this.preferMode) : this.chain;
+    const resolved = resolveKinship(activeChain, this.getActiveSpeakerGender(), dict, this.preferMode);
     const inh = resolved.inheritance || { classNumber: null, class: null, title: 'Mimo zákonnou posloupnost', description: 'Není v 1.–6. dědické třídě.', badge: 'Mimo dědické třídy' };
     const inhClassNum = inh.classNumber ?? inh.class;
 
@@ -2181,8 +2357,8 @@ class FamilyCalcApp {
   openImpedimentModal() {
     this.triggerHaptic();
     const dict = getDictionary(this.currentLang);
-    const activeChain = this.isMutualView ? invertChain(this.chain, this.egoGender) : this.chain;
-    const resolved = resolveKinship(activeChain, this.getActiveSpeakerGender(), dict);
+    const activeChain = this.isMutualView ? invertChain(this.chain, this.egoGender, this.preferMode) : this.chain;
+    const resolved = resolveKinship(activeChain, this.getActiveSpeakerGender(), dict, this.preferMode);
     const imp = resolved.marriageImpediment || { allowed: true, reason: 'Příbuzenský vztah nebrání uzavření manželství.', badge: 'Sňatek možný' };
 
     let html = `

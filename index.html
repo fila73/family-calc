@@ -105,16 +105,34 @@
             <span class="detail-value" id="detailReciprocal">—</span>
           </div>
         </div>
+        <!-- 4. Upozornění na automatické zkrácení vazby (s možností přepnutí na nevlastní nebo skrytí) -->
+        <div class="shorten-notice-banner" id="shortenNoticeBanner" style="display: none;" role="status" aria-live="polite">
+          <div class="shorten-notice-top">
+            <span class="shorten-notice-text" id="shortenNoticeText">✂️ Cesta byla zjednodušena na vlastní vztah.</span>
+            <button class="shorten-notice-close" id="shortenCloseBtn" type="button" aria-label="Zavřít upozornění" title="Zavřít">&times;</button>
+          </div>
+          <div class="shorten-notice-actions">
+            <button class="shorten-action-btn shorten-btn-step" id="shortenSwitchStepBtn" type="button">
+              🔀 Je to nevlastní vztah
+            </button>
+            <button class="shorten-action-btn shorten-btn-mute" id="shortenMuteBtn" type="button">
+              🔕 Už nezobrazovat
+            </button>
+          </div>
+        </div>
       </div>
     </section>
 
-    <!-- Modifiers Bar (Shift / Nevlastní & Křestní) -->
+    <!-- Modifiers Bar (Shift / Nevlastní, Křestní & Preference Vlastní/Nevlastní) -->
     <div class="modifiers-bar" id="modifiersBar" role="toolbar" aria-label="Modifikátory vztahů">
-      <button class="mod-btn" id="btnModStep" type="button" aria-label="Nevlastní příbuzenství (Shift)" title="Přepnout na nevlastní vztah (macecha, otčím, pastorek, polobratr)">
+      <button class="mod-btn" id="btnModStep" type="button" aria-label="Nevlastní příbuzenství (Shift)" title="Přepnout další klávesu na nevlastní vztah (macecha, otčím, pastorek, polobratr)">
         <span class="mod-icon">⇧</span> <span id="labelModStep">Nevlastní</span>
       </button>
-      <button class="mod-btn" id="btnModGod" type="button" aria-label="Křestní příbuzenství" title="Přepnout na křestní vztah (kmotr, kmotra, kmotřenec)">
+      <button class="mod-btn" id="btnModGod" type="button" aria-label="Křestní příbuzenství" title="Přepnout další klávesu na křestní vztah (kmotr, kmotra, kmotřenec)">
         <span class="mod-icon">✝</span> <span id="labelModGod">Křestní</span>
+      </button>
+      <button class="mod-btn mod-pref-btn" id="btnPreferMode" type="button" aria-label="Preference nejednoznačných vazeb (Vlastní / Nevlastní)" title="Jak vyhodnocovat nepřímé vazby (okliky): Vlastní (zkracovat) vs. Nevlastní (nezkracovat)">
+        <span class="mod-icon" id="iconPreferMode">🔗</span> <span id="labelPreferMode">Vlastní</span>
       </button>
     </div>
 
@@ -393,6 +411,107 @@
         <button class="modal-close-btn" id="closeSettingsModalBtn" aria-label="Zavřít nastavení">&times;</button>
       </div>
       <div class="settings-modal-body">
+
+        <!-- Sekce Pravidla výpočtu a nejednoznačné vazby -->
+        <div class="settings-section">
+          <div class="settings-section-title">Pravidla výpočtu a nejednoznačné vazby</div>
+
+          <div class="setting-item setting-item-col">
+            <div class="setting-item-info" style="width: 100%;">
+              <div class="setting-item-label">
+                <span class="setting-item-icon">🔗</span>
+                <span>Výklad nepřímých vazeb (oklik)</span>
+              </div>
+              <div class="setting-item-desc">
+                Jak vyhodnotit cesty zadané oklikou (např. <em>Já → Manželka → Syn</em> nebo <em>Já → Bratr → Sestra</em>):
+              </div>
+            </div>
+            <div class="setting-pref-pills" style="width: 100%; display: flex; gap: 8px; margin-top: 6px;">
+              <button class="setting-gender-pill active" id="settingPrefOwn" type="button" style="flex: 1; text-align: center;">
+                🔗 Vlastní (zkracovat)
+              </button>
+              <button class="setting-gender-pill" id="settingPrefStep" type="button" style="flex: 1; text-align: center;">
+                🔀 Nevlastní (nezkracovat)
+              </button>
+            </div>
+          </div>
+
+          <div class="setting-item">
+            <div class="setting-item-info">
+              <div class="setting-item-label">
+                <span class="setting-item-icon">✂️</span>
+                <span>Upozorňovat na zkrácení cesty</span>
+              </div>
+              <div class="setting-item-desc">Zobrazit vysvětlení, když aplikace v režimu Vlastní automaticky zkrátí naklikaný řetězec</div>
+            </div>
+            <label class="switch-toggle" for="settingShortenNotifyToggle">
+              <input type="checkbox" id="settingShortenNotifyToggle" checked>
+              <span class="switch-slider"></span>
+            </label>
+          </div>
+
+          <details class="settings-rules-details" id="settingsRulesDetails">
+            <summary class="settings-rules-summary">
+              <span>📖 Pravidla vyhodnocování cest a příklady</span>
+              <span class="settings-rules-chevron">▾</span>
+            </summary>
+            <div class="settings-rules-content">
+              <div class="rules-block">
+                <div class="rules-block-title">1. Pravidlo neopakování uzlů (žádné cykly)</div>
+                <p>
+                  Cesta v rodokmenu <strong>nikdy nevede zpět do již použitého uzlu</strong> – každý další krok představuje novou osobu.
+                  Například cesta <code>Já → Otec → Syn</code> se nikdy nevrací zpět na <code>Já</code>, ale označuje druhého syna otce (vašeho <strong>bratra</strong>, případně <strong>polobratra</strong>).
+                </p>
+              </div>
+              <div class="rules-block">
+                <div class="rules-block-title">2. Slepá ulička (uzamčení zpětných tlačítek)</div>
+                <p>
+                  Pokud by některé tlačítko znamenalo <em>výhradně</em> návrat na předchozí osobu (např. klávesa <code>Manžel</code> hned po <code>Manželka</code>, nebo <code>Otec</code> hned po <code>Já (muž) → Syn</code>), tlačítko se automaticky <strong>deaktivuje (zešedne)</strong>.
+                  Pro krok zpět použijte <code>⌫</code>; pokud chcete zadat dalšího partnera nebo nevlastního rodiče, stiskněte nejprve modifikátor <strong><code>⇧ Nevlastní</code></strong>.
+                </p>
+              </div>
+              <div class="rules-block">
+                <div class="rules-block-title">3. Přehled: Vlastní (zkracovat) vs. Nevlastní</div>
+                <table class="rules-examples-table">
+                  <thead>
+                    <tr>
+                      <th>Zadaná cesta</th>
+                      <th>🔗 Vlastní (zkrátí na)</th>
+                      <th>🔀 Nevlastní (nezkracuje)</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><code>Manželka → Syn</code></td>
+                      <td><strong>Syn</strong> (<code>Syn</code>)</td>
+                      <td><strong>Nevlastní syn</strong> (pastorek)</td>
+                    </tr>
+                    <tr>
+                      <td><code>Otec → Manželka</code></td>
+                      <td><strong>Matka</strong> (<code>Matka</code>)</td>
+                      <td><strong>Macecha</strong> (nevl. matka)</td>
+                    </tr>
+                    <tr>
+                      <td><code>Otec → Syn</code></td>
+                      <td><strong>Bratr</strong> (<code>Bratr</code>)</td>
+                      <td><strong>Polobratr jednokrevní</strong></td>
+                    </tr>
+                    <tr>
+                      <td><code>Bratr → Sestra</code></td>
+                      <td><strong>Sestra</strong> (<code>Sestra</code>)</td>
+                      <td><strong>Nevlastní sestra</strong></td>
+                    </tr>
+                    <tr>
+                      <td><code>Bratr → Otec</code></td>
+                      <td><strong>Otec</strong> (<code>Otec</code>)</td>
+                      <td><strong>Otčím</strong> (nevl. otec)</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </details>
+        </div>
         
         <!-- Sekce Zvuk a haptika -->
         <div class="settings-section">
