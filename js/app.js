@@ -415,6 +415,20 @@ class FamilyCalcApp {
         this.openShortcutsModal();
       });
     }
+    const menuWhatsNewBtn = document.getElementById('menuWhatsNewBtn');
+    if (menuWhatsNewBtn) {
+      menuWhatsNewBtn.addEventListener('click', () => {
+        this.closeMenu();
+        this.openSettingsModal();
+        const detailsEl = document.getElementById('settingsWhatsNewDetails');
+        if (detailsEl) {
+          detailsEl.open = true;
+          setTimeout(() => {
+            detailsEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }, 80);
+        }
+      });
+    }
     if (this.menuDonateBtn) {
       this.menuDonateBtn.addEventListener('click', () => {
         this.closeMenu();

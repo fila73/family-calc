@@ -428,4 +428,9 @@
     - Omezena aplikace režimu `preferMode === 'step'` u `(w|h)+(s|d)` a `f+w` / `m+h` výhradně na začátek řetězce (`i === 0`), aby odbočky uprostřed řetězce (`Bratr ➔ Manželka ➔ Syn` = **Synovec**, `Otec ➔ Otec ➔ Manželka` = **Babička**, `Syn ➔ Manželka ➔ Otec ➔ Manželka` = **Svatka**) fungovaly správně i při zapnuté preferenci nevlastních vztahů.
   - **Rozšíření automatizovaných testů (`tests/reductions_mutual.test.js` sekce 11, 12 a 13)**:
     - Testuje všech **340 genderových kombinací** napříč **39 strukturními vzory** + jejich **680 recipročních inverzí**, víceúrovňové pasti i přesnou hranici přechodu na *Vzdálený příbuzný* (**143 / 143 unit testů** v `npm test`, **380 / 380** v `tests/audit_all.js`).
+- [x] **Sestavení verze 1.1.0 (`versionCode 5`), sekce Novinky (What's New) s tagy `feat`/`bug` a příprava Google Play balíčku**:
+  - Navýšena verze aplikace na **`1.1.0`** (`versionCode 5` v `android/app/build.gradle`, `package.json` a `sw.js` `family-calc-v20`).
+  - Do aplikace doplněna sekce **✨ Novinky / What's New (Changelog)** (`#settingsWhatsNewDetails` v `#settingsModal` + rychlá položka `#menuWhatsNewBtn` v hlavním menu) s barevnými štítky `feat` a `bug`.
+  - Do `google-play/STORE_LISTING.md` (sekce 6) doplněny připravené poznámky k vydání pro Google Play Console (`<cs-CZ>` i `<en-US>` do 500 znaků) s klasickými tagy `[feat]` a `[bug]`.
+  - Zkompilován R8-optimalizovaný a kryptograficky podepsaný produkční balíček `build-android/Rodinna-Kalkulacka-release.aab` (`v1.1.0`, `versionCode 5`) a testovací `build-android/Rodinna-Kalkulacka-debug.apk`.
 

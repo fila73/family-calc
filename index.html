@@ -390,9 +390,19 @@
         </button>
 
         <div class="menu-divider"></div>
-        <div class="menu-section-label">Podpora projektu</div>
+        <div class="menu-section-label">O aplikaci & Podpora</div>
 
-        <!-- 11. Podpořit vývoj (Dobrovolný příspěvek) -->
+        <!-- 11. Novinky ve verzi (What's New) -->
+        <button class="menu-item-btn" id="menuWhatsNewBtn" type="button">
+          <span class="menu-item-icon" style="background: rgba(59, 130, 246, 0.16); color: #60a5fa;">✨</span>
+          <div class="menu-item-content">
+            <div class="menu-item-title">Novinky (What's New) <span class="changelog-ver-pill">v1.1.0</span></div>
+            <div class="menu-item-desc">Přehled nových funkcí (feat) a oprav (bug) v aktuální verzi</div>
+          </div>
+          <span class="menu-item-arrow">➔</span>
+        </button>
+
+        <!-- 12. Podpořit vývoj (Dobrovolný příspěvek) -->
         <button class="menu-item-btn" id="menuDonateBtn" type="button">
           <span class="menu-item-icon" style="background: rgba(245, 158, 11, 0.15); color: #fbbf24;">☕</span>
           <div class="menu-item-content">
@@ -581,17 +591,84 @@
 
         <!-- Sekce Informace a soukromí -->
         <div class="settings-section">
-          <div class="settings-section-title">O aplikaci</div>
+          <div class="settings-section-title">O aplikaci &amp; Novinky</div>
           
           <div class="setting-item">
             <div class="setting-item-info">
               <div class="setting-item-label">
                 <span class="setting-item-icon">⭐</span>
                 <span>Rodinná kalkulačka vztahů</span>
+                <span class="changelog-ver-pill">v1.1.0</span>
               </div>
-              <div class="setting-item-desc">Verze 1.0.0 • 100% offline nástroj • Bez reklam a sledování</div>
+              <div class="setting-item-desc">Verze 1.1.0 (build 5) • 100% offline nástroj • Bez reklam a sledování</div>
             </div>
           </div>
+
+          <details class="settings-rules-details" id="settingsWhatsNewDetails">
+            <summary class="settings-rules-summary">
+              <span>✨ Novinky / What's New (Changelog)</span>
+              <span class="settings-rules-chevron">▾</span>
+            </summary>
+            <div class="settings-rules-content changelog-content">
+              <div class="changelog-version-block">
+                <div class="changelog-version-header">
+                  <strong>Verze 1.1.0 (build 5)</strong>
+                  <span class="changelog-date">Říjen 2026</span>
+                </div>
+                <ul class="changelog-list">
+                  <li>
+                    <span class="changelog-tag tag-feat">feat</span>
+                    <span><strong>Přepínač výkladu nejednoznačných vazeb (<code>🔗 Vlastní</code> vs. <code>🔀 Nevlastní</code>)</strong> na liště modifikátorů i v Nastavení pro volbu mezi automatickým zkracováním oklik (např. <em>Manželka → Syn = Syn</em>) a nevlastním výkladem (<em>Nevlastní syn / pastorek</em>).</span>
+                  </li>
+                  <li>
+                    <span class="changelog-tag tag-feat">feat</span>
+                    <span><strong>Pravidlo prosté cesty a hlídač slepých uliček</strong> – automatické uzamčení zpětných kláves, které by vracely cestu do již navštíveného uzlu (s odemčením po stisku <code>⇧ Nevlastní</code>).</span>
+                  </li>
+                  <li>
+                    <span class="changelog-tag tag-feat">feat</span>
+                    <span><strong>Informační lišta při zkrácení řetězce</strong> s vysvětlením, jedním kliknutím pro přepnutí na nevlastní vztah a volbou <em>„Už nezobrazovat“</em>.</span>
+                  </li>
+                  <li>
+                    <span class="changelog-tag tag-feat">feat</span>
+                    <span><strong>Podpora stejnopohlavních afinitních vazeb</strong> v kalkulačce (<em>bratr → manžel = Švagr</em>, <em>sestra → manželka = Švagrová</em>, <em>syn → manžel = Zeť</em>, <em>dcera → manželka = Snacha</em>) při zachování čistě tradičního fondu otázek v Kvízu.</span>
+                  </li>
+                  <li>
+                    <span class="changelog-tag tag-bug">bug</span>
+                    <span><strong>Kompletní pokrytí všech 2<sup>k</sup> kombinací pohlaví u 2. kolene a svatovství</strong> – opraveno 58 dříve nepokrytých kombinací pro <em>Bratrance/Sestřenice z 2. kolene</em> (všech 32 cest), <em>Strýce/Tety z 2. kolena</em> (16 cest), <em>Synovce/Neteře z 2. kolena</em> (16 cest) a <em>Svaty/Svatky</em> (8 cest).</span>
+                  </li>
+                  <li>
+                    <span class="changelog-tag tag-bug">bug</span>
+                    <span><strong>Víceúrovňové redukce přes potomky a uprostřed řetězce</strong> – opraveno vyhodnocení cest typu <em>Bratr → Syn → Otec = Bratr</em>, <em>Syn → Syn → Matka = Snacha</em>, <em>Otec → Bratr → Syn → Matka = Teta</em> a zachování rodinných vazeb uprostřed cesty i v režimu <em>Preferovat nevlastní</em>.</span>
+                  </li>
+                  <li>
+                    <span class="changelog-tag tag-bug">bug</span>
+                    <span><strong>Doplnění přímých položek Druh / Družka (<code>step_h</code>, <code>step_w</code>)</strong> a partnerů otčíma/macechy a hlubokých generací <em>Praprastrýc</em>, <em>Prapratchán</em> a <em>Praprazeť</em>.</span>
+                  </li>
+                </ul>
+              </div>
+
+              <div class="changelog-version-block">
+                <div class="changelog-version-header">
+                  <strong>Verze 1.0.3 (build 4)</strong>
+                  <span class="changelog-date">Předchozí vydání</span>
+                </div>
+                <ul class="changelog-list">
+                  <li>
+                    <span class="changelog-tag tag-feat">feat</span>
+                    <span><strong>Samostatná obrazovka Nastavení aplikace (<code>⚙️</code>)</strong> a nová dvouřádková hlavička.</span>
+                  </li>
+                  <li>
+                    <span class="changelog-tag tag-feat">feat</span>
+                    <span><strong>Přenos životních dat z GEDCOMu do minirodokmenu</strong> a obousměrná inverze stromu při zobrazení vzájemného vztahu.</span>
+                  </li>
+                  <li>
+                    <span class="changelog-tag tag-bug">bug</span>
+                    <span><strong>Přesný výpočet DNA (~25 %), 3. dědické třídy a překážky sňatku (§ 675 NOZ)</strong> u polorodých sourozenců a afinitních synovců/prasynovců (0 % DNA).</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </details>
 
           <div class="setting-item clickable-setting" id="settingPrivacyRow">
             <div class="setting-item-info">
