@@ -105,6 +105,18 @@ export const cs = {
       description: 'Dcera tvého nevlastního rodiče z jeho dřívějšího vztahu (žádná biologická příbuznost)',
       lineType: 'step'
     },
+    'step_h': {
+      name: 'Druh',
+      archaic: 'Nesezdaný partner / nový partner',
+      description: 'Mužský životní partner mimo manželství nebo druhý/nový partner v řetězci',
+      lineType: 'step'
+    },
+    'step_w': {
+      name: 'Družka',
+      archaic: 'Nesezdaná partnerka / nová partnerka',
+      description: 'Ženská životní partnerka mimo manželství nebo druhá/nová partnerka v řetězci',
+      lineType: 'step'
+    },
     'm,step_h,s': {
       name: 'Polobratr jednobřišní',
       archaic: 'Staročesky/latinsky frater uterinus',
@@ -514,15 +526,15 @@ export const cs = {
       lineType: 'collateral'
     },
     'f,b,s,s': {
-      name: 'Syn bratrance',
-      archaic: 'Druhý bratranec sestupně',
-      description: 'Syn tvého bratrance',
+      name: 'Synovec z 2. kolena',
+      archaic: 'Syn bratrance (druhý bratranec sestupně)',
+      description: 'Syn tvého bratrance (vnuk strýce)',
       lineType: 'collateral'
     },
     'f,b,s,d': {
-      name: 'Dcera bratrance',
-      archaic: 'Druhá sestřenice sestupně',
-      description: 'Dcera tvého bratrance',
+      name: 'Neteř z 2. kolena',
+      archaic: 'Dcera bratrance (druhá sestřenice sestupně)',
+      description: 'Dcera tvého bratrance (vnučka strýce)',
       lineType: 'collateral'
     },
 

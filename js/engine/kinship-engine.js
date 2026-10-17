@@ -136,9 +136,10 @@ export function simplifyChain(rawChain, egoGender = 'm', preferMode = 'own') {
 
       // 1. Tříprvkové redukce:
       // A) [muž] ➔ syn/dcera ➔ matka = [muž] ➔ manželka (švagrová / matka / snacha...)
-      if (nextNorm && thirdNorm && (nextNorm === 's' || nextNorm === 'd') && thirdNorm === 'm') {
+      //    [muž] ➔ syn/dcera ➔ otec = [muž] (návrat na téhož muže)
+      if (nextNorm && thirdNorm && (nextNorm === 's' || nextNorm === 'd')) {
         const curGender = getTokenGender(curNorm);
-        if (curGender === 'm') {
+        if (curGender === 'm' && thirdNorm === 'm') {
           // např. bratr ➔ syn ➔ matka = bratr ➔ manželka
           newChain.push(cur);
           newChain.push('w');
@@ -146,15 +147,26 @@ export function simplifyChain(rawChain, egoGender = 'm', preferMode = 'own') {
           changed = true;
           continue;
         }
-      }
-
-      // B) [žena] ➔ syn/dcera ➔ otec = [žena] ➔ manžel (švagr / otec / zeť...)
-      if (nextNorm && thirdNorm && (nextNorm === 's' || nextNorm === 'd') && thirdNorm === 'f') {
-        const curGender = getTokenGender(curNorm);
-        if (curGender === 'f') {
+        if (curGender === 'm' && thirdNorm === 'f') {
+          // např. bratr ➔ syn ➔ otec = bratr
+          newChain.push(cur);
+          i += 3;
+          changed = true;
+          continue;
+        }
+        // B) [žena] ➔ syn/dcera ➔ otec = [žena] ➔ manžel (švagr / otec / zeť...)
+        //    [žena] ➔ syn/dcera ➔ matka = [žena] (návrat na tutéž ženu)
+        if (curGender === 'f' && thirdNorm === 'f') {
           // např. sestra ➔ syn ➔ otec = sestra ➔ manžel
           newChain.push(cur);
           newChain.push('h');
+          i += 3;
+          changed = true;
+          continue;
+        }
+        if (curGender === 'f' && thirdNorm === 'm') {
+          // např. sestra ➔ dcera ➔ matka = sestra
+          newChain.push(cur);
           i += 3;
           changed = true;
           continue;
@@ -278,11 +290,11 @@ export function simplifyChain(rawChain, egoGender = 'm', preferMode = 'own') {
 
         // Partner (manželka / manžel) ➔ Dítě (syn / dcera):
         // V režimu 'own' (vlastní rodina) se zkrátí na vlastní dítě (s / d), pokud před partnerem není step_ uzel.
-        // V režimu 'step' (nevlastní vztahy) jde o nevlastní dítě (step_s / step_d).
+        // V režimu 'step' na začátku řetězce (Já -> Manželka -> Syn) jde o nevlastní dítě (step_s / step_d).
         const prevToken = i > 0 ? chain[i - 1] : null;
         const prevIsStep = prevToken && prevToken.startsWith('step_');
         if (!prevIsStep && (curNorm === 'w' || curNorm === 'h') && (nextNorm === 's' || nextNorm === 'd')) {
-          if (preferMode === 'step') {
+          if (preferMode === 'step' && i === 0) {
             newChain.push(nextNorm === 's' ? 'step_s' : 'step_d');
           } else {
             newChain.push(nextNorm);
@@ -342,15 +354,15 @@ export function simplifyChain(rawChain, egoGender = 'm', preferMode = 'own') {
 
         // Rodič -> Choť:
         // V režimu 'own': otec -> manželka = matka, matka -> manžel = otec.
-        // V režimu 'step': otec -> manželka = macecha (step_m), matka -> manžel = otčím (step_f).
+        // V režimu 'step' na začátku řetězce (Já -> Otec -> Manželka): macecha (step_m) / otčím (step_f).
         if (curNorm === 'f' && nextNorm === 'w') {
-          newChain.push(preferMode === 'step' ? 'step_m' : 'm');
+          newChain.push(preferMode === 'step' && i === 0 ? 'step_m' : 'm');
           i += 2;
           changed = true;
           continue;
         }
         if (curNorm === 'm' && nextNorm === 'h') {
-          newChain.push(preferMode === 'step' ? 'step_f' : 'f');
+          newChain.push(preferMode === 'step' && i === 0 ? 'step_f' : 'f');
           i += 2;
           changed = true;
           continue;
@@ -1018,6 +1030,27 @@ function generateDeepKinshipEntry(chain, dictionary) {
     );
   }
 
+  // Partner otčíma / macechy (len === 2: step_f/step_m + w/h/step_w/step_h)
+  if (
+    len === 2 &&
+    (norm[0] === 'step_f' || norm[0] === 'step_m') &&
+    (norm[1] === 'w' || norm[1] === 'h' || norm[1] === 'step_w' || norm[1] === 'step_h')
+  ) {
+    const isStepFather = norm[0] === 'step_f';
+    const isMaleSpouse = norm[1] === 'h' || norm[1] === 'step_h';
+    if (dictionary.code === 'cs') {
+      const parentGenitive = isStepFather ? 'otčíma' : 'macechy';
+      const spouseTitle = isMaleSpouse ? 'Manžel' : 'Manželka';
+      return {
+        id: `${norm[0]}_${norm[1]}`,
+        name: `${spouseTitle} ${parentGenitive}`,
+        archaic: null,
+        description: `Partner/ka tvého nevlastního rodiče (${parentGenitive})`,
+        lineType: 'step'
+      };
+    }
+  }
+
   if (len < 3) return null;
 
   // Samí otcové/matky: předkové
@@ -1152,6 +1185,93 @@ function generateDeepKinshipEntry(chain, dictionary) {
     );
   }
 
+  // Svat / Svatka: Dítě + Partner + Rodič (len === 3: s/d, w/h, f/m)
+  if (
+    len === 3 &&
+    (norm[0] === 's' || norm[0] === 'd') &&
+    (norm[1] === 'w' || norm[1] === 'h') &&
+    (norm[2] === 'f' || norm[2] === 'm')
+  ) {
+    const isMale = norm[2] === 'f';
+    return (
+      dictionary.relations[isMale ? 's,w,f' : 's,w,m'] ||
+      dictionary.relations[isMale ? 'd,h,f' : 'd,h,m'] ||
+      null
+    );
+  }
+
+  // Strýc / Teta z 2. kolena (bratranec / sestřenice rodiče: f/m, f/m, b/z, s/d)
+  if (
+    len === 4 &&
+    (norm[0] === 'f' || norm[0] === 'm') &&
+    (norm[1] === 'f' || norm[1] === 'm') &&
+    (norm[2] === 'b' || norm[2] === 'z') &&
+    (norm[3] === 's' || norm[3] === 'd')
+  ) {
+    const isMale = norm[3] === 's';
+    const isFatherParent = norm[0] === 'f';
+    if (dictionary.code === 'cs') {
+      const parentGenitive = isFatherParent ? 'otce' : 'matky';
+      const cousinTitle = isMale ? 'Bratranec' : 'Sestřenice';
+      return {
+        id: `first_cousin_once_removed_up_${norm.join('_')}`,
+        name: isMale ? 'Strýc z 2. kolena' : 'Teta z 2. kolena',
+        archaic: `${cousinTitle} ${parentGenitive}`,
+        description: `${cousinTitle} tvého ${parentGenitive} (1. bratranec s 1 generací posunu nahoru)`,
+        lineType: 'collateral'
+      };
+    }
+    return (
+      dictionary.relations[isMale ? 'f,f,b,s' : 'f,f,b,d'] ||
+      dictionary.relations[isMale ? 'm,m,z,s' : 'm,m,z,d'] ||
+      null
+    );
+  }
+
+  // Synovec / Neteř z 2. kolena (potomek bratrance / sestřenice: f/m, b/z, s/d, s/d)
+  if (
+    len === 4 &&
+    (norm[0] === 'f' || norm[0] === 'm') &&
+    (norm[1] === 'b' || norm[1] === 'z') &&
+    (norm[2] === 's' || norm[2] === 'd') &&
+    (norm[3] === 's' || norm[3] === 'd')
+  ) {
+    const isMale = norm[3] === 's';
+    const isMaleCousin = norm[2] === 's';
+    if (dictionary.code === 'cs') {
+      const childWord = isMale ? 'Syn' : 'Dcera';
+      const cousinGenitive = isMaleCousin ? 'bratrance' : 'sestřenice';
+      return {
+        id: `first_cousin_once_removed_down_${norm.join('_')}`,
+        name: isMale ? 'Synovec z 2. kolena' : 'Neteř z 2. kolena',
+        archaic: `${childWord} ${cousinGenitive}`,
+        description: `Potomek tvého 1. bratrance nebo sestřenice (1 generace posunu dolů)`,
+        lineType: 'collateral'
+      };
+    }
+    return (
+      dictionary.relations[isMale ? 'f,b,s,s' : 'f,b,s,d'] ||
+      dictionary.relations[isMale ? 'f,z,d,s' : 'f,z,d,d'] ||
+      null
+    );
+  }
+
+  // Bratranec / Sestřenice z 2. kolene (vnuk/vnučka sourozence prarodiče: f/m, f/m, b/z, s/d, s/d)
+  if (
+    len === 5 &&
+    (norm[0] === 'f' || norm[0] === 'm') &&
+    (norm[1] === 'f' || norm[1] === 'm') &&
+    (norm[2] === 'b' || norm[2] === 'z') &&
+    (norm[3] === 's' || norm[3] === 'd') &&
+    (norm[4] === 's' || norm[4] === 'd')
+  ) {
+    const isMale = norm[4] === 's';
+    return (
+      dictionary.relations[isMale ? 'f,f,b,s,s' : 'f,f,b,s,d'] ||
+      null
+    );
+  }
+
   // Partner + sourozenec + samí potomci: sešvagřený synovec / prasynovec (0% DNA, afinitní vztah)
   const firstIsSpouse = norm[0] === 'h' || norm[0] === 'w';
   const secondIsSibling = norm[1] === 'b' || norm[1] === 'z';
@@ -1225,6 +1345,68 @@ function generateDeepKinshipEntry(chain, dictionary) {
       description: `Affinity relative via spouse's sibling`,
       lineType: 'affinity'
     };
+  }
+
+  // Předek + sourozenec + partner: sešvagřený prastrýc / prateta (inverze k S,B,C,C...)
+  if (
+    len >= 4 &&
+    norm.slice(0, len - 2).every(t => t === 'f' || t === 'm') &&
+    (norm[len - 2] === 'b' || norm[len - 2] === 'z') &&
+    (norm[len - 1] === 'h' || norm[len - 1] === 'w')
+  ) {
+    const isMale = norm[len - 1] === 'h';
+    const praCount = len - 3; // f,f,b,w -> 1 (Prateta), f,f,f,b,w -> 2 (Praprateta)
+    const praPrefix = 'pra'.repeat(praCount);
+    if (dictionary.code === 'cs') {
+      const base = isMale ? 'strýc' : 'teta';
+      const term = `${praPrefix}${base}`;
+      const termCap = term.charAt(0).toUpperCase() + term.slice(1);
+      return {
+        id: `inlaw_uncle_${len}_${norm[len - 1]}`,
+        name: termCap,
+        archaic: `${isMale ? 'Přiženěný' : 'Přivdaná'} ${term}`,
+        description: `${isMale ? 'Manžel' : 'Manželka'} sourozence tvého předka v ${len - 2}. generaci`,
+        lineType: 'affinity'
+      };
+    }
+  }
+
+  // Partner + samí předci (len >= 4): prapratchán / prapratchyně
+  if (len >= 4 && (norm[0] === 'h' || norm[0] === 'w') && norm.slice(1).every(t => t === 'f' || t === 'm')) {
+    const isMale = norm[len - 1] === 'f';
+    const praCount = len - 2; // w,f,f = 1 (Pratchán), w,f,f,f = 2 (Prapratchán)
+    const praPrefix = 'pra'.repeat(praCount);
+    if (dictionary.code === 'cs') {
+      const base = isMale ? 'tchán' : 'tchyně';
+      const term = `${praPrefix}${base}`;
+      const termCap = term.charAt(0).toUpperCase() + term.slice(1);
+      return {
+        id: `inlaw_ancestor_${len}_${norm[len - 1]}`,
+        name: termCap,
+        archaic: null,
+        description: `Předek tvého manželského partnera (${len - 1}. generace)`,
+        lineType: 'affinity'
+      };
+    }
+  }
+
+  // Samí potomci + partner (len >= 4): praprazeť / praprasnacha
+  if (len >= 4 && norm.slice(0, len - 1).every(t => t === 's' || t === 'd') && (norm[len - 1] === 'h' || norm[len - 1] === 'w')) {
+    const isMale = norm[len - 1] === 'h';
+    const praCount = len - 2; // s,s,w = 1 (Prasnacha), s,s,s,w = 2 (Praprasnacha)
+    const praPrefix = 'pra'.repeat(praCount);
+    if (dictionary.code === 'cs') {
+      const base = isMale ? 'zeť' : 'snacha';
+      const term = `${praPrefix}${base}`;
+      const termCap = term.charAt(0).toUpperCase() + term.slice(1);
+      return {
+        id: `inlaw_descendant_${len}_${norm[len - 1]}`,
+        name: termCap,
+        archaic: null,
+        description: `${isMale ? 'Manžel' : 'Manželka'} tvého potomka v ${len - 1}. generaci`,
+        lineType: 'affinity'
+      };
+    }
   }
 
   return null;
