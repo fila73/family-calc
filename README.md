@@ -5,11 +5,13 @@ An interactive web application inspired by the Chinese kinship calculator (亲�
 ## Features
 - **Calculator Keypad**: Mobile-optimized layout with dark mode ergonomics.
 - **Reduction Rules Engine**: Automatic simplification of compound relationships (e.g. *Brother ➔ Son ➔ Mother* reduces to *Sister-in-law*, *Stepmother ➔ other husband ➔ son* reduces to *Stepbrother*, *Wife ➔ Brother ➔ Son* reduces to *Nephew*).
-- **Modifier Keys**:
-  - **`⇧ Step` (Nevlastní)**: Step-parents (*Otčím*, *Macecha*), step-children (*Pastorek*), half-siblings (*jednobřišní* / *jednokrevní*), and step-siblings.
+- **Modifier Keys & Ambiguous Path Preference Toggle**:
+  - **`⇧ Step` (Nevlastní)**: Step-parents (*Otčím*, *Macecha*), step-children (*Nevlastní syn / Pastorek*, *Nevlastní dcera / Pastorkyně*), half-siblings (*jednobřišní* / *jednokrevní*), and step-siblings.
   - **`✝ Godparent` (Křestní)**: Spiritual kinship (*Kmotr*, *Kmotra*, *Kmotřenec*, *Kmotřenka*).
+  - **`🏠 Own (shorten)` vs. `🔀 Prefer step` toggle**: Controls how indirect detours entered without `⇧ Step` are decoded (e.g., *Me ➔ Wife ➔ Son* shortens to *Me ➔ Son* in `own` mode with an undo/mute banner, or evaluates to *Stepson* in `step` mode).
+- **Simple Path Rule & Dead-End Prevention**: A path never returns to an already visited node. Pure backtracking keys (e.g. *Husband* right after *Wife*, or *Father* after *Me [male] ➔ Son*) are automatically disabled in standard mode and unlocked when `⇧ Step` is pressed.
 - **Mutual Relationship Mode (互查)**: Determine reciprocal terms ("What does this relative call me?") with active neon button highlighting, breadcrumb reciprocal indicators, and target-speaker perspective.
-- **Fast Headless Test Suite**: Full suite of 96 unit tests (`npm test`) and 188 relationships audit (368+ bidirectional runs) validating 100% of relationships, half-sibling consanguinity/NOZ succession, and mutual query inversions without browser overhead.
+- **Fast Headless Test Suite**: Full suite of **113 unit tests** (`npm test`) and 188 relationships audit (376 bidirectional runs) validating 100% of relationships, half-sibling consanguinity/NOZ succession, preference modes, dead-end guards, and mutual query inversions without browser overhead.
 - **Visual Family Tree Modal (`#treeModal`)**: Interactive graphical chain with avatars, step connectors, directional arrows, and target node highlighting. When loaded from GEDCOM, displays real ancestor/descendant names, birth and death dates (`*1928 – †2005`), and automatic bidirectional path reversal for mutual relationships.
 - **Kinship Quiz Mode (`#quizModal`)**: Educational game mode with dynamic question generation strictly adhering to conservative/traditional family ties (164 verified items pool), while the calculator itself fully supports natural same-sex affinity combinations (*brother ➔ husband = brother-in-law*, *mother ➔ brother ➔ husband = uncle*, etc.).
 - **Voice Text-to-Speech (🔊 TTS)**: Natural speech synthesis in all 25 languages with animated sound waves.
@@ -25,7 +27,7 @@ An interactive web application inspired by the Chinese kinship calculator (亲�
 - **Web Audio Click Feedback & Haptics (🔊📳)**: Zero-latency synthesized audio click and gentle haptic vibration feedback with dedicated toggles in the new Settings screen.
 - **Calculation History (🕒)**: Auto-save previous calculations with one-click reload.
 - **Dictionary Explorer & Reverse Search (📖)**: Full-text search of all relationship terms with direct loading into the calculator.
-- **Hamburger Drawer Menu (☰) & Dedicated Settings Screen (⚙️)**: Clean mobile menu organizing all tools and featuring a dedicated Settings modal (`#settingsModal`) for sound toggles, haptics, language selection, default proband gender, and privacy info.
+- **Hamburger Drawer Menu (☰) & Dedicated Settings Screen (⚙️)**: Clean mobile menu organizing all tools and featuring a dedicated Settings modal (`#settingsModal`) for sound toggles, haptics, ambiguous path preference mode (`own` vs `step`), shortening notifications, rules guide, language selection, default proband gender, and privacy info.
 - **2-Row Header Layout & Quick Language Selector**: Structured 2-row header (Row 1: App Title + Quick Language Trigger `🇨🇿 CS ▾` + Hamburger `☰`; Row 2: Subtitle) preventing multi-line clutter on narrower screens.
 - **Scalable Language Selector Dialog**: Modern modal dialog with instant search (e.g. *pol*, *jap*, *viet*, *deutsch*, *ukr*, *tur*), categorized language families, and recent languages quick chips with local storage persistence.
 - **25 Fully Localized Languages**:

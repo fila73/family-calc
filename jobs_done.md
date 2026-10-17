@@ -401,6 +401,21 @@
   - V `android/variables.gradle` navýšen `targetSdkVersion` z `35` na **`36`** (při zachování `minSdkVersion = 24` pro plnou zpětnou kompatibilitu se staršími zařízeními od Androidu 7.0+).
   - Sestaven a na tabletu Lenovo (`TB328XU`, Android 12 / API 31) přímo otestován R8-optimalizovaný a kryptograficky podepsaný produkční balíček `build-android/Rodinna-Kalkulacka-release.aab` (`versionCode 4` / `1.0.3`, velikost **2,18 MB** / 2 283 KB).
 
+## [2026-10-17]
+- [x] **Pravidlo prosté cesty, automatické blokování slepých uliček a přepínač režimu nejednoznačných vazeb (`🏠 Vlastní` vs. `🔀 Nevlastní`)**:
+  - **Pravidlo prosté cesty (zákaz návratu do již použitého uzlu)**:
+    - Implementována a exportována funkce `getDeadEndTokens(chain, egoGender)` v `js/engine/kinship-engine.js`, která detekuje klávesy vedoucí výhradně zpět do již navštíveného uzlu (např. `Manžel` ihned po `Manželka`, `Manželka` ihned po `Manžel`, `Otec` po `[muž] ➔ Syn/Dcera`, `Matka` po `[žena] ➔ Syn/Dcera`).
+    - V běžném režimu klávesnice jsou tato tlačítka automaticky **deaktivována (`disabled`)** s nápovědním popisem; po stisknutí modifikátoru `⇧ Nevlastní` se okamžitě odemknou (*Nový manžel*, *Nová manželka*, *Otčím*, *Macecha*).
+  - **Dva režimy vyhodnocení nejednoznačných vazeb (`preferMode`: `'own'` vs. `'step'`)**:
+    - **Režim `'own'` (`🏠 Vlastní (zkracovat)` – výchozí)**: Nepřímé okliky zadané bez modifikátoru `⇧ Nevlastní` se okamžitě zkrátí **přímo v naklikaném řetězci (`this.chain`)** na přímý vztah (`Já ➔ Manželka ➔ Syn` ➔ `Já ➔ Syn`, `Já ➔ Bratr ➔ Sestra` ➔ `Já ➔ Sestra`, `Já ➔ Otec ➔ Syn` ➔ `Já ➔ Bratr`, `Já ➔ Otec ➔ Manželka` ➔ `Já ➔ Matka`, `Já ➔ Bratr ➔ Otec` ➔ `Já ➔ Otec`).
+    - **Informační lišta o zkrácení (`#shortenNoticeBanner`)**: Při automatickém zkrácení v režimu `'own'` se zobrazí lišta s vysvětlením a dvěma tlačítky: **„Chtěl(a) jsem nevlastní“** (okamžitě obnoví nezkrácený řetězec a přepne do režimu `'step'`) a **„Už nezobrazovat“** (uloží `family_calc_shorten_notify = false` do `localStorage`; v Nastavení lze upozornění kdykoliv znovu zapnout).
+    - **Režim `'step'` (`🔀 Preferovat nevlastní`)**: Naklikaný řetězec se na displeji **nezkracuje** a `simplifyChain(..., 'step')` vyhodnotí nepřímé okliky jako nevlastní/polorodé vazby (`Já ➔ Manželka ➔ Syn` = **Nevlastní syn** / *Pastorek*, `Já ➔ Otec ➔ Manželka` = **Macecha**, `Já ➔ Otec ➔ Syn` = **Polobratr jednokrevní**, `Já ➔ Bratr ➔ Sestra` = **Nevlastní sestra**, `Já ➔ Bratr ➔ Otec` = **Otčím**).
+  - **Ovládací prvky v UI a dokumentace**:
+    - Přidán rychlý přepínač `#btnPreferMode` přímo na lištu modifikátorů nad klávesnicí (vedle `⇧ Nevlastní` a `✝ Křestní`).
+    - V `#settingsModal` doplněna sekce **„Pravidla výpočtu a nejednoznačné vazby“** s přepínačem režimu (`#settingPrefOwn` / `#settingPrefStep`), přepínačem upozornění (`#settingShortenNotifyToggle`) a rozbalovacím přehledem pravidel a příkladů (`#settingsRulesDetails`).
+    - V `js/i18n/cs.js` sjednocen primární název `step_s` / `step_d` na srozumitelné **Nevlastní syn** / **Nevlastní dcera** (s historickým tvarem *Pastorek* / *Pastorkyně* v poli `archaic`).
+    - Rozšířena testovací sada `tests/reductions_mutual.test.js` o sekce 9 a 10 – celkem **113 / 113 unit testů** (`npm test`) a 376 / 376 obousměrných auditních běhů (`node tests/audit_all.js`).
+
 
 
 

@@ -99,6 +99,11 @@
   - Plná podpora přirozených afinitních vazeb v kalkulačce (`b,h` = Švagr, `m,b,h` = Strýc, `z,w` = Švagrová, `s,h` = Zeť, `d,w` = Snacha – celkem 188 položek v `cs.js`), kde pohlaví a typ vazby přímo určují české pojmenování.
   - Striktní oddělení kvízu: filtr `isConservative(key)` zajišťuje, že do kvízu nevstupuje žádná nekonzervativní vazba (kvízový fond 164 prověřených otázek).
   - Rozšíření headless testů na 96 unit testů (`npm test`).
+- [x] 45. **Pravidlo prosté cesty, blokování slepých uliček a přepínač režimu nejednoznačných vazeb (`🏠 Vlastní` vs. `🔀 Nevlastní`)**:
+  - **Pravidlo prosté cesty**: Cesta nikdy nevede zpět do již použitého uzlu; tlačítka vedoucí výhradně zpět (*Manžel* po *Manželce*, *Otec* po *Já [muž] ➔ Syn*) se automaticky deaktivují (`disabled`) a odemknou až po stisku `⇧ Nevlastní`.
+  - **Režim `🏠 Vlastní (zkracovat)` vs. `🔀 Preferovat nevlastní (nezkracovat)`**: Přepínač přímo na liště modifikátorů (`#btnPreferMode`) i v Nastavení (`#settingsModal`). V režimu `own` se nepřímé okliky (*Já ➔ Manželka ➔ Syn*, *Já ➔ Bratr ➔ Sestra*, *Já ➔ Otec ➔ Syn*) okamžitě zkrátí přímo v naklikaném řetězci s informační lištou (`#shortenNoticeBanner`) a možností jedním klikem obnovit nevlastní vztah či ztlumit další upozornění („Už nezobrazovat“). V režimu `step` se řetězec nezkracuje a vyhodnotí jako nevlastní/polorodý vztah (*Nevlastní syn*, *Nevlastní sestra*, *Polobratr jednokrevní*, *Macecha*, *Otčím*).
+  - Rozšíření headless testů na **113 unit testů** (`npm test`).
+
 
 
 
