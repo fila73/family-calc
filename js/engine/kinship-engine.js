@@ -79,10 +79,42 @@ export function normalizeToken(token) {
 }
 
 /**
- * Zjednoduší a normalizuje řetězec vztahů.
- * Odstraňuje okamžité návraty k sobě (např. manžel manželky = já, syn otce = bratr/já apod.)
+ * Vrátí množinu (Set) základních tokenů, které by v aktuálním stavu řetězce vedly
+ * výhradně zpět do již použitého uzlu (tzv. slepá ulička).
+ * Uživatel může pro zadání dalšího partnera nebo nevlastního rodiče použít modifikátor ⇧ Nevlastní.
  */
-export function simplifyChain(rawChain, egoGender = 'm') {
+export function getDeadEndTokens(chain, egoGender = 'm') {
+  if (!chain || chain.length === 0) return new Set();
+  const last = normalizeToken(chain[chain.length - 1]);
+  const prevGender =
+    chain.length === 1
+      ? (egoGender === 'm' ? 'm' : 'f')
+      : (getTokenGender(chain[chain.length - 2]) || 'm');
+
+  // Po manželce vede "manžel" zpět na tutéž osobu (a "manželka" nedává smysl)
+  if (last === 'w' || last === 'step_w') {
+    return new Set(['h', 'w']);
+  }
+  // Po manželovi vede "manželka" zpět na tutéž osobu (a "manžel" nedává smysl)
+  if (last === 'h' || last === 'step_h') {
+    return new Set(['w', 'h']);
+  }
+  // Po dítěti (syn/dcera) vede rodič stejného pohlaví jako předchozí uzel zpět na týž uzel
+  if (last === 's' || last === 'd' || last === 'step_s' || last === 'step_d') {
+    return new Set(prevGender === 'm' ? ['f'] : ['m']);
+  }
+  return new Set();
+}
+
+/**
+ * Zjednoduší a normalizuje řetězec vztahů.
+ * @param {string[]} rawChain - Vstupní pole tokenů
+ * @param {string} egoGender - Pohlaví výchozí osoby ('m' nebo 'f')
+ * @param {string} preferMode - Režim vyhodnocení nejednoznačných vazeb:
+ *   'own' (výchozí) = předpokládat vlastní rodinu a zkracovat okliky (Manželka -> Syn = Syn, Bratr -> Sestra = Sestra)
+ *   'step' = předpokládat nevlastní vztahy u oklik (Manželka -> Syn = Pastorek/Nevlastní syn, Bratr -> Sestra = Nevlastní sestra)
+ */
+export function simplifyChain(rawChain, egoGender = 'm', preferMode = 'own') {
   if (!rawChain || rawChain.length === 0) return [];
 
   let chain = [...rawChain];
@@ -216,7 +248,7 @@ export function simplifyChain(rawChain, egoGender = 'm') {
           continue;
         }
         // JÁ (žena) ➔ syn/dcera ➔ otec = můj manžel
-        if ((curNorm === 's' || curNorm === 'd') && nextNorm === 'f' && egoGender === 'f') {
+        if ((curNorm === 's' || curNorm === 'd') && nextNorm === 'f' && egoGender !== 'm') {
           newChain.push('h');
           i += 2;
           changed = true;
@@ -229,7 +261,7 @@ export function simplifyChain(rawChain, egoGender = 'm') {
           continue;
         }
         // JÁ (žena) ➔ syn/dcera ➔ matka = JÁ (zrušení)
-        if ((curNorm === 's' || curNorm === 'd') && nextNorm === 'm' && egoGender === 'f') {
+        if ((curNorm === 's' || curNorm === 'd') && nextNorm === 'm' && egoGender !== 'm') {
           i += 2;
           changed = true;
           continue;
@@ -244,43 +276,81 @@ export function simplifyChain(rawChain, egoGender = 'm') {
           continue;
         }
 
-        // Řetězení sourozenců (bratr bratra = bratr)
+        // Partner (manželka / manžel) ➔ Dítě (syn / dcera):
+        // V režimu 'own' (vlastní rodina) se zkrátí na vlastní dítě (s / d), pokud před partnerem není step_ uzel.
+        // V režimu 'step' (nevlastní vztahy) jde o nevlastní dítě (step_s / step_d).
+        const prevToken = i > 0 ? chain[i - 1] : null;
+        const prevIsStep = prevToken && prevToken.startsWith('step_');
+        if (!prevIsStep && (curNorm === 'w' || curNorm === 'h') && (nextNorm === 's' || nextNorm === 'd')) {
+          if (preferMode === 'step') {
+            newChain.push(nextNorm === 's' ? 'step_s' : 'step_d');
+          } else {
+            newChain.push(nextNorm);
+          }
+          i += 2;
+          changed = true;
+          continue;
+        }
+
+        // Řetězení sourozenců:
+        // V režimu 'own': bratr/sestra bratra = bratr, bratr/sestra sestry = sestra.
+        // V režimu 'step' na začátku řetězce (Já -> Bratr -> Sestra): nevlastní sourozenec (step_b / step_z).
         if ((curNorm === 'b' || curNorm === 'z') && nextNorm === 'b') {
-          newChain.push('b');
+          if (preferMode === 'step' && i === 0) {
+            newChain.push('step_b');
+          } else {
+            newChain.push(next === 'ob' || next === 'lb' ? next : 'b');
+          }
           i += 2;
           changed = true;
           continue;
         }
         if ((curNorm === 'b' || curNorm === 'z') && nextNorm === 'z') {
-          newChain.push('z');
+          if (preferMode === 'step' && i === 0) {
+            newChain.push('step_z');
+          } else {
+            newChain.push(next === 'oz' || next === 'lz' ? next : 'z');
+          }
           i += 2;
           changed = true;
           continue;
         }
 
-        // Dítě a jeho sourozenec (synův/dceřin bratr je syn téhož rodiče, synova/dceřina sestra je dcera téhož rodiče)
+        // Dítě a jeho sourozenec:
+        // V režimu 'own': synův/dceřin bratr = syn, synova/dceřina sestra = dcera.
+        // V režimu 'step' na začátku řetězce (Já -> Syn -> Bratr): nevlastní syn / dcera (step_s / step_d).
         if ((curNorm === 's' || curNorm === 'd') && nextNorm === 'b') {
-          newChain.push('s');
+          if (preferMode === 'step' && i === 0) {
+            newChain.push('step_s');
+          } else {
+            newChain.push('s');
+          }
           i += 2;
           changed = true;
           continue;
         }
         if ((curNorm === 's' || curNorm === 'd') && nextNorm === 'z') {
-          newChain.push('d');
+          if (preferMode === 'step' && i === 0) {
+            newChain.push('step_d');
+          } else {
+            newChain.push('d');
+          }
           i += 2;
           changed = true;
           continue;
         }
 
-        // Rodič -> Choť (vlastní rodina)
+        // Rodič -> Choť:
+        // V režimu 'own': otec -> manželka = matka, matka -> manžel = otec.
+        // V režimu 'step': otec -> manželka = macecha (step_m), matka -> manžel = otčím (step_f).
         if (curNorm === 'f' && nextNorm === 'w') {
-          newChain.push('m');
+          newChain.push(preferMode === 'step' ? 'step_m' : 'm');
           i += 2;
           changed = true;
           continue;
         }
         if (curNorm === 'm' && nextNorm === 'h') {
-          newChain.push('f');
+          newChain.push(preferMode === 'step' ? 'step_f' : 'f');
           i += 2;
           changed = true;
           continue;
@@ -342,30 +412,44 @@ export function simplifyChain(rawChain, egoGender = 'm') {
           continue;
         }
 
-        // Sourozenec -> Otec / Matka = můj Otec / Matka
+        // Sourozenec -> Otec / Matka:
+        // V režimu 'own': můj Otec / Matka.
+        // V režimu 'step' na začátku řetězce (Já -> Bratr -> Otec): Otčím (step_f) / Macecha (step_m).
         if ((curNorm === 'b' || curNorm === 'z') && nextNorm === 'f') {
-          newChain.push('f');
+          newChain.push(preferMode === 'step' && i === 0 ? 'step_f' : 'f');
           i += 2;
           changed = true;
           continue;
         }
         if ((curNorm === 'b' || curNorm === 'z') && nextNorm === 'm') {
-          newChain.push('m');
+          newChain.push(preferMode === 'step' && i === 0 ? 'step_m' : 'm');
           i += 2;
           changed = true;
           continue;
         }
 
-        // Dítě -> Otec/Matka
-        // Syn/dcera mého otce/matky = bratr/sestra (pokud ne já)
+        // Rodič -> Dítě (Otec/Matka -> Syn/Dcera):
+        // Podle pravidla neopakování uzlů nejde o návrat na uzel Já, ale o dalšího potomka rodiče:
+        // V režimu 'own': vlastní sourozenec (b / z).
+        // V režimu 'step' na začátku řetězce (Já -> Otec -> Syn): polorodý sourozenec (step_m,s / step_f,s).
         if ((curNorm === 'f' || curNorm === 'm') && nextNorm === 's') {
-          newChain.push('b');
+          if (preferMode === 'step' && i === 0) {
+            newChain.push(curNorm === 'f' ? 'step_m' : 'step_f');
+            newChain.push('s');
+          } else {
+            newChain.push('b');
+          }
           i += 2;
           changed = true;
           continue;
         }
         if ((curNorm === 'f' || curNorm === 'm') && nextNorm === 'd') {
-          newChain.push('z');
+          if (preferMode === 'step' && i === 0) {
+            newChain.push(curNorm === 'f' ? 'step_m' : 'step_f');
+            newChain.push('d');
+          } else {
+            newChain.push('z');
+          }
           i += 2;
           changed = true;
           continue;
@@ -376,7 +460,7 @@ export function simplifyChain(rawChain, egoGender = 'm') {
       i += 1;
     }
 
-    if (newChain.length !== chain.length) {
+    if (newChain.length !== chain.length || newChain.some((v, idx) => v !== chain[idx])) {
       chain = newChain;
       changed = true;
     }
@@ -402,10 +486,11 @@ export function isHalfSiblingKey(key) {
   );
 }
 
-export function invertChain(chain, egoGender = 'm') {
+export function invertChain(chain, egoGender = 'm', preferMode = 'own') {
   if (!chain || chain.length === 0) return [];
 
-  const key = chainToKey(chain);
+  const effectiveChain = preferMode === 'step' ? simplifyChain(chain, egoGender, 'step') : chain;
+  const key = chainToKey(effectiveChain);
   // Polorodí sourozenci ze strany matky (jednobřišní / uterine)
   if (key === 'm,step_h,s' || key === 'm,step_h,d' || key === 'step_f,s' || key === 'step_f,d') {
     return ['step_f', egoGender === 'm' ? 's' : 'd'];
@@ -417,15 +502,15 @@ export function invertChain(chain, egoGender = 'm') {
 
   // Vypočteme pohlaví každé osoby na cestě od Ega
   const genders = [egoGender];
-  for (let i = 0; i < chain.length; i++) {
-    const token = chain[i];
+  for (let i = 0; i < effectiveChain.length; i++) {
+    const token = effectiveChain[i];
     genders.push(getTokenGender(token) || 'm');
   }
 
   const inverted = [];
   // Procházíme od konce řetězce k začátku
-  for (let i = chain.length - 1; i >= 0; i--) {
-    const step = chain[i];
+  for (let i = effectiveChain.length - 1; i >= 0; i--) {
+    const step = effectiveChain[i];
     const prevPersonGender = genders[i]; // Pohlaví osoby, ke které se vracíme
     const stepNorm = normalizeToken(step);
 
@@ -493,7 +578,7 @@ export function invertChain(chain, egoGender = 'm') {
     }
   }
 
-  return simplifyChain(inverted, genders[genders.length - 1]);
+  return simplifyChain(inverted, genders[genders.length - 1], 'own');
 }
 
 /**
@@ -849,7 +934,7 @@ export function chainToKey(chain) {
 /**
  * Vyřeší vztah pomocí jazykového slovníku
  */
-export function resolveKinship(chain, egoGender = 'm', dictionary) {
+export function resolveKinship(chain, egoGender = 'm', dictionary, preferMode = 'own') {
   if (!chain || chain.length === 0) {
     return {
       id: 'self',
@@ -866,7 +951,7 @@ export function resolveKinship(chain, egoGender = 'm', dictionary) {
     };
   }
 
-  const simplified = simplifyChain(chain, egoGender);
+  const simplified = simplifyChain(chain, egoGender, preferMode);
   const rawSimplifiedKey = simplified.join(',');
   const key = chainToKey(simplified);
 

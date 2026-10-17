@@ -1,4 +1,4 @@
-import { resolveKinship, simplifyChain, invertChain, getTokenGender } from '../js/engine/kinship-engine.js';
+import { resolveKinship, simplifyChain, invertChain, getTokenGender, getDeadEndTokens } from '../js/engine/kinship-engine.js';
 import { cs } from '../js/i18n/cs.js';
 import { en } from '../js/i18n/en.js';
 import { sk } from '../js/i18n/sk.js';
@@ -204,6 +204,49 @@ console.log('\n8. Stejnopohlavní afinitní vazby v kalkulačce:');
   assertEquals(res6.name, 'Snacha', 'd, w (dcera -> manželka) = Snacha');
 }
 
+// 9. Režimy vyhodnocení nejednoznačných vazeb (preferMode: 'own' vs 'step')
+console.log('\n9. Režimy vyhodnocení nejednoznačných vazeb (preferMode: own vs step):');
+{
+  // A) Já -> Manželka -> Syn (w, s)
+  assertEquals(simplifyChain(['w', 's'], 'm', 'own').join(','), 's', 'own: w,s zkrátí na s (Syn)');
+  assertEquals(resolveKinship(['w', 's'], 'm', cs, 'own').name, 'Syn', 'own: Já -> Manželka -> Syn = Syn');
+  assertEquals(simplifyChain(['w', 's'], 'm', 'step').join(','), 'step_s', 'step: w,s vyhodnotí jako step_s');
+  assertEquals(resolveKinship(['w', 's'], 'm', cs, 'step').name, 'Nevlastní syn', 'step: Já -> Manželka -> Syn = Nevlastní syn');
+
+  // B) Já -> Otec -> Manželka (f, w)
+  assertEquals(resolveKinship(['f', 'w'], 'm', cs, 'own').name, 'Matka', 'own: Já -> Otec -> Manželka = Matka');
+  assertEquals(resolveKinship(['f', 'w'], 'm', cs, 'step').name, 'Macecha', 'step: Já -> Otec -> Manželka = Macecha');
+
+  // C) Já -> Otec -> Syn (f, s)
+  assertEquals(resolveKinship(['f', 's'], 'm', cs, 'own').name, 'Bratr', 'own: Já -> Otec -> Syn = Bratr');
+  assertEquals(resolveKinship(['f', 's'], 'm', cs, 'step').name, 'Polobratr jednokrevní', 'step: Já -> Otec -> Syn = Polobratr jednokrevní');
+
+  // D) Já -> Bratr -> Sestra (b, z)
+  assertEquals(resolveKinship(['b', 'z'], 'm', cs, 'own').name, 'Sestra', 'own: Já -> Bratr -> Sestra = Sestra');
+  assertEquals(resolveKinship(['b', 'z'], 'm', cs, 'step').name, 'Nevlastní sestra', 'step: Já -> Bratr -> Sestra = Nevlastní sestra');
+
+  // E) Já -> Bratr -> Otec (b, f)
+  assertEquals(resolveKinship(['b', 'f'], 'm', cs, 'own').name, 'Otec', 'own: Já -> Bratr -> Otec = Otec');
+  assertEquals(resolveKinship(['b', 'f'], 'm', cs, 'step').name, 'Otčím', 'step: Já -> Bratr -> Otec = Otčím');
+}
+
+// 10. Pravidlo prosté cesty a prevence slepých uliček (getDeadEndTokens)
+console.log('\n10. Pravidlo prosté cesty a detekce slepých uliček (getDeadEndTokens):');
+{
+  const deWife = getDeadEndTokens(['w'], 'm');
+  assert(deWife.has('h') && deWife.has('w'), 'Po Manželce jsou Manžel i Manželka slepá ulička');
+  assert(!deWife.has('s') && !deWife.has('f'), 'Po Manželce jsou Syn a Otec povoleni');
+
+  const deSonMale = getDeadEndTokens(['s'], 'm');
+  assert(deSonMale.has('f') && !deSonMale.has('m'), 'Pro muže po Synovi je Otec slepá ulička (návrat na Já), ale Matka je povolena');
+
+  const deSonFemale = getDeadEndTokens(['s'], 'f');
+  assert(deSonFemale.has('m') && !deSonFemale.has('f'), 'Pro ženu po Synovi je Matka slepá ulička (návrat na Já), ale Otec je povolen');
+
+  const deFatherSon = getDeadEndTokens(['f', 's'], 'm');
+  assert(deFatherSon.has('f') && !deFatherSon.has('m'), 'Po Otec -> Syn je Otec slepá ulička (návrat na Otce)');
+}
+
 console.log('\n========================================');
 console.log(`Výsledky testů: ${passed} / ${passed + failed} prošlo.`);
 if (failed > 0) {
@@ -212,3 +255,4 @@ if (failed > 0) {
 } else {
   console.log('VŠECHNY TESTY PROŠLY NA VÝBORNOU!');
 }
+

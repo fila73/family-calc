@@ -82,15 +82,15 @@ export const cs = {
       lineType: 'step'
     },
     'step_s': {
-      name: 'Pastorek',
-      archaic: 'Nevlastní syn (syn manžela/manželky z dřívějška)',
-      description: 'Syn tvého partnera z předchozího svazku',
+      name: 'Nevlastní syn',
+      archaic: 'Pastorek (syn manžela/manželky z dřívějška)',
+      description: 'Syn tvého partnera z předchozího svazku (vyženěný / vyvdaný syn)',
       lineType: 'step'
     },
     'step_d': {
-      name: 'Pastorkyně',
-      archaic: 'Nevlastní dcera (dcera manžela/manželky z dřívějška)',
-      description: 'Dcera tvého partnera z předchozího svazku',
+      name: 'Nevlastní dcera',
+      archaic: 'Pastorkyně (dcera manžela/manželky z dřívějška)',
+      description: 'Dcera tvého partnera z předchozího svazku (vyženěná / vyvdaná dcera)',
       lineType: 'step'
     },
     'step_b': {
