@@ -437,4 +437,14 @@
   - Do `google-play/STORE_LISTING.md` (sekce 6) doplněny připravené poznámky k vydání pro Google Play Console (`<cs-CZ>` i `<en-US>` do 500 znaků) s klasickými tagy `[feat]` a `[bug]`.
   - Zkompilován R8-optimalizovaný a kryptograficky podepsaný produkční balíček `build-android/Rodinna-Kalkulacka-release.aab` (`v1.1.0`, `versionCode 6`) a testovací `build-android/Rodinna-Kalkulacka-debug.apk`.
 
+## [2026-10-22]
+- [x] **Extrakce a uložení 6 znovupoužitelných globálních skills do `C:\Users\filip\.gemini\config\skills\`**:
+  - `capacitor-android-r8-release`: Kompletní pipeline pro převod Vanilla ES6/PWA aplikace do Capacitor Androidu, generování mipmap ikon s AMOLED pozadím, RSA keystore podpis, splnění všech 4 bodů R8 optimalizace Google Play (`fullMode`, `shrinkResources`, `optimizedResourceShrinking`, `-repackageclasses`) a Android 16 (API 36) Landscape kompatibilitu.
+  - `google-play-zero-tracking-publisher`: Publikační průvodce pro Google Play Console (ADB screenshoty převedené do striktního poměru 9:16 `1080×1920` a `1350×2400`, nasazení a obnova `privacy.html` na GitHub Pages přes REST API, taháky pro Data Safety a 14denní uzavřený test s 12 testery, dvojjazyčné release notes s tagy `[feat]`/`[bug]`).
+  - `android-webview-native-bridges`: Řešení omezení mobilního Android WebView bez externích pluginů (nativní offline `window.AndroidTTS` bridge přes `@JavascriptInterface`, Immersive Sticky Fullscreen přes `WindowInsetsControllerCompat`, Web Audio API syntéza kliknutí s nulovou latencí a oprava kontrastu `<select>`/`<option>` v dark mode).
+  - `czech-qr-spayd-tipjar`: Etická monetizace bez reklam a sledování (modulo-97 výpočet českého IBANu dle ČNB, generování SPAYD `SPD*1.0*` QR platby do offline SVG/PNG a 3úrovňový podporovatelský modál s QR platbou, Ko-fi a hodnocením na Google Play).
+  - `scalable-vanilla-i18n`: Architektura lokalizace pro 25+ jazyků v čistém ES6 (registr jazykových rodin `languages.js`, okamžité víceabecední vyhledávání, recent čipy v `localStorage`, Service Worker cache a headless audit úplnosti slovníků).
+  - `gedcom-kinship-noz-engine`: Genealogický a právní engine (GEDCOM 5.5/5.5.1 parser s bilaterální opravou vazeb `FAM` ⇄ `INDI` a přímými sourozeneckými hranami v BFS, redukce příbuzenských řetězců s pravidlem prosté cesty a režimy `own`/`step`, $2^k$ strukturní audit kombinací pohlaví a výpočet DNA %, stupňů příbuzenství, dědických tříd §§ 1635–1640 NOZ a překážek manželství § 675 NOZ).
+
+
 
