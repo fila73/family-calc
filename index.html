@@ -397,7 +397,7 @@
         <button class="menu-item-btn" id="menuWhatsNewBtn" type="button">
           <span class="menu-item-icon" style="background: rgba(59, 130, 246, 0.16); color: #60a5fa;">✨</span>
           <div class="menu-item-content">
-            <div class="menu-item-title">Novinky (What's New) <span class="changelog-ver-pill">v1.1.0</span></div>
+            <div class="menu-item-title">Novinky (What's New) <span class="changelog-ver-pill">v1.1.1</span></div>
             <div class="menu-item-desc">Přehled nových funkcí (feat) a oprav (bug) v aktuální verzi</div>
           </div>
           <span class="menu-item-arrow">➔</span>
@@ -599,9 +599,9 @@
               <div class="setting-item-label">
                 <span class="setting-item-icon">⭐</span>
                 <span>Rodinná kalkulačka vztahů</span>
-                <span class="changelog-ver-pill">v1.1.0</span>
+                <span class="changelog-ver-pill">v1.1.1</span>
               </div>
-              <div class="setting-item-desc">Verze 1.1.0 (build 6) • 100% offline nástroj • Bez reklam a sledování</div>
+              <div class="setting-item-desc">Verze 1.1.1 (build 7) • 100% offline nástroj • Bez reklam a sledování</div>
             </div>
           </div>
 
@@ -611,6 +611,22 @@
               <span class="settings-rules-chevron">▾</span>
             </summary>
             <div class="settings-rules-content changelog-content">
+              <div class="changelog-version-block">
+                <div class="changelog-version-header">
+                  <strong>Verze 1.1.1 (build 7)</strong>
+                  <span class="changelog-date">Říjen 2026</span>
+                </div>
+                <ul class="changelog-list">
+                  <li>
+                    <span class="changelog-tag tag-bug">bug</span>
+                    <span><strong>Bezpečnostní oprava importu GEDCOM</strong> – jména, data a název souboru z importovaného rodokmenu se nyní bezpečně escapují a nemohou v aplikaci spustit kód. Přidána ochrana Content-Security-Policy.</span>
+                  </li>
+                  <li>
+                    <span class="changelog-tag tag-bug">bug</span>
+                    <span><strong>Offline mezipaměť</strong> – service worker ukládá jen soubory aplikace a písma (pouze GET požadavky), mezipaměť tak zbytečně neroste.</span>
+                  </li>
+                </ul>
+              </div>
               <div class="changelog-version-block">
                 <div class="changelog-version-header">
                   <strong>Verze 1.1.0 (build 6)</strong>

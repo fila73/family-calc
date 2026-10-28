@@ -24,7 +24,9 @@ npm run build
 # 2. Synchronizace do Android projektu
 npx cap sync android
 
-# 3. Sestavení APK / AAB
+# 3. Sestavení APK / AAB (vyžaduje plné JDK 17 s jlink, např. Microsoft JDK 17;
+#    JBR z IntelliJ nestačí – chybí v něm jlink)
+$env:JAVA_HOME = "C:\Program Files\Microsoft\jdk-17.0.20.101-hotspot"
 cd android
 .\gradlew.bat assembleDebug   # pro debug APK
 .\gradlew.bat bundleRelease   # pro Google Play AAB

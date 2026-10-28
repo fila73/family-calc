@@ -2,7 +2,7 @@
  * Service Worker pro offline běh rodinné kalkulačky
  */
 
-const CACHE_NAME = 'family-calc-v22';
+const CACHE_NAME = 'family-calc-v23';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
@@ -45,6 +45,12 @@ const ASSETS_TO_CACHE = [
   './img/qr-platba.png'
 ];
 
+const CACHEABLE_ORIGINS = [
+  self.location.origin,
+  'https://fonts.googleapis.com',
+  'https://fonts.gstatic.com'
+];
+
 self.addEventListener('install', (e) => {
   e.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
@@ -68,6 +74,9 @@ self.addEventListener('activate', (e) => {
 });
 
 self.addEventListener('fetch', (e) => {
+  // Cachujeme jen GET požadavky na vlastní soubory aplikace a písma Google Fonts
+  if (e.request.method !== 'GET' || !CACHEABLE_ORIGINS.includes(new URL(e.request.url).origin)) return;
+
   e.respondWith(
     fetch(e.request)
       .then((networkRes) => {
