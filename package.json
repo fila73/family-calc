@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "build": "node scripts/build.js",
-    "test": "node tests/kinship.test.js && node tests/reductions_mutual.test.js",
+    "test": "node tests/kinship.test.js && node tests/reductions_mutual.test.js && node tests/html_escape.test.js",
     "dev": "node server.js",
     "start": "node server.js"
   },

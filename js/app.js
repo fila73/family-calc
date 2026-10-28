@@ -5,6 +5,7 @@
 import { resolveKinship, invertChain, simplifyChain, getDeadEndTokens, TOKENS, getTokenGender } from './engine/kinship-engine.js';
 import { parseGedcom, getStepDirection } from './engine/gedcom-parser.js';
 import { getDictionary, languagesRegistry, languageCategories, getLanguageMeta } from './i18n/index.js';
+import { escapeHtml } from './utils/html.js';
 
 class FamilyCalcApp {
   constructor() {
@@ -1768,7 +1769,8 @@ class FamilyCalcApp {
     );
 
     // Pomocná funkce pro formátování genealogických let a dat
-    const formatPersonDates = (p) => {
+    const formatPersonDates = (p) => escapeHtml(formatPersonDatesRaw(p));
+    const formatPersonDatesRaw = (p) => {
       if (!p) return '';
       if (p.birthYear && p.deathYear) return `*${p.birthYear} – †${p.deathYear}`;
       if (p.birthYear) return `*${p.birthYear}`;
@@ -1811,7 +1813,7 @@ class FamilyCalcApp {
         <div class="tree-source-icon">📜</div>
         <div class="tree-source-text">
           <div class="tree-source-title">Příbuzenská cesta z rodokmenu GEDCOM</div>
-          <div class="tree-source-sub">${startP ? startP.name : 'Osoba A'} ➔ ${endP ? endP.name : 'Osoba B'} (${stepCount} ${stepWord})</div>
+          <div class="tree-source-sub">${startP ? escapeHtml(startP.name) : 'Osoba A'} ➔ ${endP ? escapeHtml(endP.name) : 'Osoba B'} (${stepCount} ${stepWord})</div>
         </div>
       `;
       this.treeCanvasContainer.appendChild(banner);
@@ -1831,7 +1833,7 @@ class FamilyCalcApp {
     let egoSub = 'Výchozí bod výzkumu (Gen 0)';
 
     if (person0) {
-      egoTitle = person0.name || egoTitle;
+      egoTitle = person0.name ? escapeHtml(person0.name) : egoTitle;
       const dates = formatPersonDates(person0);
       const role = this.isMutualView ? 'Tázající se osoba (původní cíl)' : 'Výchozí proband (JÁ)';
       egoSub = dates ? `<span class="tree-node-dates">${dates}</span> · ${role}` : role;
@@ -1880,7 +1882,7 @@ class FamilyCalcApp {
       let subtitle = isLast ? (resolved.description || '') : `Krok ${idx + 1} v řetězci`;
 
       if (personNode) {
-        title = personNode.name || title;
+        title = personNode.name ? escapeHtml(personNode.name) : title;
         const dates = formatPersonDates(personNode);
         if (isLast) {
           const relationDesc = resolved.name + (resolved.description ? ` (${resolved.description})` : '');
@@ -2130,7 +2132,7 @@ class FamilyCalcApp {
 
       card.innerHTML = `
         <div class="history-item-top">
-          <span class="history-item-result">${h.resultName}</span>
+          <span class="history-item-result">${escapeHtml(h.resultName)}</span>
           <span class="history-item-time">${timeStr}</span>
         </div>
         <div class="history-item-chain">Já ➔ ${pathText}</div>
@@ -2740,7 +2742,7 @@ class FamilyCalcApp {
       const list = parsed.getIndividualList();
 
       this.gedcomStatusBox.innerHTML = `
-        <strong style="color: #10b981;">✓ Úspěšně načteno:</strong> ${sourceName}<br>
+        <strong style="color: #10b981;">✓ Úspěšně načteno:</strong> ${escapeHtml(sourceName)}<br>
         Celkem <strong>${parsed.individuals.size}</strong> osob v <strong>${parsed.families.size}</strong> rodinách.
       `;
 
@@ -2784,7 +2786,7 @@ class FamilyCalcApp {
 
     if (pathResult.error || !pathResult.chain) {
       this.gedcomResultTitle.textContent = `${personB.name} a ${personA.name}`;
-      this.gedcomResultDesc.innerHTML = `<span style="color: #ef4444;">${pathResult.error || 'Nepropojeno'}</span>`;
+      this.gedcomResultDesc.innerHTML = `<span style="color: #ef4444;">${escapeHtml(pathResult.error || 'Nepropojeno')}</span>`;
       this.transferGedcomBtn.style.display = 'none';
       if (this.viewGedcomTreeBtn) this.viewGedcomTreeBtn.style.display = 'none';
       this.gedcomResultCard.style.display = 'block';
@@ -2823,7 +2825,7 @@ class FamilyCalcApp {
         disambig = i === 1 ? ' (starší)' : ' (mladší)';
       }
 
-      const pDisplayName = p ? `${p.name}${years}${disambig}` : pathResult.pathPersons[i];
+      const pDisplayName = escapeHtml(p ? `${p.name}${years}${disambig}` : pathResult.pathPersons[i]);
       const isStart = i === 0;
       const isTarget = i === pathResult.pathPersons.length - 1;
       const nodeClass = isStart ? 'node-start' : isTarget ? 'node-target' : '';
